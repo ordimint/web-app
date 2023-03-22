@@ -1,0 +1,33 @@
+{
+  "presets": [
+    "@babel/preset-env",
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ]
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        [
+          "inline-dotenv",
+          {
+            "path": ".env"
+          }
+        ]
+      ]
+    },
+    "development": {
+      "plugins": [
+        [
+          "inline-dotenv",
+          {
+            "path": ".env.local"
+          }
+        ]
+      ]
+    }
+  }
+}
