@@ -66,28 +66,64 @@ export const getAddressInfoLedger = async (ledgerPublicKey, verify) => {
 }
 
 
-export const signSchnorrLedger = async (sigHash) => {
+export const signLedger = async (psbt, txData) => {
     const transport = await TransportWebUSB.create();
-    const sigHashBuffer = Buffer.from(sigHash, 'hex')
     console.log("Transport created", transport)
-    // listen(log => console.log(log))
+    listen(log => console.log(log))
+    const newTx = psbt.__CACHE.__TX;
+    console.log("newTx", newTx)
+    console.log("PSBT", psbt)
+    console.log("txData", txData)
+    const path = "86'/0'/100'/0/0";
+    const DEFAULT_LOCK_TIME = 0;
+    const utxo = bitcoin.Transaction.fromHex(txData.txHex)
+    console.log("utxo", utxo)
     try {
-        console.log("Creating appBtc:", sigHashBuffer)
+        console.log("Creating appBtc:")
+        console.log("psbt cache new tx", psbt.__CACHE.__TX)
         const appBtc = new AppBtc({ transport, currency: "bitcoin" });
-        appBtc.createPaymentTransactionNew(sigHashBuffer)
 
+        const inLedgerTx = await splitTransaction(appBtc, utxo);
+        const outLedgerTx = await splitTransaction(appBtc, psbt.__CACHE.__TX);
+        const outputScriptHex = await appBtc.serializeTransactionOutputs(outLedgerTx).toString('hex');
+
+        console.log("outputScriptHex", outputScriptHex)
+        console.log("inLedgerTx", inLedgerTx)
+        console.log("outLedgerTx", outLedgerTx)
+        console.log("redem script", txData.redeemScript.toString('hex'))
+
+        const ledgerTxSignatures = await appBtc.createPaymentTransaction({
+            inputs: [[inLedgerTx, txData.inputIndex]],
+            associatedKeysets: [path],
+            outputScriptHex: outputScriptHex,
+            lockTime: DEFAULT_LOCK_TIME,
+            segwit: newTx.hasWitnesses(),
+            additionals: ["bech32m"],
+            transactionVersion: psbt.data.globalMap.unsignedTx.tx.version,
+            sigHashType: bitcoin.Transaction.SIGHASH_ALL,
+            useTrustedInputForSegwit: true,
+        });
+        console.log("ledgerTxSignatures", ledgerTxSignatures)
+        return ledgerTxSignatures;
     } catch (e) {
         console.log(e)
-        console.log("Error connecting to Ledger", e.message);
+        console.log(e.message);
         alert("Error connecting to Ledger", e.message)
     }
+
+    function splitTransaction(ledger, tx) {
+        return ledger.splitTransaction(tx.toHex(), tx.hasWitnesses());
+    }
+
 
     // const signature = await secp256k1.schnorr.sign(
     //     Buffer.from(secp256k1.utils.hexToBytes(sigHash)),
     //     secp256k1.utils.hexToBytes(this.privateKey)
     // );
-    // const signedHex = secp256k1.utils.bytesToHex(signature);
+    // const signedHex = secp256k1.utils.bytesToHex(signature)
     // return signedHex;
 }
+
+
 
 

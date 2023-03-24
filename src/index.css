@@ -398,8 +398,9 @@ div.preview-image-container img {
   display: flex;
   row-gap: 10px;
   flex-direction: row;
-  align-items: stretch;
+  justify-content: space-between;
   flex-wrap: wrap;
+  justify-items: center;
 }
 
 div.wallet-card {
@@ -548,7 +549,7 @@ span.input-group-text.required .required:after {
 
 #wallet-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-content: space-around;
   align-items: stretch;

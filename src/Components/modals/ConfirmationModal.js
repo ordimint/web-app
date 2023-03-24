@@ -9,7 +9,7 @@ import { outputValue, getAddressInfoNostr } from '../WalletConfig/utils';
 import { TESTNET } from '../WalletConfig/constance';
 import * as bitcoin from 'bitcoinjs-lib'
 import * as ecc from 'tiny-secp256k1'
-import { getAddressInfoLedger, signSchnorrLedger } from '../WalletConfig/connectLedger';
+import { getAddressInfoLedger, signLedger } from '../WalletConfig/connectLedger';
 
 import ECPairFactory from 'ecpair';
 const axios = require('axios')
@@ -35,12 +35,15 @@ export default function ConfirmationModal({
   }
 
   async function sendUtxo() {
-    var inputAddressInfo, publicKey, sig;
+    var inputAddressInfo, publicKey, sig, txHex, fullTx, hex;
 
     if (nostrPublicKey) {
       inputAddressInfo = getAddressInfoNostr(nostrPublicKey)
     } else if (ledgerPublicKey) {
       inputAddressInfo = await getAddressInfoLedger(ledgerPublicKey, false)
+      txHex = await axios.get(`https://mempool.space/api/tx/${currentUtxo.txid}/hex`)
+      console.log("inputAddressInfo redeem output", inputAddressInfo)
+      console.log("txHex", txHex)
     }
 
     const psbt = new bitcoin.Psbt({ network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
@@ -73,24 +76,34 @@ export default function ConfirmationModal({
 
     const sigHash = psbt.__CACHE.__TX.hashForWitnessV1(0, [inputAddressInfo.output], [currentUtxo.value], bitcoin.Transaction.SIGHASH_DEFAULT)
 
-    console.log(sigHash)
+
 
     if (nostrPublicKey) {
       sig = await window.nostr.signSchnorr(sigHash.toString('hex'))
+      psbt.updateInput(0, {
+        tapKeySig: serializeTaprootSignature(Buffer.from(sig, 'hex'))
+      })
+      psbt.finalizeAllInputs()
+      const tx = psbt.extractTransaction()
+      hex = tx.toBuffer().toString('hex')
+      fullTx = bitcoin.Transaction.fromHex(hex)
+      console.log(hex)
     } else if (ledgerPublicKey) {
-      sig = await signSchnorrLedger(sigHash)
+      const txData = {
+        txHex: txHex.data,
+        sigHash: sigHash.toString('hex'),
+        inputIndex: currentUtxo.vout,
+        inputValue: currentUtxo.value,
+        redeemScript: inputAddressInfo.output,
+      }
+      hex = await signLedger(psbt, txData)
+      fullTx = bitcoin.Transaction.fromHex(hex)
     }
-    psbt.updateInput(0, {
-      tapKeySig: serializeTaprootSignature(Buffer.from(sig, 'hex'))
-    })
-    psbt.finalizeAllInputs()
-    const tx = psbt.extractTransaction()
-    const hex = tx.toBuffer().toString('hex')
-    const fullTx = bitcoin.Transaction.fromHex(hex)
-    console.log(hex)
+
+
     const res = await axios.post(`https://mempool.space/api/tx`, hex).catch(err => {
       console.error(err)
-      alert(err)
+      // alert(err)
       return null
     })
     if (!res) return false
@@ -144,7 +157,7 @@ export default function ConfirmationModal({
         <Button variant="primary" onClick={async () => {
           const success = await sendUtxo().catch(err => {
             console.error(err)
-            alert(err)
+            // alert(err)
             return false
           })
           setShowConfirmSendModal(false)

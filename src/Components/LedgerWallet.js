@@ -125,13 +125,16 @@ const LedgerWallet = () => {
                         </>
                 }
                 <br /><br />
-                {ledgerPublicKey && <UtxoInfo
-                    utxosReady={utxosReady}
-                    ownedUtxos={ownedUtxos}
-                    setShowUtxoModal={setShowUtxoModal}
-                    setCurrentUtxo={setCurrentUtxo}
-                    inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
-                />}
+                {ledgerPublicKey &&
+                    <div>
+                        <UtxoInfo
+                            utxosReady={utxosReady}
+                            ownedUtxos={ownedUtxos}
+                            setShowUtxoModal={setShowUtxoModal}
+                            setCurrentUtxo={setCurrentUtxo}
+                            inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
+                        />
+                    </div>}
             </Container>
 
 

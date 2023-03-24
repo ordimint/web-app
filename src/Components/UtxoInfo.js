@@ -1,14 +1,18 @@
 import React from 'react'
 import { TailSpin } from 'react-loading-icons'
-import { cloudfrontUrl, ordinalsImageUrl } from './WalletConfig/utils';
 import { Row, Col, Card, Container, Button } from 'react-bootstrap';
 import UtxoImage from './UtxoImage';
+import InscriptionsDetails from './InscriptionsDetails';
 export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, setCurrentUtxo, inscriptionUtxosByUtxo }) {
   if (!utxosReady) return (<>
+
     <br /><br />
     <TailSpin stroke="#000000" speed={.75} />
     <br /><br />
   </>)
+
+
+
   return (<div>
     {
       ownedUtxos.length === 0 ?
@@ -20,12 +24,12 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
         :
         <>
           <br />
-          <Container>
-            <Row xs={1} sm={1} md={2} lg={4} id="wallet-thumbnails">
+          <Container id="ordinal-container" fluid>
+            <Row xs={1} sm={2} md={2} lg={4} xl={4} xxl={4} id="wallet-thumbnails">
               {ownedUtxos.map(it => {
-                return (
 
-                  <Col>
+                return (
+                  <Col className="ordinal-column">
                     <Card className="hover-pointer gallery-item wallet-card" key={it.txid}
                       onClick={() => {
                         setCurrentUtxo(it)
@@ -43,14 +47,16 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
                             </>
                             :
                             <>
+
                               <UtxoImage utxo={it} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />
 
                             </>
                         }
 
                       </Card.Body>
+                      <InscriptionsDetails utxo={it} />
                       <div className='wallet-card-button'>
-                        <Button  >Details</Button>
+                        <Button >Details</Button>
                       </div>
                     </Card>
                   </Col>
@@ -61,5 +67,5 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
           </Container>
         </>
     }
-  </div>)
+  </div >)
 }

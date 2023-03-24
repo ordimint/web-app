@@ -12,9 +12,9 @@ import Search from "./Pages/Search";
 function App() {
   return (
     <>
-      <Router>
+      <Router >
         <Header />
-        <Routes>
+        <Routes forceRefresh={true}>
           <Route path="/" element={<Home />} />
           <Route path="/checkorder" element={<CheckOrder />} />
           <Route path="/wallet" element={<WalletPage />} />

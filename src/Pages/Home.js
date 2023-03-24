@@ -26,8 +26,10 @@ import BRC from '../Components/BRC';
 var socket = io.connect(process.env.REACT_APP_socket_port);
 var clientPaymentHash;
 var isPaid = false; //Is only necessary in the case of socket event is fireing multible times
-const premium = process.env.REACT_APP_price;
-console.log(premium);
+
+const outputCost = process.env.REACT_APP_output_cost;
+const securityBuffer = process.env.REACT_APP_security_buffer;
+
 
 const getFeesRecommended = async () => {
 
@@ -118,7 +120,7 @@ function Home() {
     const [price, setPrice] = useState(1);
 
     useEffect(() => {
-        var priceSats = (Math.trunc((fileSize / 4) * fee) + parseInt(premium));
+        var priceSats = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCost));
         setPrice(priceSats);
     }, [fileSize, fee]);
 

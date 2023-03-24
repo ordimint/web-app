@@ -13,14 +13,14 @@ const Footer = () => {
                 >
                     <FaTwitterSquare color="white" size="30" />
                 </a>
-                {/* &ensp;|&ensp;
+                &ensp;|&ensp;
                 <a
-                    href="https://github.com/LightRider5/ordimint"
+                    href="https://github.com/ordimint/web-app"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     <FaGithub color="white" size="30" />
-                </a>{" "} */}
+                </a>{" "}
                 &ensp;|&ensp;
                 {/*             
             &ensp;|&ensp;

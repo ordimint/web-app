@@ -47,7 +47,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
           if (nostrPublicKey) {
             navigator.clipboard.writeText(getAddressInfoNostr(nostrPublicKey).address)
           } else if (ledgerPublicKey) {
-            navigator.clipboard.writeText(getAddressInfoLedger(ledgerPublicKey).address)
+            navigator.clipboard.writeText(ledgerAddress)
           }
           setShowReceiveAddressModal(false)
         }}>Copy Address</Button>
