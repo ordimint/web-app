@@ -37,7 +37,7 @@ const CollectionThumbnail = (props) => {
                     <iframe className="ordinal-iframe image-thumbnail"
                         title="ordinal-iframe"
 
-                        src={`https://ordinals.com/preview/${props.collection.inscription_icon}`}
+                        src={`https://explorer.ordimint.com/preview/${props.collection.inscription_icon}`}
                     >
                     </iframe>
 
@@ -56,7 +56,7 @@ const CollectionThumbnail = (props) => {
                         width={200}
                         height={200}
                         alt={props.collection.name}
-                        src={`https://ordinals.com/content/${props.collection.inscription_icon}`}
+                        src={`https://explorer.ordimint.com/content/${props.collection.inscription_icon}`}
                     />
                     <Figure.Caption>
                         <h4>

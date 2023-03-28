@@ -144,7 +144,7 @@ const Search = () => {
 
                                                     <Col className='index-search-result' >
                                                         <div >
-                                                            <a href={`https://ordinals.com/inscription/${searchIndex.inscriptionId}`} target="_blank" rel="noreferrer noopener">
+                                                            <a href={`https://explorer.ordimint.com/inscription/${searchIndex.inscriptionId}`} target="_blank" rel="noreferrer noopener">
                                                                 <h4>Inscription: {searchIndex.inscriptionIndex}</h4>
                                                             </a>
                                                             <p>{searchIndex.name}</p>

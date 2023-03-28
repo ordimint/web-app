@@ -85,7 +85,7 @@ const CollectionDetailPage = () => {
                         <iframe className="ordinal-iframe image-thumbnail"
                             title="ordinal-iframe"
 
-                            src={`https://ordinals.com/preview/${collectionMeta.inscription_icon}`}
+                            src={`https://explorer.ordimint.com/preview/${collectionMeta.inscription_icon}`}
                         >
                         </iframe>
                         <Figure.Caption>
@@ -103,7 +103,7 @@ const CollectionDetailPage = () => {
                                 width={200}
                                 height={200}
                                 alt={collectionMeta.name}
-                                src={`https://ordinals.com/content/${collectionMeta.inscription_icon}`}
+                                src={`https://explorer.ordimint.com/content/${collectionMeta.inscription_icon}`}
                             />
                             <Figure.Caption>
                             </Figure.Caption>

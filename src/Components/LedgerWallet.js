@@ -60,12 +60,12 @@ const LedgerWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const res = await axios.get(`https://ordinals.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                    const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
                 } catch (err) {
-                    console.log(`Error from ordinals.com`)
+                    console.log(`Error from Ordinal Explorer`)
                 }
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
                 const newInscriptionsByUtxo = {}

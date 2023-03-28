@@ -15,7 +15,7 @@ const OrdinalThumbnail = (props) => {
                 <Figure>
 
                     <iframe title="ordinal-iframe" className="ordinal-iframe"
-                        src={`https://ordinals.com/preview/${props.collection.id}`}
+                        src={`https://explorer.ordimint.com/preview/${props.collection.id}`}
                         onClick={() => {
                             renderDetailModal()
                         }}
@@ -25,7 +25,7 @@ const OrdinalThumbnail = (props) => {
 
                     <Figure.Caption>
 
-                        <a href={`https://ordinals.com/inscription/${props.collection.id}`}
+                        <a href={`https://explorer.ordimint.com/inscription/${props.collection.id}`}
                             target="_blank" rel="noopener noreferrer"
                         >
                             <h4>
@@ -43,7 +43,7 @@ const OrdinalThumbnail = (props) => {
                         width={200}
                         height={200}
                         alt={props.collection.meta.name}
-                        src={`https://ordinals.com/content/${props.collection.id}`}
+                        src={`https://explorer.ordimint.com/content/${props.collection.id}`}
                         onClick={() => {
                             renderDetailModal()
                         }}

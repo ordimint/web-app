@@ -13,7 +13,7 @@
 /dist
 
 #collections
-src/data/collections.js
+/src/data/collections.js
 
 # misc
 .DS_Store
@@ -21,6 +21,7 @@ src/data/collections.js
 .env.development.local
 .env.test.local
 .env.production.local
+.env
 
 npm-debug.log*
 yarn-debug.log*

@@ -31,7 +31,7 @@ const SingleOrdinalModal = (props) => {
                             width={200}
                             height={200}
                             alt={props.selectedOrdinalName}
-                            src={`https://ordinals.com/content/${props.selectedOrdinal}`}
+                            src={`https://explorer.ordimint.com/content/${props.selectedOrdinal}`}
                         />
                         <Figure.Caption>
                             {/* <h4>

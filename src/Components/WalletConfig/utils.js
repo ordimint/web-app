@@ -11,11 +11,11 @@ export const outputValue = (currentUtxo, sendFeeRate) => {
 }
 
 export const ordinalsUrl = (utxo) => {
-  return `https://ordinals.com/output/${utxo.txid}:${utxo.vout}`
+  return `https://explorer.ordimint.com/output/${utxo.txid}:${utxo.vout}`
 }
 
 export const ordinalsImageUrl = (utxo) => {
-  return `https://ordinals.com/content/${utxo.txid}i${utxo.vout}`
+  return `https://explorer.ordimint.com/content/${utxo.txid}i${utxo.vout}`
 }
 
 export const cloudfrontUrl = (utxo) => {
