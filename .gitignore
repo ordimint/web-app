@@ -10,6 +10,10 @@
 
 # production
 /build
+/dist
+
+#collections
+src/data/collections.js
 
 # misc
 .DS_Store
