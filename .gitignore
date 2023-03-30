@@ -13,8 +13,7 @@
 /dist
 
 #collections
-/src/data/collections.js
-
+src/data/collections.js
 # misc
 .DS_Store
 .env.local

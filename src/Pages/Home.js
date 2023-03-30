@@ -472,6 +472,7 @@ function Home() {
                             Pay with Lightning
                         </Button>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
+                        <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
                         <Footer />
                     </div>
 
