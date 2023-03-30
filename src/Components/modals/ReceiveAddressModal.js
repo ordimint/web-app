@@ -20,7 +20,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
   }, [ledgerPublicKey])
 
   useEffect(() => {
-    if (!showReceiveAddressModal) return
+    if (!showReceiveAddressModal || !ledgerPublicKey) return
     async function verifyAddress() {
       await getAddressInfoLedger(ledgerPublicKey, true).address
 

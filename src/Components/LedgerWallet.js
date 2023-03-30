@@ -105,7 +105,8 @@ const LedgerWallet = () => {
                         <>
                             <div>
                                 <Alert variant="light">
-                                    Connect your Ledger Nano S to your computer and open the Bitcoin app.
+                                    Connect your Ledger to your computer and open the Bitcoin app.<br></br>
+                                    You should use Chrome browser or Microsoft Edge.
                                 </Alert>
                                 <Spinner>
 

@@ -63,17 +63,32 @@ const FAQ = () => {
                                 </Accordion.Body>
                             </Accordion.Item>
                             <Accordion.Item eventKey="011111">
-                                <Accordion.Header>How does the wallet work?</Accordion.Header>
+                                <Accordion.Header>How does the Alby wallet work?</Accordion.Header>
                                 <Accordion.Body>
-                                    <ListGroup variant="flush">
+                                    <p>Pre-requirements: You have installed the <a href="https://getalby.com/" target="_blank"
+                                        rel="noreferrer">Alby extension</a> and have configured your Nostr key (see also these guides <a href="https://blog.getalby.com/the-2-minute-alby-guide-to-nostr/" target="_blank"
+                                            rel="noreferrer">here</a> and <a href="https://blog.getalby.com/how-to-use-nostr-with-the-alby-extension/" target="_blank"
+                                                rel="noreferrer">here</a>). Make sure you have a backup of your Nostr key!
+                                        Please note: your NFTs/inscriptions will be managed by your Nostr private key. It is currently not possible to import this key into various other wallets. The focus here is on simply managing inscriptions with Nos-FT.</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="0111111">
+                                <Accordion.Header>How does the Ledger Wallet work?</Accordion.Header>
+                                <Accordion.Body>
+                                    <ListGroup variant="flush" numbered>
                                         <ListGroup.Item>
-                                            <b>getAlby and Nostr</b><br />
-                                            <p>Pre-requirements: You have installed the <a href="https://getalby.com/" target="_blank"
-                                                rel="noreferrer">Alby extension</a> and have configured your Nostr key (see also these guides <a href="https://blog.getalby.com/the-2-minute-alby-guide-to-nostr/" target="_blank"
-                                                    rel="noreferrer">here</a> and <a href="https://blog.getalby.com/how-to-use-nostr-with-the-alby-extension/" target="_blank"
-                                                        rel="noreferrer">here</a>). Make sure you have a backup of your Nostr key!
-                                                Please note: your NFTs/inscriptions will be managed by your Nostr private key. It is currently not possible to import this key into various other wallets. The focus here is on simply managing inscriptions with Nos-FT.</p>
+                                            Ensure that you have the latest version of Google Chrome installed on your computer.
                                         </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            Connect your Ledger hardware wallet to your computer using the USB cable provided and unlock it by entering your PIN code. After that open the Bitcoin app on your Ledger.
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            Go to the <a href="/wallet"> Wallet section</a> and click on the "Connect" button and wait for the app to detect your device.
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            Once your device is connected, you should be able to use our Ordinal wallet with your Ledger wallet.
+                                        </ListGroup.Item>
+                                        That's it! When you want to receive an Ordinal or mint it to your Ledger make sure to confirm the address on the device.
                                     </ListGroup>
                                 </Accordion.Body>
                             </Accordion.Item>
