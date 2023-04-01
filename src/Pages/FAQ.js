@@ -5,7 +5,7 @@ const FAQ = () => {
     return (
         <div id="faq">
             <title>FAQ - Frequently asked Questions</title>
-            <h1>FAQ</h1>
+            <h1 className='mb-3'>FAQ</h1>
             <Container>
                 <Row xs={1} sm={1} md={1} lg={1}>
                     <Col>
@@ -73,7 +73,7 @@ const FAQ = () => {
                                 </Accordion.Body>
                             </Accordion.Item>
                             <Accordion.Item eventKey="0111111">
-                                <Accordion.Header>How does the Ledger Wallet work?</Accordion.Header>
+                                <Accordion.Header>How does the Ledger wallet work?</Accordion.Header>
                                 <Accordion.Body>
                                     <ListGroup variant="flush" numbered>
                                         <ListGroup.Item>

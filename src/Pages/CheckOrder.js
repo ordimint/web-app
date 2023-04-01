@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import { InputGroup, Form, Container, Button, Col, Row } from 'react-bootstrap'
 import axios from 'axios'
+import Footer from '../Components/Footer';
 
 const CheckOrder = () => {
 

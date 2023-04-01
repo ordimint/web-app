@@ -135,7 +135,7 @@ button.close {
   color: white;
 }
 .modal-content {
-  border: 1px solid #375a7f !important;
+  border: 3px solid white !important;
 }
 .footer-text {
   text-align: center;
@@ -554,4 +554,18 @@ span.input-group-text.required .required:after {
   align-content: space-around;
   align-items: stretch;
   justify-items: stretch;
+}
+
+.wallet-card {
+  -moz-transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  -o-transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.wallet-card:hover {
+  -webkit-transform: translate(0, -8px);
+  -moz-transform: translate(0, -8px);
+  -ms-transform: translate(0, -8px);
+  -o-transform: translate(0, -8px);
+  transform: translate(0, -8px);
 }

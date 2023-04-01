@@ -7,7 +7,7 @@ import LedgerWallet from '../Components/LedgerWallet';
 import BitBoxLogo from '../media/bitbox-logo.png'
 import { useState, useEffect } from 'react'
 import BitBoxWallet from '../Components/BitBoxWallet';
-
+import Footer from '../Components/Footer'
 
 const WalletPage = () => {
 
@@ -92,6 +92,7 @@ const WalletPage = () => {
                         {wallet === "bitbox" ? <BitBoxWallet /> : <></>}
                     </div>
                 )}
+            <Footer />
         </div>
     )
 }

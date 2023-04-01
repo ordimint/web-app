@@ -9,7 +9,7 @@ const Header = (props) => {
                 <Navbar
                     collapseOnSelect
                     bg="dark"
-                    expand="sm"
+                    expand="md"
                     key="nav"
                     variant="dark"
                     className="mb-3"
