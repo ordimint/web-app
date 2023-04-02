@@ -116,7 +116,7 @@ function Home() {
     }
 
 
-    const [fee, setFee] = useState(6);
+    const [fee, setFee] = useState(15);
     const [price, setPrice] = useState(1);
 
     useEffect(() => {

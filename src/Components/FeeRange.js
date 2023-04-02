@@ -11,12 +11,12 @@ const getFeesRecommended = async () => {
 };
 
 const FeeRange = (props) => {
-    const [minFee, setMinFee] = useState(getFeesRecommended().economyFee + 4);
-    const [maxFee, setMaxFee] = useState((getFeesRecommended().fastestFee + 15));
+    const [minFee, setMinFee] = useState(0);
+    const [maxFee, setMaxFee] = useState(0);
     useEffect(() => {
         getFeesRecommended().then((result) => {
-            setMinFee(result.economyFee + 6);
-            setMaxFee(result.fastestFee + 15);
+            setMinFee(result.hourFee + 5);
+            setMaxFee(result.hourFee + 25);
 
         })
     }, [minFee, maxFee]);
