@@ -58,7 +58,7 @@ const CheckOrder = () => {
                             </a>
                         </h4>
                         <h4 className="mt-3 order-status">
-                            <a href={`https://ordinals.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
+                            <a href={`https://explorer.ordimint.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
                                 Your Inscription (when minted)
                             </a>
                         </h4>

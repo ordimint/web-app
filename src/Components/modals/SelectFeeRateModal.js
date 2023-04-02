@@ -21,7 +21,9 @@ export default function SelectFeeRateModal({
         <Modal.Title>Sending {shortenStr(currentUtxo && `${currentUtxo.txid}:${currentUtxo.vout}`)}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="modal-body p-4">
-        {currentUtxo && <UtxoImage utxo={currentUtxo} style={{ width: "60%" }} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+        <div className='modal-preview-in-utxomodal'>
+          {currentUtxo && <UtxoImage utxo={currentUtxo} style={{ width: "60%" }} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+        </div>
         <p>
           <b>Select a fee rate</b>
         </p>

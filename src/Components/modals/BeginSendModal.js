@@ -25,8 +25,10 @@ export default function BeginSendModal({
         <Modal.Title>Send {shortenStr(currentUtxo && `${currentUtxo.txid}:${currentUtxo.vout}`)}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="modal-body p-4">
-        {currentUtxo && <UtxoImage utxo={currentUtxo} style={{ width: "60%" }} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
-        <p>Where would you like to send this to?</p>
+        <div className='modal-preview-in-utxomodal'>
+          {currentUtxo && <UtxoImage utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+        </div>
+        <h6>Where would you like to send this to?</h6>
         <InputGroup className="mb-3">
           <Form.Control onChange={(evt) => {
             const newaddr = evt.target.value

@@ -32,7 +32,6 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 const getFeesRecommended = async () => {
-
     const response = await fetch("https://mempool.space/api/v1/fees/recommended");
     const data = await response.json();
     return data;
@@ -90,7 +89,7 @@ function Home() {
     ///////Fee and price
 
     useEffect(() => {
-        getFeesRecommended().then(data => setFee(data.halfHourFee))
+        getFeesRecommended().then(data => setFee(data.fastestFee))
     }, [])
 
 
@@ -116,7 +115,7 @@ function Home() {
     }
 
 
-    const [fee, setFee] = useState(15);
+    const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
 
     useEffect(() => {
@@ -159,6 +158,7 @@ function Home() {
     const checkInvoice = () => {
         socket.emit("checkInvoice", clientPaymentHash);
     };
+
 
     //Get the invoice
     const getInvoice = (price) => {

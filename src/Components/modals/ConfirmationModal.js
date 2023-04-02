@@ -120,8 +120,9 @@ export default function ConfirmationModal({
       <Modal.Body className="modal-body">
         <Container fluid>
           <div className='send-confirmation'>
-            {currentUtxo && <UtxoImage utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
-
+            <div className='modal-preview-in-utxomodal'>
+              {currentUtxo && <UtxoImage utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+            </div>
             <b>Sending:</b>
             <div className='bitcoin-address'>
               {currentUtxo && `${currentUtxo.txid}:${currentUtxo.vout}`}
@@ -164,7 +165,8 @@ export default function ConfirmationModal({
           if (!success) return
           setShowSentModal(true)
         }}>
-          Confirm
+          {ledgerPublicKey ? 'Confirm on Ledger' : 'Confirm'}
+
         </Button>
       </Modal.Footer>
     </Modal>
