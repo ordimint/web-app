@@ -46,14 +46,14 @@ const CheckOrder = () => {
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
                 {txhash ? (
                     <div>
-                        <Figure>
-                            <Figure.Image
-                                width={200}
-                                height={200}
-                                alt="Ordinal Preview"
-                                src={`https://live.ordilabs.org/content/${txhash}`}
-                            />
-                        </Figure>
+
+                        <Figure.Image
+                            width={200}
+                            height={200}
+                            alt="Ordinal Preview, if not minted yet"
+                            src={`https://live.ordilabs.org/content/${txhash}`}
+                        />
+
                         <h4 className="mt-3 order-status">
                             <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">
                                 Minting Transaction
