@@ -48,7 +48,7 @@ const CheckOrder = () => {
                     <div>
                         <iframe title="Ordinal Preview">
                             <Image
-                                src={`https://live.ordilabs.org/preview/${txhash}`}
+                                src={`https://live.ordilabs.org/content/${txhash}`}
                                 thumbnail
                             />
                         </iframe>

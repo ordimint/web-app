@@ -15,7 +15,7 @@ const FeeRange = (props) => {
     const [maxFee, setMaxFee] = useState(0);
     useEffect(() => {
         getFeesRecommended().then((result) => {
-            setMinFee(result.hourFee + 5);
+            setMinFee(result.hourFee + 10);
             setMaxFee(result.hourFee + 25);
 
         })

@@ -38,7 +38,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
         {nostrPublicKey && <div className="bitcoin-address">{getAddressInfoNostr(nostrPublicKey).address}</div>}
         {ledgerPublicKey && <div className="bitcoin-address">{ledgerAddress}</div>}
         <br />
-        {ledgerPublicKey && <p className="very-small-text">verify your address on your ledger device</p>}
+        {ledgerPublicKey && <h5>verify your address on your ledger device</h5>}
         <p className="very-small-text">
           (you can safely receive ordinal inscriptions and regular bitcoin to this address)
         </p>
