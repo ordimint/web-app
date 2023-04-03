@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import { InputGroup, Form, Container, Button, Image, Col, Row } from 'react-bootstrap'
+import { InputGroup, Form, Container, Button, Figure, Col, Row } from 'react-bootstrap'
 import axios from 'axios'
 import Footer from '../Components/Footer';
 
@@ -46,12 +46,20 @@ const CheckOrder = () => {
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
                 {txhash ? (
                     <div>
-                        <iframe title="Ordinal Preview">
-                            <Image
-                                src={`https://live.ordilabs.org/content/${txhash}`}
+                        <Figure>
+                            <Figure.Image
                                 thumbnail
+                                width={200}
+                                height={200}
+                                alt="Ordinal Preview"
+                                src={`https://live.ordilabs.org/content/${txhash}`}
                             />
-                        </iframe>
+                            <Figure.Caption>
+                                <h4>
+                                    Your Ordinal Preview
+                                </h4>
+                            </Figure.Caption>
+                        </Figure>
                         <h4 className="mt-3 order-status">
                             <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">
                                 Minting Transaction
