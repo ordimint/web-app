@@ -48,17 +48,11 @@ const CheckOrder = () => {
                     <div>
                         <Figure>
                             <Figure.Image
-                                thumbnail
                                 width={200}
                                 height={200}
                                 alt="Ordinal Preview"
                                 src={`https://live.ordilabs.org/content/${txhash}`}
                             />
-                            <Figure.Caption>
-                                <h4>
-                                    Your Ordinal Preview
-                                </h4>
-                            </Figure.Caption>
                         </Figure>
                         <h4 className="mt-3 order-status">
                             <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">
