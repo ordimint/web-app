@@ -4,6 +4,8 @@ import CollectionThumbnail from '../Components/CollectionThumbnail';
 import { Link } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination';
 import { collections } from '../data/collections.js';
+import Footer from '../Components/Footer';
+
 
 const CollectionsCatalog = () => {
     const [search, setSearch] = useState('');
@@ -106,6 +108,7 @@ const CollectionsCatalog = () => {
 
                 </Row>
             </Container>
+            <Footer />
         </div>
     );
 };

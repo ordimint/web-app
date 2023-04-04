@@ -7,6 +7,7 @@ import OrdinalThumbnail from '../Components/OrdinalThumbnail'
 import placeholderimage from "../media/text-placeholder.png";
 import SingleOrdinalModal from '../Components/modals/SingleOrdinalModal';
 import { getContentType } from '../functions/ordinalFunctions';
+import Footer from '../Components/Footer';
 
 const CollectionDetailPage = () => {
     const { slug } = useParams();
@@ -171,7 +172,7 @@ const CollectionDetailPage = () => {
 
             </div>
 
-
+            <Footer />
         </div >
 
     )
