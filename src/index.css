@@ -614,3 +614,11 @@ span.input-group-text.required .required:after {
   width: 100%;
   height: 200px;
 }
+
+#info-text-home-bottom {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}

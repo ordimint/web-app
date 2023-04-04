@@ -10,7 +10,7 @@ import Footer from '../Components/Footer';
 const CollectionsCatalog = () => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [collectionsPerPage] = useState(12);
+    const [collectionsPerPage] = useState(20);
 
     const filterCollections = (collections, query) => {
         if (!query) {
