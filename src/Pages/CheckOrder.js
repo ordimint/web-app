@@ -47,13 +47,8 @@ const CheckOrder = () => {
                 {txhash ? (
                     <div>
                         <div className='mt-2 order-status'>
-                            <Figure.Image
-                                width={200}
-                                height={200}
-                                alt="Ordinal Preview, if not minted yet"
-                                src={`https://live.ordilabs.org/content/${inscriptionID}`}
-
-                            />
+                            <p>Preview:</p>
+                            <iframe src={`https://live.ordilabs.org/content/${inscriptionID}`} title="Inscription pewview"></iframe>
                         </div>
                         <h4 className="mt-3 order-status">
                             <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">
