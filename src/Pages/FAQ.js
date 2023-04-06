@@ -89,6 +89,9 @@ const FAQ = () => {
                                             Once your device is connected, you should be able to use our Ordinal wallet with your Ledger wallet.
                                         </ListGroup.Item>
                                         That's it! When you want to receive an Ordinal or mint it to your Ledger make sure to confirm the address on the device.
+                                        <br></br>
+                                        <b>Important: The transaction will not be visible in your Ledger Live app. This is to prevent interference with your existing accounts and to avoid accidentally sending funds to your Ordinal account or you send your Ordinal accidentally to another account.
+                                        </b>
                                     </ListGroup>
                                 </Accordion.Body>
                             </Accordion.Item>

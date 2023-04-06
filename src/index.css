@@ -622,3 +622,15 @@ span.input-group-text.required .required:after {
   flex-direction: column;
   justify-content: center;
 }
+
+
+.iframe-container {
+  width: 100%;
+  overflow: hidden;
+  border: none;
+}
+
+.iframe-container iframe {
+  width: 100%;
+  border: none;
+}
