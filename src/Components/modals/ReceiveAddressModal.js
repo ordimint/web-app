@@ -5,7 +5,7 @@ import { getAddressInfoNostr } from '../WalletConfig/utils';
 import { getAddressInfoLedger } from '../WalletConfig/connectLedger';
 
 export default function ReceiveAddressModal({ showReceiveAddressModal,
-  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey }) {
+  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey, ordimintAddress }) {
 
   const [ledgerAddress, setLedgerAddress] = useState(null)
 
@@ -20,7 +20,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
   }, [ledgerPublicKey])
 
   useEffect(() => {
-    if (!showReceiveAddressModal || !ledgerPublicKey) return
+    if (!showReceiveAddressModal || !ledgerPublicKey || !ordimintAddress) return
     async function verifyAddress() {
       await getAddressInfoLedger(ledgerPublicKey, true).address
 
@@ -37,6 +37,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
       <Modal.Body className="px-5 py-3 text-center">
         {nostrPublicKey && <div className="bitcoin-address">{getAddressInfoNostr(nostrPublicKey).address}</div>}
         {ledgerPublicKey && <div className="bitcoin-address">{ledgerAddress}</div>}
+        {ordimintAddress && <div className="bitcoin-address">{ordimintAddress}</div>}
         <br />
         {ledgerPublicKey && <h5>verify your address on your ledger device</h5>}
         <p className="very-small-text">
@@ -46,8 +47,12 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
         <Button variant="primary" onClick={() => {
           if (nostrPublicKey) {
             navigator.clipboard.writeText(getAddressInfoNostr(nostrPublicKey).address)
-          } else if (ledgerPublicKey) {
+          }
+          if (ledgerPublicKey) {
             navigator.clipboard.writeText(ledgerAddress)
+          }
+          if (ordimintAddress) {
+            navigator.clipboard.writeText(ordimintAddress)
           }
           setShowReceiveAddressModal(false)
         }}>Copy Address</Button>

@@ -28,9 +28,9 @@ export const shortenStr = (str) => {
 }
 
 export const getAddressInfoNostr = (nostrPublicKey) => {
-  // console.log(`Nostr pub: ${nostrPublicKey}`)
+  console.log(`Nostr pub: ${nostrPublicKey}`)
   const pubkeyBuffer = Buffer.from(nostrPublicKey, 'hex')
-  // console.log(`pubkeyBuffer: ${pubkeyBuffer}`)
+  console.log(`pubkeyBuffer: ${pubkeyBuffer}`)
   const addrInfo = bitcoin.payments.p2tr({ pubkey: pubkeyBuffer, network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
   return addrInfo
 }

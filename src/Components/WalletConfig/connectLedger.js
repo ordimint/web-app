@@ -71,26 +71,26 @@ export const signLedger = async (psbt, txData) => {
     console.log("Transport created", transport)
     listen(log => console.log(log))
     const newTx = psbt.__CACHE.__TX;
-    console.log("newTx", newTx)
-    console.log("PSBT", psbt)
-    console.log("txData", txData)
+    // console.log("newTx", newTx)
+    // console.log("PSBT", psbt)
+    // console.log("txData", txData)
     const path = "86'/0'/100'/0/0";
     const DEFAULT_LOCK_TIME = 0;
     const utxo = bitcoin.Transaction.fromHex(txData.txHex)
     console.log("utxo", utxo)
     try {
-        console.log("Creating appBtc:")
-        console.log("psbt cache new tx", psbt.__CACHE.__TX)
+        // console.log("Creating appBtc:")
+        // console.log("psbt cache new tx", psbt.__CACHE.__TX)
         const appBtc = new AppBtc({ transport, currency: "bitcoin" });
 
         const inLedgerTx = await splitTransaction(appBtc, utxo);
         const outLedgerTx = await splitTransaction(appBtc, psbt.__CACHE.__TX);
         const outputScriptHex = await appBtc.serializeTransactionOutputs(outLedgerTx).toString('hex');
 
-        console.log("outputScriptHex", outputScriptHex)
-        console.log("inLedgerTx", inLedgerTx)
-        console.log("outLedgerTx", outLedgerTx)
-        console.log("redem script", txData.redeemScript.toString('hex'))
+        // console.log("outputScriptHex", outputScriptHex)
+        // console.log("inLedgerTx", inLedgerTx)
+        // console.log("outLedgerTx", outLedgerTx)
+        // console.log("redem script", txData.redeemScript.toString('hex'))
 
         const ledgerTxSignatures = await appBtc.createPaymentTransaction({
             inputs: [[inLedgerTx, txData.inputIndex]],
@@ -115,13 +115,6 @@ export const signLedger = async (psbt, txData) => {
         return ledger.splitTransaction(tx.toHex(), tx.hasWitnesses());
     }
 
-
-    // const signature = await secp256k1.schnorr.sign(
-    //     Buffer.from(secp256k1.utils.hexToBytes(sigHash)),
-    //     secp256k1.utils.hexToBytes(this.privateKey)
-    // );
-    // const signedHex = secp256k1.utils.bytesToHex(signature)
-    // return signedHex;
 }
 
 

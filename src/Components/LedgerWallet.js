@@ -128,6 +128,11 @@ const LedgerWallet = () => {
                 <br /><br />
                 {ledgerPublicKey &&
                     <div>
+                        <Alert variant="light">
+                            The transactions and Ordinals will not be visible in your Ledger Live app.
+                            This is to prevent interference with your existing accounts and to avoid accidentally sending funds to your Ordinal account or you send your Ordinal accidentally to another account.
+                            So don't worry, your Ordinals are safu.
+                        </Alert>
                         <UtxoInfo
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
