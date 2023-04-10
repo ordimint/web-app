@@ -3003,9 +3003,9 @@ fieldset:disabled .btn {
 }
 
 .btn-primary {
-  --bs-btn-color: var(--bs-black);
-  --bs-btn-bg: var(--bs-white);
-  --bs-btn-border-color: var(--bs-black);
+  --bs-btn-color: white;
+  --bs-btn-bg: black;
+  --bs-btn-border-color: white;
   --bs-btn-hover-color: var(--bs-black);
   --bs-btn-hover-bg: var(--bs-white);
   --bs-btn-hover-border-color: var(--bs-black);

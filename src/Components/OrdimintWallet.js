@@ -15,9 +15,11 @@ import BeginSendModal from './modals/BeginSendModal';
 import axios from 'axios';
 import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from './WalletConfig/constance';
 
+
 const ECPair = ECPairFactory(ecc);
 const bip39 = require('bip39');
-const cryptoModule = require('crypto');
+const { BIP32Factory } = require('bip32')
+const bip32 = BIP32Factory(ecc)
 
 
 bitcoin.initEccLib(ecc)
@@ -54,8 +56,6 @@ const OrdimintWallet = () => {
     const handleRestoreWalletModalClose = () => setShowRestoreWalletModal(false);
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
 
-
-    const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         async function fetchUtxosForAddress() {
@@ -97,23 +97,44 @@ const OrdimintWallet = () => {
     }
 
     const generateWallet = () => {
-        const keyPair = ECPair.makeRandom();
+        // const keyPair = ECPair.makeRandom();
+        // const newPrivateKey = keyPair.toWIF();
+        // setOrdimintPubkey((Buffer.from(keyPair.publicKey, 'hex')).toString('hex'));
+        // console.log(`newPrivateKey: ${newPrivateKey}`);
+        // console.log(`keyPair.publicKey: ${keyPair.publicKey}`);
+        // const pubkeyBuffer = Buffer.from(keyPair.publicKey, 'hex')
+        // console.log(`pubkeyBuffer: ${pubkeyBuffer.toString('hex')}`);
+
+        // const newAddress = bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(keyPair.publicKey, 'hex')) }).address;
+        // setPrivateKey(newPrivateKey);
+        // setAddress(newAddress);
+
+        // const seed = crypto.getRandomValues(new Uint8Array(16));
+        // const mnemonic = bip39.entropyToMnemonic(Buffer.from(seed).toString('hex'));
+        // setSeedPhrase(mnemonic);
+        // handleShowModal();
+        // alert(`Address: ${newAddress}\nPrivate Key: ${newPrivateKey}`);
+        const entropy = crypto.getRandomValues(new Uint8Array(16));
+        const mnemonic = bip39.entropyToMnemonic(Buffer.from(entropy).toString('hex'));
+        const seed = bip39.mnemonicToSeedSync(mnemonic);
+        const root = bip32.fromSeed(seed);
+        const path = "m/86'/0'/0'/0/0"; // You can change the path if necessary
+        const keyPair = root.derivePath(path);
         const newPrivateKey = keyPair.toWIF();
+
         setOrdimintPubkey((Buffer.from(keyPair.publicKey, 'hex')).toString('hex'));
-        console.log(`newPrivateKey: ${newPrivateKey}`);
-        console.log(`keyPair.publicKey: ${keyPair.publicKey}`);
-        const pubkeyBuffer = Buffer.from(keyPair.publicKey, 'hex')
-        console.log(`pubkeyBuffer: ${pubkeyBuffer.toString('hex')}`);
+        // console.log(`newPrivateKey: ${newPrivateKey}`);
+        // console.log(`keyPair.publicKey: ${keyPair.publicKey}`);
+        const pubkeyBuffer = Buffer.from(keyPair.publicKey, 'hex');
+        // console.log(`pubkeyBuffer: ${pubkeyBuffer.toString('hex')}`);
 
         const newAddress = bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(keyPair.publicKey, 'hex')) }).address;
         setPrivateKey(newPrivateKey);
         setAddress(newAddress);
 
-        const seed = crypto.getRandomValues(new Uint8Array(16));
-        const mnemonic = bip39.entropyToMnemonic(Buffer.from(seed).toString('hex'));
         setSeedPhrase(mnemonic);
         handleShowModal();
-        alert(`Address: ${newAddress}\nPrivate Key: ${newPrivateKey}`);
+        // alert(`Address: ${newAddress}\nPrivate Key: ${newPrivateKey}`);
     };
 
     const downloadPrivateKey = () => {
