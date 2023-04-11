@@ -92,8 +92,8 @@ const FeeRange = (props) => {
         const fetchFees = async () => {
             const result = await getFeesRecommended();
             setMinFee(result.hourFee);
-            setMediumFee(result.halfHourFee + 5);
-            setMaxFee(result.fastestFee + 10);
+            setMediumFee(result.halfHourFee);
+            setMaxFee(result.fastestFee + 5);
             setSelectedFee(result.halfHourFee + 5);
             props.setFee({ target: { value: result.halfHourFee + 5 } });
         };
