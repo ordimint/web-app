@@ -276,7 +276,7 @@ const OrdimintWallet = () => {
                             onChange={restoreWallet}
                         />
                         <Button variant="primary" size="lg" onClick={() => document.getElementById('restoreWalletFile').click()}>
-                            Choose Private Key File
+                            Choose Backup File
                         </Button>
                     </div>
                 </Modal.Body>
@@ -306,13 +306,13 @@ const OrdimintWallet = () => {
                         </Button>
                     </pre>
                     <p>
-                        <strong>Important:</strong> Store this seed phrase safely! It is the
-                        only way to recover your wallet if you lose your private key.
+                        <strong>Important:</strong> Write down this seed phrase safely! It is the
+                        only way to recover your wallet if you lose your backup file.
                     </p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={downloadPrivateKey}>
-                        Download Seed Phrase
+                        Download Backup File
                     </Button>
                     {/* Change the onClick prop to handleCloseAndDownload */}
                     <Button variant="primary" onClick={handleCloseAndDownload}>

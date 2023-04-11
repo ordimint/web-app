@@ -68,9 +68,9 @@ const WalletPage = () => {
                         <Card className='m-2'>
                             <Card.Img className='wallet-logo' variant="top" src={OrdimintLogo} />
                             <Card.Body>
-                                <Card.Title>Ordimint</Card.Title>
+                                <Card.Title>Ordimint Wallet</Card.Title>
                                 <Card.Text>
-                                    Create a new Ordimint wallet with wallet file.
+                                    Create a new Ordimint wallet or restore an existing one.
                                 </Card.Text>
                                 <Button variant="primary"
                                     onClick={() => {
@@ -78,7 +78,7 @@ const WalletPage = () => {
                                         setWallet("ordimint")
                                     }
                                     }
-                                >Create</Button>
+                                >Use Ordimint</Button>
                             </Card.Body>
                         </Card>
                     </div>
