@@ -53,6 +53,7 @@ const WalletConnectModal = (props) => {
                                                     renderTooltipID(!showTooltipID);
                                                 }}
                                                 variant="primary"
+
                                             >
                                                 <IoIosCopy color="black" />
                                             </Button>

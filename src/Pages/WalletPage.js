@@ -25,6 +25,23 @@ const WalletPage = () => {
                     <div id="wallet-connect-cards">
 
                         <Card className='m-2'>
+                            <Card.Img className='wallet-logo' variant="top" src={OrdimintLogo} />
+                            <Card.Body>
+                                <Card.Title>Ordimint Wallet</Card.Title>
+                                <Card.Text>
+                                    Create a new Ordimint wallet or restore an existing one.
+                                </Card.Text>
+                                <Button variant="primary"
+                                    onClick={() => {
+                                        setSelectedWallet(true)
+                                        setWallet("ordimint")
+                                    }
+                                    }
+                                >Use Ordimint Wallet</Button>
+                            </Card.Body>
+                        </Card>
+
+                        <Card className='m-2'>
                             <Card.Img className='wallet-logo' style={{ objectFit: "contain" }} variant="top" src={albyLogo} />
                             <Card.Body>
                                 <Card.Title>Alby Wallet</Card.Title>
@@ -65,22 +82,7 @@ const WalletPage = () => {
                             </Card.Body>
                         </Card>
 
-                        <Card className='m-2'>
-                            <Card.Img className='wallet-logo' variant="top" src={OrdimintLogo} />
-                            <Card.Body>
-                                <Card.Title>Ordimint Wallet</Card.Title>
-                                <Card.Text>
-                                    Create a new Ordimint wallet or restore an existing one.
-                                </Card.Text>
-                                <Button variant="primary"
-                                    onClick={() => {
-                                        setSelectedWallet(true)
-                                        setWallet("ordimint")
-                                    }
-                                    }
-                                >Use Ordimint</Button>
-                            </Card.Body>
-                        </Card>
+
                     </div>
                 </div>) :
                 (

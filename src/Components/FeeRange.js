@@ -38,7 +38,7 @@ const FeeRange = (props) => {
         <div>
             <Container>
                 <div id="fee-range" className="mt-3">
-                    <ToggleButtonGroup type="radio" name="options" id="runtimeselector" value={selectedFee}>
+                    <ToggleButtonGroup type="radio" name="options" id="fee-selector" value={selectedFee}>
                         <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
                             {minFee} sats/vByte <br></br><b> slow </b> <br></br>
                         </ToggleButton>

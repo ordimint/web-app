@@ -643,3 +643,8 @@ span.input-group-text.required .required:after {
   width: 100%;
   border: none;
 }
+#fee-selector label {
+  --bs-btn-color: white;
+  --bs-btn-bg: black;
+  --bs-btn-border-color: white;
+}
