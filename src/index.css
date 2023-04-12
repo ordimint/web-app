@@ -504,7 +504,7 @@ span.input-group-text.required .required:after {
 .wallet-logo {
   background-color: white;
   padding: 10px;
-  height: 100px;
+  height: 110px;
   border-radius: 0;
 }
 
@@ -544,7 +544,8 @@ span.input-group-text.required .required:after {
 }
 
 #wallet-connect-cards .card {
-  max-width: 300px;
+  width: 300px;
+  height: 280px;
 }
 
 #wallet-buttons {
@@ -623,6 +624,14 @@ span.input-group-text.required .required:after {
   justify-content: center;
 }
 
+.seed-phrase-ordimint-wallet {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border: solid 1px;
+}
 
 .iframe-container {
   width: 100%;

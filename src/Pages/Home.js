@@ -31,11 +31,11 @@ const outputCost = process.env.REACT_APP_output_cost;
 const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
-const getFeesRecommended = async () => {
-    const response = await fetch("https://mempool.space/api/v1/fees/recommended");
-    const data = await response.json();
-    return data;
-};
+// const getFeesRecommended = async () => {
+//     const response = await fetch("https://mempool.space/api/v1/fees/recommended");
+//     const data = await response.json();
+//     return data;
+// };
 
 
 function Home() {
@@ -88,9 +88,9 @@ function Home() {
     const [fileType, setFileType] = useState("jpeg");
     ///////Fee and price
 
-    useEffect(() => {
-        getFeesRecommended().then(data => setFee(data.fastestFee))
-    }, [])
+    // useEffect(() => {
+    //     getFeesRecommended().then(data => setFee(data.fastestFee))
+    // }, [])
 
 
 

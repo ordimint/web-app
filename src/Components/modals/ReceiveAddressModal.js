@@ -3,9 +3,10 @@ import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
 import { getAddressInfoNostr } from '../WalletConfig/utils';
 import { getAddressInfoLedger } from '../WalletConfig/connectLedger';
+import { QRCodeCanvas, } from "qrcode.react";
 
 export default function ReceiveAddressModal({ showReceiveAddressModal,
-  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey }) {
+  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey, ordimintAddress }) {
 
   const [ledgerAddress, setLedgerAddress] = useState(null)
 
@@ -29,15 +30,29 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
   }
     , [showReceiveAddressModal])
 
+  function getAddressForQRCode() {
+    if (nostrPublicKey) {
+      return getAddressInfoNostr(nostrPublicKey).address;
+    } else if (ledgerPublicKey) {
+      return ledgerAddress;
+    } else if (ordimintAddress) {
+      return ordimintAddress;
+    }
+    return '';
+  }
+
   return (
     <Modal show={showReceiveAddressModal} onHide={() => setShowReceiveAddressModal(false)} className="py-5">
       <Modal.Header closeButton className="p-4">
         <Modal.Title>Receive Address</Modal.Title>
       </Modal.Header>
       <Modal.Body className="px-5 py-3 text-center">
-        {nostrPublicKey && <div className="bitcoin-address">{getAddressInfoNostr(nostrPublicKey).address}</div>}
-        {ledgerPublicKey && <div className="bitcoin-address">{ledgerAddress}</div>}
+        <div className="bitcoin-address">{getAddressForQRCode()}</div>
         <br />
+        <QRCodeCanvas value={getAddressForQRCode()} size={256} />
+
+        <br />
+
         {ledgerPublicKey && <h5>verify your address on your ledger device</h5>}
         <p className="very-small-text">
           (you can safely receive ordinal inscriptions and regular bitcoin to this address)
@@ -46,8 +61,12 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
         <Button variant="primary" onClick={() => {
           if (nostrPublicKey) {
             navigator.clipboard.writeText(getAddressInfoNostr(nostrPublicKey).address)
-          } else if (ledgerPublicKey) {
+          }
+          if (ledgerPublicKey) {
             navigator.clipboard.writeText(ledgerAddress)
+          }
+          if (ordimintAddress) {
+            navigator.clipboard.writeText(ordimintAddress)
           }
           setShowReceiveAddressModal(false)
         }}>Copy Address</Button>

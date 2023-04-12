@@ -5,17 +5,16 @@ import albyLogo from '../media/alby_icon_yellow.png'
 import ledgerLogo from '../media/ledger-logo.svg'
 import LedgerWallet from '../Components/LedgerWallet';
 import BitBoxLogo from '../media/bitbox-logo.png'
+import OrdimintLogo from '../media/logo-dark.jpeg'
 import { useState, useEffect } from 'react'
 import BitBoxWallet from '../Components/BitBoxWallet';
 import Footer from '../Components/Footer'
+import OrdimintWallet from '../Components/OrdimintWallet';
 
 const WalletPage = () => {
 
     const [selectedWallet, setSelectedWallet] = useState(false)
     const [wallet, setWallet] = useState("")
-
-
-
     return (
 
         <div className='main-middle' >
@@ -66,30 +65,29 @@ const WalletPage = () => {
                             </Card.Body>
                         </Card>
 
-                        {/* <Card className='m-2'>
-                            <Card.Img className='wallet-logo' variant="top" src={BitBoxLogo} />
+                        <Card className='m-2'>
+                            <Card.Img className='wallet-logo' variant="top" src={OrdimintLogo} />
                             <Card.Body>
-                                <Card.Title>Bitbox</Card.Title>
+                                <Card.Title>Ordimint Wallet</Card.Title>
                                 <Card.Text>
-                                    Connect your BitBox hardware wallet.
+                                    Create a new Ordimint wallet or restore an existing one.
                                 </Card.Text>
                                 <Button variant="primary"
                                     onClick={() => {
                                         setSelectedWallet(true)
-                                        setWallet("bitbox")
-
+                                        setWallet("ordimint")
                                     }
                                     }
-                                >Connect</Button>
+                                >Use Ordimint</Button>
                             </Card.Body>
-                        </Card> */}
+                        </Card>
                     </div>
                 </div>) :
                 (
                     <div>
                         {wallet === "alby" ? <NostrWallet /> : <></>}
                         {wallet === "ledger" ? <LedgerWallet /> : <></>}
-                        {wallet === "bitbox" ? <BitBoxWallet /> : <></>}
+                        {wallet === "ordimint" ? <OrdimintWallet /> : <></>}
                     </div>
                 )}
             <Footer />

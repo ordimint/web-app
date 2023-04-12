@@ -12,6 +12,7 @@ import * as ecc from 'tiny-secp256k1'
 import { getAddressInfoLedger, signLedger } from '../WalletConfig/connectLedger';
 
 import ECPairFactory from 'ecpair';
+const secp256k1 = require('@noble/secp256k1');
 const axios = require('axios')
 const ECPair = ECPairFactory(ecc);
 
@@ -28,33 +29,57 @@ export default function ConfirmationModal({
   nostrPublicKey,
   ledgerPublicKey,
   destinationBtcAddress,
-  inscriptionUtxosByUtxo
+  inscriptionUtxosByUtxo,
+  privateKey,
+  ordimintPubkey,
 }) {
   function toXOnly(key) {
-    return key.length === 33 ? key.slice(1, 33) : key;
+    if (key.length === 33) {
+      return key.slice(1, 33);
+    } else if (key.length === 32) {
+      return key;
+    } else {
+      throw new Error('Invalid public key length');
+    }
   }
+
 
   async function sendUtxo() {
     var inputAddressInfo, publicKey, sig, txHex, fullTx, hex;
 
     if (nostrPublicKey) {
       inputAddressInfo = getAddressInfoNostr(nostrPublicKey)
-    } else if (ledgerPublicKey) {
+    }
+
+    if (ledgerPublicKey) {
       inputAddressInfo = await getAddressInfoLedger(ledgerPublicKey, false)
       txHex = await axios.get(`https://mempool.space/api/tx/${currentUtxo.txid}/hex`)
-      console.log("inputAddressInfo redeem output", inputAddressInfo)
-      console.log("txHex", txHex)
+      // console.log("inputAddressInfo redeem output", inputAddressInfo)
+      // console.log("txHex", txHex)
+    }
+
+    if (ordimintPubkey) {
+      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(ordimintPubkey, 'hex')) })
+      console.log("Adress Info Ordimint Address info", inputAddressInfo)
     }
 
     const psbt = new bitcoin.Psbt({ network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
 
     if (nostrPublicKey) {
       publicKey = Buffer.from(await window.nostr.getPublicKey(), 'hex')
+      console.log("Public Key Nostr:", publicKey);
     }
-    else if (ledgerPublicKey) {
+
+    if (ledgerPublicKey) {
       const pubkeyBuffer = Buffer.from(ledgerPublicKey, 'hex')
       const pubkey = ECPair.fromPublicKey(pubkeyBuffer)
       publicKey = Buffer.from(pubkey.publicKey, 'hex').slice(1)
+    }
+
+    if (ordimintPubkey) {
+
+      publicKey = Buffer.from(ordimintPubkey, 'hex');
+      console.log("Public Key Ordimint:", publicKey);
     }
 
     const inputParams = {
@@ -76,19 +101,42 @@ export default function ConfirmationModal({
 
     const sigHash = psbt.__CACHE.__TX.hashForWitnessV1(0, [inputAddressInfo.output], [currentUtxo.value], bitcoin.Transaction.SIGHASH_DEFAULT)
 
-
-
     if (nostrPublicKey) {
       sig = await window.nostr.signSchnorr(sigHash.toString('hex'))
       psbt.updateInput(0, {
         tapKeySig: serializeTaprootSignature(Buffer.from(sig, 'hex'))
       })
+
       psbt.finalizeAllInputs()
       const tx = psbt.extractTransaction()
       hex = tx.toBuffer().toString('hex')
       fullTx = bitcoin.Transaction.fromHex(hex)
       console.log(hex)
-    } else if (ledgerPublicKey) {
+    }
+
+    if (ordimintPubkey) {
+      sig = await signSchnorrOrdimintWallet(sigHash.toString('hex'), privateKey)
+      console.log("Ordimint signature:", sig);
+      psbt.updateInput(0, {
+        tapKeySig: serializeTaprootSignature(Buffer.from(sig, 'hex'))
+      })
+
+
+
+      psbt.finalizeAllInputs()
+      const tx = psbt.extractTransaction()
+      hex = tx.toBuffer().toString('hex')
+      fullTx = bitcoin.Transaction.fromHex(hex)
+
+      console.log("Finalized PSBT:", psbt);
+      console.log("PrivateKey", privateKey);
+      console.log("Finalized transaction hex:", hex);
+      const decodedTx = bitcoin.Transaction.fromHex(hex);
+      console.log("Decoded transaction:", decodedTx);
+      console.log(hex)
+    }
+
+    if (ledgerPublicKey) {
       const txData = {
         txHex: txHex.data,
         sigHash: sigHash.toString('hex'),
@@ -101,6 +149,7 @@ export default function ConfirmationModal({
     }
 
 
+
     const res = await axios.post(`https://mempool.space/api/tx`, hex).catch(err => {
       console.error(err)
       // alert(err)
@@ -110,6 +159,16 @@ export default function ConfirmationModal({
 
     setSentTxid(fullTx.getId())
     return true
+  }
+
+  async function signSchnorrOrdimintWallet(sigHash, privateKey) {
+    privateKey = ECPair.fromWIF(privateKey).privateKey.toString('hex')
+    const signature = await secp256k1.schnorr.sign(
+      Buffer.from(secp256k1.utils.hexToBytes(sigHash)),
+      secp256k1.utils.hexToBytes(privateKey)
+    );
+    const signedHex = secp256k1.utils.bytesToHex(signature);
+    return signedHex;
   }
 
   return (
