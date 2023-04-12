@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
@@ -20,8 +22,8 @@ const FeeRange = (props) => {
             setMinFee(result.hourFee);
             setMediumFee(result.halfHourFee);
             setMaxFee(result.fastestFee + 5);
-            setSelectedFee(result.halfHourFee + 5);
-            props.setFee({ target: { value: result.halfHourFee + 5 } });
+            setSelectedFee(result.halfHourFee);
+            props.setFee({ target: { value: result.halfHourFee } });
         };
 
         fetchFees();
