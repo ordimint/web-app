@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState } from 'react'
 import { InputGroup, Form, Container, Button, Figure, Col, Row } from 'react-bootstrap'
 import axios from 'axios'
 import Footer from '../Components/Footer';
@@ -25,12 +25,6 @@ const CheckOrder = () => {
                 setTxhash(response.data.mintingTransaction);
                 setInscriptionID(response.data.inscription_ID);
             }
-            // if (response.data.sendingtxhash) {
-            //     setSendingTxHash(response.data.sendingtxhash)
-            // }
-
-            // console.log(response.data)
-
         })
             // if error
             .catch(function (error) {
@@ -39,6 +33,7 @@ const CheckOrder = () => {
             });
     }
 
+
     return (
         <Container>
             <div className='main-middle'>
@@ -46,9 +41,14 @@ const CheckOrder = () => {
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
                 {txhash ? (
                     <div>
-                        <div className='mt-2 order-status'>
+                        <div className="mt-2 order-status">
                             <p>Preview:</p>
-                            <iframe src={`https://live.ordilabs.org/content/${inscriptionID}`} title="Inscription pewview"></iframe>
+                            <div className="iframe-container">
+                                <iframe
+                                    src={`https://live.ordilabs.org/content/${inscriptionID}`}
+                                    title="Inscription preview"
+                                ></iframe>
+                            </div>
                         </div>
                         <h4 className="mt-3 order-status">
                             <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">

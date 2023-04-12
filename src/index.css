@@ -632,3 +632,14 @@ span.input-group-text.required .required:after {
   border-radius: 0.25rem;
   border: solid 1px;
 }
+
+.iframe-container {
+  width: 100%;
+  overflow: hidden;
+  border: none;
+}
+
+.iframe-container iframe {
+  width: 100%;
+  border: none;
+}
