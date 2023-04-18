@@ -1,8 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Image, Figure } from 'react-bootstrap'
-import placeholderimage from "../media/text-placeholder.png";
-import { getContentType } from '../functions/ordinalFunctions';
+import { getContentType } from '../public/functions/ordinalFunctions';
 
 const CollectionThumbnail = (props) => {
 

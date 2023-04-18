@@ -1,3 +1,5 @@
+
+
 async function getContentType(inscriptionID) {
     try {
         const response = await fetch(`https://ordapi.xyz/inscription/${inscriptionID}`)

@@ -1,8 +1,19 @@
 import { Navbar, Nav, Button, Offcanvas, Container } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import { Link } from "react-router-dom";
-import logo from "../media/logo.png";
+import { useRouter } from 'next/router';
+import Link from "next/link";
+import Image from 'next/image';
+
+
+
+
 const Header = (props) => {
+
+    const router = useRouter();
+
+    const isActive = (href) => {
+        return router.pathname === href ? "active" : '';
+    };
+
     return (
         <div>
             <Container fluid>
@@ -14,18 +25,17 @@ const Header = (props) => {
                     variant="dark"
                     className="mb-3"
                 >
-                    {/* <Navbar.Brand href="/">
-                        ORDIMINT
-                    </Navbar.Brand> */}
-                    <Navbar.Brand href="/">
-                        <img
-                            src={logo}
-                            width="130"
-                            height="50"
-                            className="d-inline-block align-top align-start"
-                            alt="Ordimint Brand Logo"
-                        />
-                    </Navbar.Brand>
+                    <Link href="/">
+                        <Navbar.Brand>
+                            <Image
+                                src="/media/logo.png"
+                                width={130}
+                                height={50}
+                                className="d-inline-block align-top align-start"
+                                alt="Ordimint Brand Logo"
+                            />
+                        </Navbar.Brand>
+                    </Link>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Offcanvas
                         id="responsive-navbar-nav"
@@ -42,39 +52,24 @@ const Header = (props) => {
                         <Offcanvas.Body>
                             <Nav variant="pills" className="container">
                                 <Nav.Item>
-                                    <LinkContainer to="/">
-                                        <Nav.Link>Inscribe  </Nav.Link>
-                                    </LinkContainer>
+                                    <Nav.Link className={isActive('/')} href="/">
+                                        Inscribe  </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <LinkContainer to="/checkorder">
-                                        <Nav.Link>Check Order </Nav.Link>
-                                    </LinkContainer>
+                                    <Nav.Link className={isActive('/check-order')} href="check-order">Check Order</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <LinkContainer to="/wallet">
-                                        <Nav.Link>Wallet</Nav.Link>
-                                    </LinkContainer>
+                                    <Nav.Link className={isActive('/wallet')} href="wallet">Wallet</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <LinkContainer to="/collections">
-                                        <Nav.Link>Collections</Nav.Link>
-                                    </LinkContainer>
+                                    <Nav.Link className={isActive('/collections')} href="collections">Collections</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <LinkContainer to="/search">
-                                        <Nav.Link>Search </Nav.Link>
-                                    </LinkContainer>
+                                    <Nav.Link className={isActive('/search')} href="search">Search </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <LinkContainer to="/faq">
-                                        <Nav.Link>FAQ </Nav.Link>
-                                    </LinkContainer>
+                                    <Nav.Link className={isActive('/faq')} href="faq">FAQ </Nav.Link>
                                 </Nav.Item>
-
-
-
-
                             </Nav>
                             <Nav >
                                 {/* <Nav.Item >
@@ -99,7 +94,7 @@ const Header = (props) => {
             </div>
       </Row> */}
             </Container>
-        </div>
+        </div >
     );
 };
 
