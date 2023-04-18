@@ -39,6 +39,7 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 function Home() {
+    const defaultImage = '/media/dorian-nakamoto.jpg';
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
@@ -83,7 +84,7 @@ function Home() {
     //////OnChain-Address
     const [onChainAddress, setOnChainAddress] = useState("");
     ///////File
-    const [file, setFile] = useState("/media/dorian-nakamoto.jpg");
+    const [file, setFile] = useState(defaultImage);
     const [fileSize, setFileSize] = useState(1000);
     const [fileType, setFileType] = useState("jpeg");
     ///////Fee and price

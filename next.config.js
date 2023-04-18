@@ -15,4 +15,11 @@ module.exports = withTM({
 
         return config;
     },
+    async rewrites() {
+        return [
+            {
+                source: '/invoicehook',
+                destination: 'http://localhost:5000/invoicehook',
+            }]
+    }
 });

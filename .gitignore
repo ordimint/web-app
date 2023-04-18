@@ -12,6 +12,9 @@
 /build
 /dist
 
+public/robots.txt
+
+
 #collections
 src/data/collections.js
 # misc
