@@ -10,17 +10,17 @@ import { Row, Container, Button, Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
 import AlbyLogo from '../public/media/alby_icon_yellow.svg';
 import LedgerLogo from '../public/media/ledger-logo-small.svg';
-import AlertModal from '../Components/modals/AlterModal';
-import FeeRange from '../Components/FeeRange';
-import Price from '../Components/Price';
-import ReceiveAddressModal from '../Components/modals/ReceiveAddressModal';
-import WalletConnectModal from '../Components/modals/WalletConnectModal';
-import { getAddressInfoNostr, connectWallet } from '../Components/WalletConfig/utils';
-import { getLedgerPubkey, getAddressInfoLedger } from '../Components/WalletConfig/connectLedger';
-import TextInput from '../Components/TextInput';
-import DomainInput from '../Components/DomainInput';
-import NewsInput from '../Components/NewsInput';
-import BRC from '../Components/BRC';
+import AlertModal from '../components/modals/AlterModal';
+import FeeRange from '../components/FeeRange';
+import Price from '../components/Price';
+import ReceiveAddressModal from '../components/modals/ReceiveAddressModal';
+import WalletConnectModal from '../components/modals/WalletConnectModal';
+import { getAddressInfoNostr, connectWallet } from '../components/WalletConfig/utils';
+import { getLedgerPubkey, getAddressInfoLedger } from '../components/WalletConfig/connectLedger';
+import TextInput from '../components/TextInput';
+import DomainInput from '../components/DomainInput';
+import NewsInput from '../components/NewsInput';
+import BRC from '../components/BRC';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);

@@ -1,15 +1,15 @@
 import React from 'react'
-import NostrWallet from '../Components/NostrWallet'
+import NostrWallet from '../components/NostrWallet'
 import { Card, Button } from 'react-bootstrap';
 import albyLogo from '../media/alby_icon_yellow.png'
 import ledgerLogo from '../media/ledger-logo.svg'
-import LedgerWallet from '../Components/LedgerWallet';
+import LedgerWallet from '../components/LedgerWallet';
 import BitBoxLogo from '../media/bitbox-logo.png'
 import OrdimintLogo from '../media/logo-dark.jpeg'
 import { useState, useEffect } from 'react'
-import BitBoxWallet from '../Components/BitBoxWallet';
-import Footer from '../Components/Footer'
-import OrdimintWallet from '../Components/OrdimintWallet';
+import BitBoxWallet from '../components/BitBoxWallet';
+import Footer from '../components/Footer'
+import OrdimintWallet from '../components/OrdimintWallet';
 
 const WalletPage = () => {
 

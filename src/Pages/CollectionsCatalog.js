@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
-import CollectionThumbnail from '../Components/CollectionThumbnail';
+import CollectionThumbnail from '../components/CollectionThumbnail';
 import { Link } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination';
 import { collections } from '../data/collections.js';
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 
 
 const CollectionsCatalog = () => {

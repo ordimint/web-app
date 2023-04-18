@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom'
 import { Button, Figure, Row, Col, Container, Placeholder } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { FaTwitterSquare, FaDiscord, FaGlobe } from "react-icons/fa";
-import OrdinalThumbnail from '../Components/OrdinalThumbnail'
-import SingleOrdinalModal from '../Components/modals/SingleOrdinalModal';
+import OrdinalThumbnail from '../components/OrdinalThumbnail'
+import SingleOrdinalModal from '../components/modals/SingleOrdinalModal';
 import { getContentType } from '../functions/ordinalFunctions';
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 
 const CollectionDetailPage = () => {
     const { slug } = useParams();

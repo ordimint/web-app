@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { FaTwitterSquare, FaDiscord, FaGlobe } from "react-icons/fa";
 import OrdinalThumbnail from '../../components/OrdinalThumbnail'
 // import placeholderimage from "../../public/media/text-placeholder.png";
-// import SingleOrdinalModal from '../../Components/modals/SingleOrdinalModal';
+// import SingleOrdinalModal from '../../components/modals/SingleOrdinalModal';
 import { getContentType } from '../../public/functions/ordinalFunctions';
-import Footer from '../../Components/Footer';
+import Footer from '../../components/Footer';
 
 const CollectionDetailPage = () => {
     const router = useRouter();

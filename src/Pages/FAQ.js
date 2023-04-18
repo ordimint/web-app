@@ -1,6 +1,6 @@
 import React from 'react'
 import { Accordion, Container, ListGroup, Col, Row } from "react-bootstrap";
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 const FAQ = () => {
     return (
         <div id="faq">
