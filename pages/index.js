@@ -3,13 +3,13 @@ import { io } from "socket.io-client";
 import FileUpload from '../components/FileUpload';
 import OnchainInput from '../components/OnchainInput';
 import InvoiceModal from '../components/modals/InvoiceModal';
-import defaultImage from '../media/dorian-nakamoto.jpg';
 import { validate } from 'bitcoin-address-validation';
 import Footer from '../components/Footer';
+import Image from 'next/image';
 import { Row, Container, Button, Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
-import AlbyLogo from '../media/alby_icon_yellow.svg';
-import LedgerLogo from '../media/ledger-logo-small.svg';
+import AlbyLogo from '../public/media/alby_icon_yellow.svg';
+import LedgerLogo from '../public/media/ledger-logo-small.svg';
 import AlertModal from '../components/modals/AlterModal';
 import FeeRange from '../components/FeeRange';
 import Price from '../components/Price';
@@ -21,6 +21,7 @@ import TextInput from '../components/TextInput';
 import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
+import Head from 'next/head';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -39,6 +40,7 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 function Home() {
+    const defaultImage = '/media/dorian-nakamoto.jpg';
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
@@ -306,6 +308,11 @@ function Home() {
 
     return (
         <div className="App" >
+            <Head>
+                <meta name="description" content="A simple Wallet and Inscription service for Bitcoin Ordinals" />
+                <title>Ordimint - Inscribe</title>
+                <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT" />
+            </Head>
             <Container>
                 <Row>
                     <div className='main-middle'>
@@ -429,7 +436,7 @@ function Home() {
                                         }
                                         variant="success"
                                         size="md"
-                                    ><img src={AlbyLogo} height="20" alt="Alby Logo" /> use Alby Wallet</Button>
+                                    ><Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet</Button>
 
                                     <Button
                                         className='m-1'
@@ -441,7 +448,7 @@ function Home() {
                                         }
                                         variant="success"
                                         size="md"
-                                    ><img src={LedgerLogo} height="20" alt="Alby Logo" /> use Ledger HW</Button>
+                                    ><Image src={LedgerLogo} height="20" width="20" alt="Ledger" /> use Ledger HW</Button>
                                 </div>
                             </div>
                         }

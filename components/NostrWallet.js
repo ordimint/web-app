@@ -9,7 +9,7 @@ import SelectFeeRateModal from './modals/SelectFeeRateModal';
 import SentModal from './modals/SentModal';
 import BeginSendModal from './modals/BeginSendModal';
 import UtxoModal from './modals/UtxoModal';
-import AlbyLogo from '../media/alby_icon_yellow.svg';
+import AlbyLogo from '../public/media/alby_icon_yellow.svg';
 import UtxoInfo from './UtxoInfo';
 import { getAddressInfoNostr, connectWallet } from './WalletConfig/utils';
 import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from './WalletConfig/constance';

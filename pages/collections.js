@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import CollectionThumbnail from '../components/CollectionThumbnail';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Pagination from 'react-bootstrap/Pagination';
-import { collections } from '../data/collections.js';
+import { collections } from '/public/data/collections.js';
 import Footer from '../components/Footer';
-
+import Head from 'next/head';
 
 const CollectionsCatalog = () => {
     const [search, setSearch] = useState('');
@@ -44,6 +44,11 @@ const CollectionsCatalog = () => {
     return (
 
         <div className="collections-catalog">
+            <Head>
+                <title>Ordimint - Ordinal Collections</title>
+                <meta name="description" content="A searchable site with all Ordinal collections" />
+                <meta name="keywords" content="Bitcoin, Ordinal Collections,Searchable" />
+            </Head>
             <Container fluid>
                 <h1 className="text-center py-3">Collections</h1>
                 <Form>
@@ -58,7 +63,7 @@ const CollectionsCatalog = () => {
                 <Row xs={1} sm={2} md={3} lg={4} className="g-4">
                     {currentCollections.map((collection, index) => (
                         <Col key={index}>
-                            <Link to={`${collection.slug}`} className="collection-link">
+                            <Link href={`/collections/${collection.slug}`} passHref>
                                 <div className="collection-card">
                                     <CollectionThumbnail collection={collection} />
                                 </div>

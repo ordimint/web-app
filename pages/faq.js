@@ -1,10 +1,14 @@
 import React from 'react'
 import { Accordion, Container, ListGroup, Col, Row } from "react-bootstrap";
 import Footer from '../components/Footer';
+import Head from 'next/head';
 const FAQ = () => {
     return (
         <div id="faq">
-            <title>FAQ - Frequently asked Questions</title>
+            <Head>
+                <title>Ordimint - FAQ</title>
+                <meta name="keywords" content="Bitcoin, Ordinal, Inscriptin, FAQ" />
+            </Head>
             <h1 className='mb-3'>FAQ</h1>
             <Container>
                 <Row xs={1} sm={1} md={1} lg={1}>
@@ -44,8 +48,23 @@ const FAQ = () => {
                                     </ListGroup>
                                 </Accordion.Body>
                             </Accordion.Item>
+                            <Accordion.Item eventKey="0222">
+                                <Accordion.Header>What are Bitcoin inscriptions?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>An inscription is a convention where sats can be inscribed with arbitrary content, a kind of Bitcoin-native digital artifact or NFT. Using the convention, they can be sent around and stored in a Bitcoin unspent transaction output (UTXO). The Inscription process writes or inscribes the data of the content stored into the witness data of the Bitcoin transaction. The witness was introduced in the SegWit upgrade to the Bitcoin network in 2017.</p>
+
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="0333">
+                                <Accordion.Header>What is the difference between a Bitcoin inscription and an NFT?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>Inscriptions don't need a token. A Bitcoin inscription is a kind of Bitcoin-native digital artifact or NFT. It is created by inscribing arbitrary content onto sats (the smallest unit of Bitcoin) and can be sent around and stored in a Bitcoin unspent transaction output (UTXO). An NFT (non-fungible token) is a unique digital asset that represents ownership of a specific item or piece of content, such as a piece of art or a collectible. NFTs can be created on various blockchain platforms, not just Bitcoin. The main difference between a Bitcoin inscription and an NFT is that a Bitcoin inscription is specific to the Bitcoin blockchain and is created by inscribing content onto sats, while an NFT can be created on various blockchain platforms and represents ownership of a specific item or piece of content.</p>
+
+                                </Accordion.Body>
+                            </Accordion.Item>
+
                             <Accordion.Item eventKey="0111">
-                                <Accordion.Header>Supported file Types</Accordion.Header>
+                                <Accordion.Header>What file types are supported?</Accordion.Header>
                                 <Accordion.Body>
                                     <p>apng flac gif html jpg mp3 pdf png svg txt wav webm webp</p>
 

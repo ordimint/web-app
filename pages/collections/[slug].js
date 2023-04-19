@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useRouter } from 'next/router'
 import { Button, Figure, Row, Col, Container, Placeholder } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { FaTwitterSquare, FaDiscord, FaGlobe } from "react-icons/fa";
-import OrdinalThumbnail from '../components/OrdinalThumbnail'
-import SingleOrdinalModal from '../components/modals/SingleOrdinalModal';
-import { getContentType } from '../functions/ordinalFunctions';
-import Footer from '../components/Footer';
+import OrdinalThumbnail from '../../components/OrdinalThumbnail'
+// import placeholderimage from "../../public/media/text-placeholder.png";
+// import SingleOrdinalModal from '../../components/modals/SingleOrdinalModal';
+import { getContentType } from '../../public/functions/ordinalFunctions';
+import Footer from '../../components/Footer';
+import Head from 'next/head';
 
 const CollectionDetailPage = () => {
-    const { slug } = useParams();
-
+    const router = useRouter();
+    const { slug } = router.query;
     const [collectionMeta, setCollectionMeta] = useState([])
     const [collection, setCollection] = useState([])
     const [isText, setIsText] = useState(false)
@@ -20,15 +22,20 @@ const CollectionDetailPage = () => {
     const hideDetailModal = () => showDetailModal(false);
     const [ordinal, setOrdinal] = useState()
 
+    const goBack = () => {
+        router.push('/collections');
+    };
+
 
     async function setContentType(inscriptionID) {
-        const response = await getContentType(inscriptionID)
-        const contentType = response
-        if (contentType.includes("text")) {
-            console.log(contentType)
-            setIsText(true)
+        const response = await getContentType(inscriptionID);
+        const contentType = response;
+        if (contentType && contentType.includes("text")) {
+            console.log(contentType);
+            setIsText(true);
         }
     }
+
 
 
     async function getCollectionMeta() {
@@ -69,12 +76,15 @@ const CollectionDetailPage = () => {
 
     return (
         <div>
+            <Head>
+                <title>Collection - {collectionMeta.name}</title>
+                <meta name="description" content={collectionMeta.description} />
+                <meta name="keywords" content="Bitcoin, Ordinals Collection" />
+            </Head>
             <Container>
-                <Link to={-1}>
-                    <Button
-                        size="lg"
-                    >Back</Button>
-                </Link>
+                <Button size="lg" onClick={goBack}>
+                    Back
+                </Button>
             </Container>
 
             <div className='main-middle'>

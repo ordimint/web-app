@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Figure } from 'react-bootstrap'
-import SingleOrdinalModal from '../Components/modals/SingleOrdinalModal';
+import SingleOrdinalModal from '../components/modals/SingleOrdinalModal';
 
 const OrdinalThumbnail = (props) => {
 

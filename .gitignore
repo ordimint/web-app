@@ -12,6 +12,9 @@
 /build
 /dist
 
+public/robots.txt
+
+
 #collections
 src/data/collections.js
 # misc
@@ -21,6 +24,7 @@ src/data/collections.js
 .env.test.local
 .env.production.local
 .env
+.next
 
 npm-debug.log*
 yarn-debug.log*

@@ -2,6 +2,7 @@ import { React, useState } from 'react'
 import { InputGroup, Form, Container, Button, Figure, Col, Row } from 'react-bootstrap'
 import axios from 'axios'
 import Footer from '../components/Footer';
+import Head from 'next/head';
 
 const CheckOrder = () => {
 
@@ -36,6 +37,11 @@ const CheckOrder = () => {
 
     return (
         <Container>
+            <Head>
+                <title>Ordimint - Check Order</title>
+                <meta name="description" content="Check your inscription order" />
+                <meta name="keywords" content="Bitcoin, Inscription service" />
+            </Head>
             <div className='main-middle'>
                 {/* <h1>Check your order</h1> */}
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>

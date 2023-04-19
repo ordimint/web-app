@@ -1,16 +1,11 @@
 import React from 'react'
 import NostrWallet from '../components/NostrWallet'
 import { Card, Button } from 'react-bootstrap';
-import albyLogo from '../media/alby_icon_yellow.png'
-import ledgerLogo from '../media/ledger-logo.svg'
 import LedgerWallet from '../components/LedgerWallet';
-import BitBoxLogo from '../media/bitbox-logo.png'
-import OrdimintLogo from '../media/logo-dark.jpeg'
 import { useState, useEffect } from 'react'
-import BitBoxWallet from '../components/BitBoxWallet';
 import Footer from '../components/Footer'
 import OrdimintWallet from '../components/OrdimintWallet';
-
+import Head from 'next/head';
 const WalletPage = () => {
 
     const [selectedWallet, setSelectedWallet] = useState(false)
@@ -18,6 +13,11 @@ const WalletPage = () => {
     return (
 
         <div className='main-middle' >
+            <Head>
+                <title>Ordimint - Wallet</title>
+                <meta name="description" content="Ordinals wallet" />
+                <meta name="keywords" content="Bitcoin, Ordinals, Wallet, Ledger, Alby" /> {/* Add this line */}
+            </Head>
             <h1>Wallet</h1>
             {!selectedWallet ? (
                 <div>
@@ -25,7 +25,7 @@ const WalletPage = () => {
                     <div id="wallet-connect-cards">
 
                         <Card className='m-2'>
-                            <Card.Img className='wallet-logo' variant="top" src={OrdimintLogo} />
+                            <Card.Img className='wallet-logo' variant="top" src="/media/logo-dark.jpeg" />
                             <Card.Body>
                                 <Card.Title>Ordimint Wallet</Card.Title>
                                 <Card.Text>
@@ -42,7 +42,7 @@ const WalletPage = () => {
                         </Card>
 
                         <Card className='m-2'>
-                            <Card.Img className='wallet-logo' style={{ objectFit: "contain" }} variant="top" src={albyLogo} />
+                            <Card.Img className='wallet-logo' style={{ objectFit: "contain" }} variant="top" src="/media/alby_icon_yellow.png" />
                             <Card.Body>
                                 <Card.Title>Alby Wallet</Card.Title>
                                 <Card.Text>
@@ -64,7 +64,7 @@ const WalletPage = () => {
                         </Card>
 
                         <Card className='m-2'>
-                            <Card.Img className='wallet-logo' variant="top" src={ledgerLogo} />
+                            <Card.Img className='wallet-logo' variant="top" src="/media/ledger-logo.svg" />
                             <Card.Body>
                                 <Card.Title>Ledger</Card.Title>
                                 <Card.Text>
