@@ -10,11 +10,11 @@ import { getContentType } from '../../public/functions/ordinalFunctions';
 import Footer from '../../components/Footer';
 import Head from 'next/head';
 
-const CollectionDetailPage = () => {
+const CollectionDetailPage = ({ collectionMeta, collection }) => {
     const router = useRouter();
     const { slug } = router.query;
-    const [collectionMeta, setCollectionMeta] = useState([])
-    const [collection, setCollection] = useState([])
+    // const [collectionMeta, setCollectionMeta] = useState([])
+    // const [collection, setCollection] = useState([])
     const [isText, setIsText] = useState(false)
     const [text, setText] = useState("")
     const [isDetailModal, showDetailModal] = useState(false);
@@ -36,8 +36,6 @@ const CollectionDetailPage = () => {
         }
     }
 
-
-
     async function getCollectionMeta() {
         const collectionMeta = await fetch(`https://raw.githubusercontent.com/ordinals-wallet/ordinals-collections/main/collections/${slug}/meta.json`)
         if (collectionMeta) {
@@ -54,21 +52,21 @@ const CollectionDetailPage = () => {
 
 
 
-    useEffect(() => {
-        getCollectionMeta().then(async (collectionMeta) => {
+    // useEffect(() => {
+    //     getCollectionMeta().then(async (collectionMeta) => {
 
-            await setCollectionMeta(collectionMeta)
+    //         await setCollectionMeta(collectionMeta)
 
-            // console.log(collection)
-        })
+    //         // console.log(collection)
+    //     })
 
-        getCollection().then(async (collection) => {
-            await setCollection(collection)
-            // console.log(collection)
-        })
+    //     getCollection().then(async (collection) => {
+    //         await setCollection(collection)
+    //         // console.log(collection)
+    //     })
 
 
-    }, [])
+    // }, [])
 
     useEffect(() => {
         setContentType(collectionMeta.inscription_icon)
@@ -186,5 +184,23 @@ const CollectionDetailPage = () => {
 
     )
 }
+
+export async function getServerSideProps(context) {
+    const { slug } = context.query;
+
+    const collectionMetaRes = await fetch(`https://raw.githubusercontent.com/ordinals-wallet/ordinals-collections/main/collections/${slug}/meta.json`);
+    const collectionMeta = await collectionMetaRes.json();
+
+    const collectionRes = await fetch(`https://raw.githubusercontent.com/ordinals-wallet/ordinals-collections/main/collections/${slug}/inscriptions.json`);
+    const collection = await collectionRes.json();
+
+    return {
+        props: {
+            collectionMeta,
+            collection,
+        },
+    };
+}
+
 
 export default CollectionDetailPage
