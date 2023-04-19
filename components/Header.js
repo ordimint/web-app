@@ -56,19 +56,19 @@ const Header = (props) => {
                                         Inscribe  </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/check-order')} href="check-order">Check Order</Nav.Link>
+                                    <Nav.Link className={isActive('/check-order')} href="/check-order">Check Order</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/wallet')} href="wallet">Wallet</Nav.Link>
+                                    <Nav.Link className={isActive('/wallet')} href="/wallet">Wallet</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/collections')} href="collections">Collections</Nav.Link>
+                                    <Nav.Link className={isActive('/collections')} href="/collections">Collections</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/search')} href="search">Search </Nav.Link>
+                                    <Nav.Link className={isActive('/search')} href="/search">Search </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/faq')} href="faq">FAQ </Nav.Link>
+                                    <Nav.Link className={isActive('/faq')} href="/faq">FAQ </Nav.Link>
                                 </Nav.Item>
                             </Nav>
                             <Nav >
