@@ -5,7 +5,7 @@ import LedgerWallet from '../components/LedgerWallet';
 import { useState, useEffect } from 'react'
 import Footer from '../components/Footer'
 import OrdimintWallet from '../components/OrdimintWallet';
-
+import Head from 'next/head';
 const WalletPage = () => {
 
     const [selectedWallet, setSelectedWallet] = useState(false)
@@ -13,6 +13,11 @@ const WalletPage = () => {
     return (
 
         <div className='main-middle' >
+            <Head>
+                <title>Ordimint - Wallet</title>
+                <meta name="description" content="Ordinals wallet" />
+                <meta name="keywords" content="Bitcoin, Ordinals, Wallet, Ledger, Alby" /> {/* Add this line */}
+            </Head>
             <h1>Wallet</h1>
             {!selectedWallet ? (
                 <div>

@@ -21,6 +21,7 @@ import TextInput from '../components/TextInput';
 import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
+import Head from 'next/head';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -307,6 +308,11 @@ function Home() {
 
     return (
         <div className="App" >
+            <Head>
+                <meta name="description" content="A simple Wallet and Inscription service for Bitcoin Ordinals" />
+                <title>Ordimint - Inscribe</title>
+                <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT" />
+            </Head>
             <Container>
                 <Row>
                     <div className='main-middle'>

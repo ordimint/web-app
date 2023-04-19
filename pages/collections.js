@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Pagination from 'react-bootstrap/Pagination';
 import { collections } from '/public/data/collections.js';
 import Footer from '../components/Footer';
-
+import Head from 'next/head';
 
 const CollectionsCatalog = () => {
     const [search, setSearch] = useState('');
@@ -44,6 +44,11 @@ const CollectionsCatalog = () => {
     return (
 
         <div className="collections-catalog">
+            <Head>
+                <title>Ordimint - Ordinal Collections</title>
+                <meta name="description" content="A searchable site with all Ordinal collections" />
+                <meta name="keywords" content="Bitcoin, Ordinal Collections,Searchable" />
+            </Head>
             <Container fluid>
                 <h1 className="text-center py-3">Collections</h1>
                 <Form>

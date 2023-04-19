@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Form, InputGroup, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
-
+import Head from 'next/head';
 
 const Search = () => {
 
@@ -62,6 +62,11 @@ const Search = () => {
 
     return (
         <div>
+            <Head>
+                <title>Ordimint - Search</title>
+                <meta name="description" content="Seach for .sats Names" />
+                <meta name="keywords" content="Bitcoin, .sats names, inscriptions, Ordinals" /> {/* Add this line */}
+            </Head>
             <div className="main-middle">
                 <h4>Search for an inscription</h4>
                 <div id="tab-container">

@@ -1,10 +1,14 @@
 import React from 'react'
 import { Accordion, Container, ListGroup, Col, Row } from "react-bootstrap";
 import Footer from '../components/Footer';
+import Head from 'next/head';
 const FAQ = () => {
     return (
         <div id="faq">
-            <title>FAQ - Frequently asked Questions</title>
+            <Head>
+                <title>Ordimint - FAQ</title>
+                <meta name="keywords" content="Bitcoin, Ordinal, Inscriptin, FAQ" />
+            </Head>
             <h1 className='mb-3'>FAQ</h1>
             <Container>
                 <Row xs={1} sm={1} md={1} lg={1}>

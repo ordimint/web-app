@@ -8,6 +8,7 @@ import OrdinalThumbnail from '../../components/OrdinalThumbnail'
 // import SingleOrdinalModal from '../../components/modals/SingleOrdinalModal';
 import { getContentType } from '../../public/functions/ordinalFunctions';
 import Footer from '../../components/Footer';
+import Head from 'next/head';
 
 const CollectionDetailPage = () => {
     const router = useRouter();
@@ -75,6 +76,11 @@ const CollectionDetailPage = () => {
 
     return (
         <div>
+            <Head>
+                <title>Collection - {collectionMeta.name}</title>
+                <meta name="description" content={collectionMeta.description} />
+                <meta name="keywords" content="Bitcoin, Ordinals Collection" />
+            </Head>
             <Container>
                 <Button size="lg" onClick={goBack}>
                     Back

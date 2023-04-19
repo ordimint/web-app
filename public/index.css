@@ -342,7 +342,7 @@ div.preview-image-container {
 }
 
 div.preview-image-container img {
-  max-height: 300px;
+  /* max-height: 300px; */
   background-color: black;
 }
 @media screen and (max-width: 420px) {

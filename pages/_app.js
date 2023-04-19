@@ -19,10 +19,6 @@ export default function MyApp({ Component, pageProps }) {
                 <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:image" content="https://ordimint.com/logo.png" />
-
-                <meta name="description" content="A simple Wallet and Inscription service for Bitcoin Ordinals" />
-                <title>Ordimint - Wallet and Inscription Service</title>
-                <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT" />
             </Head>
 
             <Header />
