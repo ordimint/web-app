@@ -12,13 +12,13 @@ export default function MyApp({ Component, pageProps }) {
             <Head>
                 <meta property="og:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content="https://ordimint.com/logo.png" />
-                <meta property="og:description" content="A website to mint, receive, store or send your Ordinals" />
+                <meta property="og:image" content="https://ordimint.com/logo-dark.jpeg" />
+                <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
 
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
-                <meta name="twitter:image" content="https://ordimint.com/logo.png" />
+                <meta name="twitter:image" content="https://ordimint.com/logo-dark.jpeg" />
             </Head>
 
             <Header />
