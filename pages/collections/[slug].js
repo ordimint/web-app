@@ -9,6 +9,8 @@ import OrdinalThumbnail from '../../components/OrdinalThumbnail'
 import { getContentType } from '../../public/functions/ordinalFunctions';
 import Footer from '../../components/Footer';
 import Head from 'next/head';
+import { Breadcrumb } from 'react-bootstrap';
+
 
 const CollectionDetailPage = ({ collectionMeta, collection }) => {
     const router = useRouter();
@@ -21,10 +23,6 @@ const CollectionDetailPage = ({ collectionMeta, collection }) => {
     const renderDetailModal = () => showDetailModal(true);
     const hideDetailModal = () => showDetailModal(false);
     const [ordinal, setOrdinal] = useState()
-
-    const goBack = () => {
-        router.push('/collections');
-    };
 
 
     async function setContentType(inscriptionID) {
@@ -80,9 +78,10 @@ const CollectionDetailPage = ({ collectionMeta, collection }) => {
                 <meta name="keywords" content="Bitcoin, Ordinals Collection" />
             </Head>
             <Container>
-                <Button size="lg" onClick={goBack}>
-                    Back
-                </Button>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/collections">Collections</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{collectionMeta.name}</Breadcrumb.Item>
+                </Breadcrumb>
             </Container>
 
             <div className='main-middle'>
