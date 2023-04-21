@@ -47,7 +47,7 @@ const CollectionDetailPage = ({ collectionMeta, collection }) => {
             </Head>
             <Container>
                 <Breadcrumb>
-                    <Breadcrumb.Item href="/collections">Collections</Breadcrumb.Item>
+                    <Breadcrumb.Item href="/ordinal-collections">Collections</Breadcrumb.Item>
                     <Breadcrumb.Item active>{collectionMeta.name}</Breadcrumb.Item>
                 </Breadcrumb>
             </Container>

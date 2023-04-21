@@ -18,6 +18,7 @@ import GenerateWalletModal from '../../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../../components/modals/RestoreWalletModal';
 import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 import { generateWallet, downloadPrivateKey, restoreWallet } from '../../components/WalletConfig/ordimintWalletFunctions';
+import Footer from '../../components/Footer';
 
 const ECPair = ECPairFactory(ecc);
 const bip39 = require('bip39');
@@ -117,7 +118,8 @@ const OrdimintWallet = () => {
 
     const handleCloseAndDownload = () => {
         if (!seedDownloaded) {
-            downloadPrivateKey();
+            alert("Please download your backup file!")
+            downloadPrivateKey(privateKey);
             setShowModal(false);
         }
         else {
@@ -197,6 +199,7 @@ const OrdimintWallet = () => {
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
                         />
                     </div>}
+                <Footer />
             </Container>
 
 

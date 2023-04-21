@@ -65,7 +65,7 @@ const Header = (props) => {
                                     <Nav.Link className={isActive('/wallet')} href="/wallet">Wallet</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/collections')} href="/collections">Collections</Nav.Link>
+                                    <Nav.Link className={isActive('/ordinal-collections')} href="/ordinal-collections">Collections</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/search')} href="/search">Search </Nav.Link>

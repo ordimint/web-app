@@ -18,7 +18,7 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
       ownedUtxos.length === 0 ?
         <>
           <div>
-            This address doesn't own anything yet... Inscribe something
+            This address doesn't own anything yet... <a href="/">Inscribe something</a>
           </div>
         </>
         :

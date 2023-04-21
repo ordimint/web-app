@@ -10,6 +10,7 @@ import { Row, Container, Button, Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
 import AlbyLogo from '../public/media/alby_icon_yellow.svg';
 import LedgerLogo from '../public/media/ledger-logo-small.svg';
+import OrdimintLogo from '../public/media/ordimint-coin.png';
 import AlertModal from '../components/modals/AlterModal';
 import FeeRange from '../components/FeeRange';
 import Price from '../components/Price';
@@ -22,6 +23,7 @@ import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
 import Head from 'next/head';
+import SelectWalletModal from '../components/modals/SelectWalletModal';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -88,11 +90,12 @@ function Home() {
     const [file, setFile] = useState(defaultImage);
     const [fileSize, setFileSize] = useState(1000);
     const [fileType, setFileType] = useState("jpeg");
-    ///////Fee and price
 
-    // useEffect(() => {
-    //     getFeesRecommended().then(data => setFee(data.fastestFee))
-    // }, [])
+    const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
+    const closeSelectWalletModal = () => setShowSelectWalletModal(false);
+    const renderSelectWalletModal = () => setShowSelectWalletModal(true);
+
+
 
 
 
@@ -448,7 +451,14 @@ function Home() {
                                         }
                                         variant="success"
                                         size="md"
-                                    ><Image src={LedgerLogo} height="20" width="20" alt="Ledger" /> use Ledger HW</Button>
+                                    ><Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW</Button>
+
+
+                                </div>
+                                <div>
+                                    <Button onClick={renderSelectWalletModal} >
+                                        <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet</Button>
+
                                 </div>
                             </div>
                         }
@@ -512,6 +522,14 @@ function Home() {
                 handleClose={closeInvoiceModal}
                 showPaymentAlert={showPaymentSuccessfull}
             />
+            <SelectWalletModal
+                show={showSelectWalletModal}
+                handleClose={closeSelectWalletModal}
+            // handleGenerateWallet={ }
+            // handleHowDoesItWork={ }
+            // handleRestoreWallet={ }
+            />
+
         </div >
     );
 }
