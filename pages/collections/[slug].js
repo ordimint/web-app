@@ -34,38 +34,6 @@ const CollectionDetailPage = ({ collectionMeta, collection }) => {
         }
     }
 
-    async function getCollectionMeta() {
-        const collectionMeta = await fetch(`https://raw.githubusercontent.com/ordinals-wallet/ordinals-collections/main/collections/${slug}/meta.json`)
-        if (collectionMeta) {
-            return collectionMeta.json()
-        }
-    }
-
-    async function getCollection() {
-        const collection = await fetch(`https://raw.githubusercontent.com/ordinals-wallet/ordinals-collections/main/collections/${slug}/inscriptions.json`)
-        if (collection) {
-            return collection.json()
-        }
-    }
-
-
-
-    // useEffect(() => {
-    //     getCollectionMeta().then(async (collectionMeta) => {
-
-    //         await setCollectionMeta(collectionMeta)
-
-    //         // console.log(collection)
-    //     })
-
-    //     getCollection().then(async (collection) => {
-    //         await setCollection(collection)
-    //         // console.log(collection)
-    //     })
-
-
-    // }, [])
-
     useEffect(() => {
         setContentType(collectionMeta.inscription_icon)
     }, [collectionMeta])

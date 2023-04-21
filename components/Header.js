@@ -11,7 +11,10 @@ const Header = (props) => {
     const router = useRouter();
 
     const isActive = (href) => {
-        return router.pathname === href ? "active" : '';
+        if (href === "/") {
+            return router.pathname === href ? "active" : "";
+        }
+        return router.pathname.startsWith(href) ? "active" : '';
     };
 
     return (

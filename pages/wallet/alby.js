@@ -1,25 +1,27 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import { Breadcrumb } from 'react-bootstrap';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
-import Alert from 'react-bootstrap/Alert';
-import ReceiveAddressModal from './modals/ReceiveAddressModal';
-import ConfirmationModal from './modals/ConfirmationModal';
-import SelectFeeRateModal from './modals/SelectFeeRateModal';
-import SentModal from './modals/SentModal';
-import BeginSendModal from './modals/BeginSendModal';
-import UtxoModal from './modals/UtxoModal';
-import UtxoInfo from './UtxoInfo';
-import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from './WalletConfig/constance';
-import { getLedgerPubkey, getAddressInfoLedger } from './WalletConfig/connectLedger';
-import axios from 'axios';
-import { Spinner } from 'react-bootstrap';
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import { useRouter } from 'next/router'
+import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import SelectFeeRateModal from '../../components/modals/SelectFeeRateModal';
+import SentModal from '../../components/modals/SentModal';
+import BeginSendModal from '../../components/modals/BeginSendModal';
+import UtxoModal from '../../components/modals/UtxoModal';
+import AlbyLogo from '../../public/media/alby_icon_yellow.svg';
+import UtxoInfo from '../../components/UtxoInfo';
+import { getAddressInfoNostr, connectWallet } from '../../components/WalletConfig/utils';
+import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 
 
-const LedgerWallet = () => {
-    const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
+
+
+const axios = require('axios')
+
+export default function NostrWallet() {
+    const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
@@ -34,22 +36,12 @@ const LedgerWallet = () => {
     const [sendFeeRate, setSendFeeRate] = useState(DEFAULT_FEE_RATE)
     const [showSentModal, setShowSentModal] = useState(false)
     const [sentTxid, setSentTxid] = useState(null)
-    const [address, setAddress] = useState(null)
 
     useEffect(() => {
-        async function fetchUtxosForLedger() {
-            if (!ledgerPublicKey) {
-                console.log("Connect on load", ledgerPublicKey)
-                await connectOnLoad()
-                return
-            }
-            if (!address) {
-                await setAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address)
-                return
-            }
-            console.log('address', address)
+        async function fetchUtxosForAddress() {
+            if (!nostrPublicKey) return
+            const address = getAddressInfoNostr(nostrPublicKey).address
             const response = await axios.get(`https://mempool.space/api/address/${address}/utxo`)
-            console.log('response', response)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
@@ -65,7 +57,7 @@ const LedgerWallet = () => {
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
                 } catch (err) {
-                    console.log(`Error from Ordinal Explorer`)
+                    console.log(`Error from explorer.ordimint.com: ${err}`)
                 }
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
                 const newInscriptionsByUtxo = {}
@@ -76,63 +68,59 @@ const LedgerWallet = () => {
             setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
             setUtxosReady(true)
         }
-        fetchUtxosForLedger()
-
-
-    }, [ledgerPublicKey, address])
-
+        connectOnLoad()
+        fetchUtxosForAddress()
+    }, [nostrPublicKey]);
 
     async function connectOnLoad() {
-
-        setLedgerPublicKey(await getLedgerPubkey(false))
-
+        setNostrPublicKey(await connectWallet())
     }
 
+
+
+
+
     return (
-        <div>
+        <>
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Alby Wallet</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+                <h1 className="text-center m-3">Alby Wallet</h1>
                 {
-                    ledgerPublicKey ?
+                    nostrPublicKey ?
                         <div>
-                            <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small"
-                                onClick={async () =>
-                                    setShowReceiveAddressModal(true)}>
-                                Receive<BsBoxArrowInDownLeft />
+                            <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small" onClick={() => setShowReceiveAddressModal(true)}>
+                                Receive <BsBoxArrowInDownLeft />
                             </Button>
                         </div>
                         :
                         <>
                             <div>
-                                <Alert variant="light">
-                                    Connect your Ledger to your computer and open the Bitcoin app.<br></br>
-                                    You should use Chrome browser or Microsoft Edge.
-                                </Alert>
-                                <Spinner>
-
-                                    <span className="sr-only"></span>
-                                </Spinner>
-                                <p>Loading....</p>
-                                {/* <Button
+                                {/* <Alert variant="light">
+                                    Connect your wallet via the <a href="https://getalby.com/" target="_blank"
+                                        rel="noopener noreferrer"><img src={AlbyLogo} height="20" alt="Alby Logo" /> getAlby</a> browser extension.
+                                    You are in full control of your privat keys.
+                                </Alert> */}
+                                <br />
+                                <Button
                                     variant="primary"
                                     size="lg"
                                     className="mx-3 shadowed-orange-small"
                                     onClick={async () => {
-                                        setLedgerPublicKey(await connectWallet())
-                                    }}><img src={ledgerLogo} height="35" alt="Alby Logo" />Connect wallet</Button> */}
+                                        setNostrPublicKey(await connectWallet())
+                                    }}><img src={AlbyLogo} height="35" alt="Alby Logo" /> use Alby Wallet</Button>
 
-                                <br />
                             </div>
                         </>
                 }
                 <br /><br />
-                {ledgerPublicKey &&
+                {nostrPublicKey &&
                     <div>
-                        <Alert variant="light">
-                            The transactions and Ordinals will not be visible in your Ledger Live app.
-                            This is to prevent interference with your existing accounts and to avoid accidentally sending funds to your Ordinal account or you send your Ordinal accidentally to another account.
-                            So don't worry, your Ordinals are safu.
-                        </Alert>
                         <UtxoInfo
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
@@ -140,14 +128,17 @@ const LedgerWallet = () => {
                             setCurrentUtxo={setCurrentUtxo}
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
                         />
-                    </div>}
+                    </div>
+                }
+
             </Container>
 
 
             <ReceiveAddressModal
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
-                ledgerPublicKey={ledgerPublicKey}
+                nostrPublicKey={nostrPublicKey}
+
             />
             <UtxoModal
                 setShowBeginSendModal={setShowBeginSendModal}
@@ -186,7 +177,7 @@ const LedgerWallet = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
-                ledgerPublicKey={ledgerPublicKey}
+                nostrPublicKey={nostrPublicKey}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
@@ -196,10 +187,6 @@ const LedgerWallet = () => {
                 setShowSentModal={setShowSentModal}
                 sentTxid={sentTxid}
             />
-
-
-        </div>
+        </>
     )
 }
-
-export default LedgerWallet
