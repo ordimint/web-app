@@ -26,14 +26,19 @@ import Head from 'next/head';
 import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
-import { generateWallet, downloadPrivateKey, restoreWallet } from '../components/WalletConfig/ordimintWalletFunctions';
+import { generateWallet, restoreWallet } from '../components/WalletConfig/ordimintWalletFunctions';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
 var clientPaymentHash;
 var isPaid = false; //Is only necessary in the case of socket event is fireing multible times
 
-const outputCost = process.env.REACT_APP_output_cost;
+const outputCostPicture = process.env.REACT_APP_output_cost_picture;
+const outputCostText = process.env.REACT_APP_output_cost_text;
+const outputCostDomain = process.env.REACT_APP_output_cost_domain;
+const outputCostNews = process.env.REACT_APP_output_cost_news;
+const outputCostBRC = process.env.REACT_APP_output_cost_brc;
+
 const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
@@ -130,9 +135,28 @@ function Home() {
 
 
     useEffect(() => {
-        var priceSats = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCost));
-        setPrice(priceSats);
-    }, [fileSize, fee]);
+        let newPrice;
+        switch (tabKey) {
+            case "file":
+                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
+                break;
+            case "text":
+                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostText));
+                break;
+            case "news":
+                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostNews));
+                break;
+            case "domain":
+                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostDomain));
+                break;
+            case "brc":
+                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostBRC));
+                break;
+            default:
+                newPrice = 10000;
+        }
+        setPrice(newPrice);
+    }, [fileSize, fee, tabKey]);
 
     ///////Successfull payment alert
     const renderAlert = (show) => {
@@ -348,10 +372,6 @@ function Home() {
                                 <Tab eventKey="news" title="News">
                                     <NewsInput
                                         setFileSize={setFileSize}
-                                        // newsTitle={newsTitle}
-                                        // newsText={newsText}
-                                        // newsUrl={newsUrl}
-                                        // newsAuthor={newsAuthor}
                                         setNewsAuthor={setNewsAuthor}
                                         setNewsText={setNewsText}
                                         setNewsTitle={setNewsTitle}

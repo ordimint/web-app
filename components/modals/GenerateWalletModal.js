@@ -42,7 +42,7 @@ const GenerateWalletModal = ({
         if (!seedDownloaded) {
             alert("Please download your backup file!")
             downloadPrivateKey(privateKey);
-            setShowModal(false);
+            closeModal();
         }
         else {
             closeModal();
