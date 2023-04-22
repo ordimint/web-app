@@ -9,12 +9,12 @@ const SelectWalletModal = ({ show, handleClose, handleGenerateWallet, handleHowD
             </Modal.Header>
             <Modal.Body>
                 <p>Generate a new wallet or restore an existing one.</p>
-                <div className='d-flex flex-row justify-content-center'>
-                    <Button variant="primary" onClick={handleGenerateWallet}>
+                <div className='d-flex flex-row justify-content-around'>
+                    <Button className='m-1' variant="primary" onClick={handleGenerateWallet}>
                         Generate Wallet
                     </Button>
 
-                    <Button variant="secondary" onClick={handleRestoreWallet}>
+                    <Button className='m-1' variant="secondary" onClick={handleRestoreWallet}>
                         Restore Wallet
                     </Button>
                 </div>

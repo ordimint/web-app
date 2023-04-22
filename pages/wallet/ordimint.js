@@ -17,16 +17,16 @@ import OrdimintWalletInfo from '../../components/modals/OrdimintWalletInfo';
 import GenerateWalletModal from '../../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../../components/modals/RestoreWalletModal';
 import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
-import { generateWallet, downloadPrivateKey, restoreWallet } from '../../components/WalletConfig/ordimintWalletFunctions';
+import { generateWallet, restoreWallet } from '../../components/WalletConfig/ordimintWalletFunctions';
 import Footer from '../../components/Footer';
 
-const ECPair = ECPairFactory(ecc);
-const bip39 = require('bip39');
-const { BIP32Factory } = require('bip32')
-const bip32 = BIP32Factory(ecc)
+// const ECPair = ECPairFactory(ecc);
+// const bip39 = require('bip39');
+// const { BIP32Factory } = require('bip32')
+// const bip32 = BIP32Factory(ecc)
 
 
-bitcoin.initEccLib(ecc)
+// bitcoin.initEccLib(ecc)
 
 
 
@@ -34,12 +34,13 @@ const OrdimintWallet = () => {
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     const [privateKey, setPrivateKey] = useState(null);
     const [address, setAddress] = useState(null);
-
-    const [showModal, setShowModal] = useState(false);
     const [seedPhrase, setSeedPhrase] = useState('');
 
-    const handleShowModal = () => setShowModal(true);
-    const [seedDownloaded, setSeedDownloaded] = React.useState(false);
+    const [showGenerateWalletModal, setShowGenerateWalletModal] = useState(false);
+    const closeGenerateWalletModal = () => setShowGenerateWalletModal(false);
+    const handleGenerateWalletModalShow = () => setShowGenerateWalletModal(true);
+
+
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
@@ -98,55 +99,29 @@ const OrdimintWallet = () => {
         fetchUtxosForAddress()
     }, [ordimintPubkey, address]);
 
-
     const handleGenerateWallet = async () => {
-        const { newOrdimintPubkey, newPrivateKey, newAddress, mnemonic } = await generateWallet();
-        setOrdimintPubkey(newOrdimintPubkey);
+        const { newPrivateKey, newAddress, mnemonic } = await generateWallet();
         setPrivateKey(newPrivateKey);
         setAddress(newAddress);
         setSeedPhrase(mnemonic);
-        handleShowModal();
+        handleGenerateWalletModalShow();
     };
 
-
-
-    const handleDownloadPrivateKey = () => {
-        downloadPrivateKey(privateKey);
-        setSeedDownloaded(true);
-    };
-
-
-    const handleCloseAndDownload = () => {
-        if (!seedDownloaded) {
-            alert("Please download your backup file!")
-            downloadPrivateKey(privateKey);
-            setShowModal(false);
-        }
-        else {
-            setShowModal(false);
-        }
-    };
-
-
-
-    const copySeedPhrase = async () => {
-        if (!seedPhrase) {
-            alert('Please generate a wallet first!');
-            return;
-        }
+    const handleRestoreWallet = async (event) => {
         try {
-            await navigator.clipboard.writeText(seedPhrase);
-            alert('Seed phrase copied to clipboard!');
-        } catch (err) {
-            console.error('Failed to copy seed phrase: ', err);
-            alert('Failed to copy seed phrase. Please try again.');
+            const { restoredAddress } = await restoreWallet(event);
+            setAddress(restoredAddress);
+            handleRestoreWalletModalClose();
+        } catch (error) {
+            console.error('Error:', error);
+
         }
     };
+
 
 
 
     return (
-
 
         <div className="container mt-5">
             <Container>
@@ -207,20 +182,18 @@ const OrdimintWallet = () => {
             <RestoreWalletModal
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
-                restoreWallet={restoreWallet}
-                setOrdimintPubkey={setOrdimintPubkey}
-                setAddress={setAddress}
-                setPrivateKey={setPrivateKey}
+                restoreWallet={(e) => handleRestoreWallet(e)}
+            // setOrdimintPubkey={setOrdimintPubkey}
+            // setAddress={setAddress}
+            // setPrivateKey={setPrivateKey}
             />
 
 
             <GenerateWalletModal
-                showModal={showModal}
+                showModal={showGenerateWalletModal}
+                closeModal={closeGenerateWalletModal}
                 seedPhrase={seedPhrase}
-                seedDownloaded={seedDownloaded}
-                handleCloseAndDownload={handleCloseAndDownload}
-                handleDownloadPrivateKey={handleDownloadPrivateKey}
-                copySeedPhrase={copySeedPhrase}
+                privateKey={privateKey}
             />
 
             <ReceiveAddressModal

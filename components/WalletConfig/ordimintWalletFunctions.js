@@ -36,59 +36,42 @@ export const generateWallet = async () => {
     };
 };
 
-export const downloadPrivateKey = (privateKey) => {
-    if (!privateKey) {
-        alert('Please generate a wallet first!');
-        return;
-    }
 
-    const fileContent = `Ordimint-Key: ${privateKey}\n`;
-    const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'ordimint-wallet.txt';
-    document.body.appendChild(link);
-    link.click();
 
-    setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }, 100);
-};
-
-export const restoreWallet = (event, handleRestoreWalletModalClose, setOrdimintPubkey, setAddress, setPrivateKey) => {
-    const file = event.target.files[0];
-    if (!file) {
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const privateKeyContent = e.target.result;
-        const privateKeyMatch = privateKeyContent.match(/Ordimint-Key: (\S+)/);
-
-        if (!privateKeyMatch || !privateKeyMatch[1]) {
-            alert('Invalid private key file');
+export const restoreWallet = (event) => {
+    return new Promise(async (resolve, reject) => {
+        let restoredPrivateKey, restoredKeyPair, restoredAddress;
+        const file = event.target.files[0];
+        if (!file) {
+            reject('No file provided');
             return;
         }
 
-        try {
-            const restoredPrivateKey = privateKeyMatch[1].trim();
-            const restoredKeyPair = ECPair.fromWIF(restoredPrivateKey);
-            console.log(`restoredKeyPair.publicKey: ${restoredKeyPair.publicKey}`);
-            const restoredAddress = bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')) }).address;
-            setOrdimintPubkey((Buffer.from(restoredKeyPair.publicKey, 'hex')).toString('hex'));
-            setAddress(restoredAddress);
-            setPrivateKey(restoredPrivateKey);
-            handleRestoreWalletModalClose();
-        } catch (err) {
-            alert('Error restoring wallet: ' + err.message);
-        }
-    };
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const privateKeyContent = e.target.result;
 
-    reader.readAsText(file);
+            const privateKeyMatch = privateKeyContent.match(/Ordimint-Key: (\S+)/);
+
+            if (!privateKeyMatch || !privateKeyMatch[1]) {
+                reject('Invalid private key file');
+                return;
+            }
+
+            try {
+                restoredPrivateKey = privateKeyMatch[1].trim()
+                restoredKeyPair = ECPair.fromWIF(restoredPrivateKey)
+                restoredAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')) }).address
+                resolve({ restoredPrivateKey, restoredKeyPair, restoredAddress });
+            } catch (err) {
+                reject('Error restoring wallet: ' + err.message);
+            }
+        };
+
+        reader.readAsText(file);
+    });
 };
+
 
 
 // const restoreWallet = (event) => {

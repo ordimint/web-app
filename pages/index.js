@@ -23,7 +23,10 @@ import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
 import Head from 'next/head';
+import GenerateWalletModal from '../components/modals/GenerateWalletModal';
+import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
+import { generateWallet, downloadPrivateKey, restoreWallet } from '../components/WalletConfig/ordimintWalletFunctions';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -32,13 +35,6 @@ var isPaid = false; //Is only necessary in the case of socket event is fireing m
 
 const outputCost = process.env.REACT_APP_output_cost;
 const securityBuffer = process.env.REACT_APP_security_buffer;
-
-
-// const getFeesRecommended = async () => {
-//     const response = await fetch("https://mempool.space/api/v1/fees/recommended");
-//     const data = await response.json();
-//     return data;
-// };
 
 
 function Home() {
@@ -55,14 +51,12 @@ function Home() {
     const [newsAuthor, setNewsAuthor] = useState('');
     const [newsTitle, setNewsTitle] = useState('');
     const [newsUrl, setNewsUrl] = useState('');
-    const [domainAvailable, setDomainAvailable] = useState(true) //muss geändert werden
 
     const [brcRadioButton, setbrcRadioButton] = useState("deploy");
     const [tokenTicker, setTokenTicker] = useState('');
     const [tokenSupply, setTokenSupply] = useState('21000');
     const [mintLimit, setMintLimit] = useState('1000');
     const [mintAmount, setMintAmount] = useState('1000');
-
 
     const [showSpinner, setSpinner] = useState(true);
     const [payment_request, setPaymentrequest] = useState(0);
@@ -90,38 +84,50 @@ function Home() {
     const [file, setFile] = useState(defaultImage);
     const [fileSize, setFileSize] = useState(1000);
     const [fileType, setFileType] = useState("jpeg");
-
+    ////// Wallet selction modal
     const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
     const closeSelectWalletModal = () => setShowSelectWalletModal(false);
     const renderSelectWalletModal = () => setShowSelectWalletModal(true);
-
-
-
-
-
-
-    async function checkDomain(domain) {
-        try {
-            const response = await fetch(`https://api.sats.id/names/${domain}.sats`)
-            const responseJSON = await response.json()
-            // console.log(responseJSON)
-            if (responseJSON.owner) {
-                console.log(responseJSON)
-                setDomainAvailable(false) ////
-            }
-            else {
-                setDomainAvailable(true)
-            }
-        } catch (error) {
-            console.log(error)
-
-        }
-
-    }
-
+    ////// Generate wallet modal
+    const [showGenerateWalletModal, setShowGenerateWAlletModal] = useState(false);
+    const handleShowGenerateWalletModal = () => setShowGenerateWAlletModal(true);
+    const handleCloseGenerateWalletModal = () => setShowGenerateWAlletModal(false);
+    const [privateKey, setPrivateKey] = useState(null);
+    const [seedPhrase, setSeedPhrase] = useState('');
+    ////// Restore wallet modal
+    const [showRestoreWalletModal, setShowRestoreWalletModal] = useState(false);
+    const handleRestoreWalletModalClose = () => setShowRestoreWalletModal(false);
+    const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
+    const [ordimintPubkey, setOrdimintPubkey] = useState(null);
 
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
+
+
+
+    const handleGenerateWallet = async () => {
+        const { newPrivateKey, newAddress, mnemonic } = await generateWallet();
+        setPrivateKey(newPrivateKey);
+        setOnChainAddress(newAddress);
+        setSeedPhrase(mnemonic);
+        handleShowGenerateWalletModal();
+        closeSelectWalletModal();
+
+    };
+    const handleRestoreWallet = async (event) => {
+        closeSelectWalletModal();
+        try {
+            const { restoredAddress } = await restoreWallet(event);
+            setOnChainAddress(restoredAddress);
+            handleRestoreWalletModalClose();
+
+        } catch (error) {
+            console.error('Error:', error);
+
+        }
+    };
+
+
 
     useEffect(() => {
         var priceSats = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCost));
@@ -184,13 +190,6 @@ function Home() {
             showAlertModal({
                 show: true,
                 text: "Please enter a domain name",
-                type: "danger",
-            });
-        }
-        else if (!domainAvailable && tabKey === 'domain') {
-            showAlertModal({
-                show: true,
-                text: "Domain is not available",
                 type: "danger",
             });
         }
@@ -364,8 +363,7 @@ function Home() {
                                         setFileSize={setFileSize}
                                         domainInput={domainInput}
                                         setDomainInput={setDomainInput}
-                                        // checkDomain={checkDomain} muss wieder raus
-                                        domainAvailable={domainAvailable}
+
                                     />
                                 </Tab>
                                 <Tab eventKey="brc" title="BRC-20">
@@ -525,10 +523,32 @@ function Home() {
             <SelectWalletModal
                 show={showSelectWalletModal}
                 handleClose={closeSelectWalletModal}
-            // handleGenerateWallet={ }
-            // handleHowDoesItWork={ }
-            // handleRestoreWallet={ }
+                handleGenerateWallet={handleGenerateWallet}
+                handleRestoreWallet={handleRestoreWalletModalShow}
             />
+            <GenerateWalletModal
+                showModal={showGenerateWalletModal}
+                closeModal={handleCloseGenerateWalletModal}
+                setOrdimintPubkey={setOrdimintPubkey}
+                seedPhrase={seedPhrase}
+                privateKey={privateKey}
+            />
+
+            <RestoreWalletModal
+                showRestoreWalletModal={showRestoreWalletModal}
+                handleRestoreWalletModalClose={handleRestoreWalletModalClose}
+                restoreWallet={(e) => handleRestoreWallet(e)}
+            // setOrdimintPubkey={setOrdimintPubkey}
+            // setAddress={setAddress}
+            // setPrivateKey={setPrivateKey}
+            />
+
+            <ReceiveAddressModal
+                showReceiveAddressModal={showReceiveAddressModal}
+                setShowReceiveAddressModal={setShowReceiveAddressModal}
+                nostrPublicKey={nostrPublicKey}
+            />
+
 
         </div >
     );
