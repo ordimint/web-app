@@ -21,5 +21,14 @@ module.exports = withTM({
                 source: '/invoicehook',
                 destination: 'http://localhost:5000/invoicehook',
             }]
-    }
+    },
+    async redirects() {
+        return [
+            {
+                source: '/collections/:path*',
+                destination: '/ordinal-collections/:path*',
+                permanent: true,
+            },
+        ]
+    },
 });
