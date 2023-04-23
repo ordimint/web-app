@@ -29,8 +29,8 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
               {ownedUtxos.map(it => {
 
                 return (
-                  <Col className="ordinal-column">
-                    <Card className="hover-pointer gallery-item wallet-card" key={it.txid}
+                  <Col className="ordinal-column" key={it.txid}>
+                    <Card className="hover-pointer gallery-item wallet-card"
                       onClick={() => {
                         setCurrentUtxo(it)
                         setShowUtxoModal(true)

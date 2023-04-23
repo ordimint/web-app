@@ -40,7 +40,7 @@ export const generateWallet = async () => {
 
 export const restoreWallet = (event) => {
     return new Promise(async (resolve, reject) => {
-        let restoredPrivateKey, restoredKeyPair, restoredAddress;
+        let restoredPrivateKey, restoredKeyPair, restoredAddress, restoredPubkey;
         const file = event.target.files[0];
         if (!file) {
             reject('No file provided');
@@ -62,7 +62,8 @@ export const restoreWallet = (event) => {
                 restoredPrivateKey = privateKeyMatch[1].trim()
                 restoredKeyPair = ECPair.fromWIF(restoredPrivateKey)
                 restoredAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')) }).address
-                resolve({ restoredPrivateKey, restoredKeyPair, restoredAddress });
+                restoredPubkey = await Buffer.from(restoredKeyPair.publicKey, 'hex').toString('hex');
+                resolve({ restoredPrivateKey, restoredKeyPair, restoredAddress, restoredPubkey });
             } catch (err) {
                 reject('Error restoring wallet: ' + err.message);
             }

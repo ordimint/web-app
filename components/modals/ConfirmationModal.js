@@ -128,9 +128,6 @@ export default function ConfirmationModal({
       hex = tx.toBuffer().toString('hex')
       fullTx = bitcoin.Transaction.fromHex(hex)
 
-      console.log("Finalized PSBT:", psbt);
-      console.log("PrivateKey", privateKey);
-      console.log("Finalized transaction hex:", hex);
       const decodedTx = bitcoin.Transaction.fromHex(hex);
       console.log("Decoded transaction:", decodedTx);
       console.log(hex)

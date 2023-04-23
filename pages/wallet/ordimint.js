@@ -100,17 +100,21 @@ const OrdimintWallet = () => {
     }, [ordimintPubkey, address]);
 
     const handleGenerateWallet = async () => {
-        const { newPrivateKey, newAddress, mnemonic } = await generateWallet();
+        const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet();
         setPrivateKey(newPrivateKey);
         setAddress(newAddress);
         setSeedPhrase(mnemonic);
+        setOrdimintPubkey(newOrdimintPubkey);
         handleGenerateWalletModalShow();
     };
 
     const handleRestoreWallet = async (event) => {
         try {
-            const { restoredAddress } = await restoreWallet(event);
+            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event);
             setAddress(restoredAddress);
+            setPrivateKey(restoredPrivateKey);
+            setOrdimintPubkey(restoredPubkey);
+
             handleRestoreWalletModalClose();
         } catch (error) {
             console.error('Error:', error);
@@ -153,8 +157,11 @@ const OrdimintWallet = () => {
                                 </Alert>
                                 <div className="d-flex justify-content-evenly">
                                     <Button variant="primary" onClick={handleGenerateWallet}>Generate Wallet</Button>
-                                    <Button variant="primary" onClick={ShowWalletInfoModal}>How does it work?</Button>
+
                                     <Button variant="secondary" onClick={handleRestoreWalletModalShow}>Restore Wallet</Button>
+                                </div>
+                                <div className='mt-3'>
+                                    <Button variant="secondary" onClick={ShowWalletInfoModal}>How does it work?</Button>
                                 </div>
                                 <div>
 
