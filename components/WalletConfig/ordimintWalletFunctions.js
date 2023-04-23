@@ -17,6 +17,11 @@ function toXOnly(key) {
     return key.length === 33 ? key.slice(1, 33) : key;
 }
 
+export const getOrdimintAddress = async (pubkey) => {
+    const address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')) }).address;
+    return address;
+}
+
 export const generateWallet = async () => {
     const entropy = crypto.getRandomValues(new Uint8Array(16));
     const mnemonic = bip39.entropyToMnemonic(Buffer.from(entropy).toString('hex'));

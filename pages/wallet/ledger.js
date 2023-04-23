@@ -121,7 +121,7 @@ const LedgerWallet = () => {
 
                                     <span className="sr-only"></span>
                                 </Spinner>
-                                <p>Loading....</p>
+                                <p>Connecting....</p>
                                 {/* <Button
                                     variant="primary"
                                     size="lg"

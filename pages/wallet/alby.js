@@ -8,6 +8,7 @@ import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import SelectFeeRateModal from '../../components/modals/SelectFeeRateModal';
 import SentModal from '../../components/modals/SentModal';
+import Image from 'next/image';
 import BeginSendModal from '../../components/modals/BeginSendModal';
 import UtxoModal from '../../components/modals/UtxoModal';
 import AlbyLogo from '../../public/media/alby_icon_yellow.svg';
@@ -113,7 +114,7 @@ export default function NostrWallet() {
                                     className="mx-3 shadowed-orange-small"
                                     onClick={async () => {
                                         setNostrPublicKey(await connectWallet())
-                                    }}><img src={AlbyLogo} height="35" alt="Alby Logo" /> use Alby Wallet</Button>
+                                    }}><Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet</Button>
 
                             </div>
                         </>
