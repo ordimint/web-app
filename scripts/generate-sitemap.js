@@ -1,6 +1,7 @@
 
-const fs = require('fs')
-const globby = require('globby')
+import fs from 'fs'
+import globby from 'globby'
+
 
 
 function addPage(page) {
@@ -23,6 +24,7 @@ async function generateSitemap() {
     const sitemap = `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${pages.map(addPage).join('\n')}
 </urlset>`
+
 
     fs.writeFileSync('public/sitemap.xml', sitemap)
 }
