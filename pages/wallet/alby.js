@@ -16,9 +16,6 @@ import UtxoInfo from '../../components/UtxoInfo';
 import { getAddressInfoNostr, connectWallet } from '../../components/WalletConfig/utils';
 import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 
-
-
-
 const axios = require('axios')
 
 export default function NostrWallet() {
