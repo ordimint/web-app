@@ -42,7 +42,7 @@ const WalletPage = () => {
                         <Card.Body>
                             <Card.Title>Alby Wallet</Card.Title>
                             <Card.Text>
-                                Connect with your {" "}
+                                Connect via Nostr and {" "}
                                 <a href="https://getalby.com/" target="_blank" rel="noopener noreferrer">
                                     Alby
                                 </a>{" "}
