@@ -16,9 +16,10 @@ const WalletPage = () => {
         <div className='main-middle' >
             <Head>
                 <title>Ordimint - Wallet</title>
-                <meta name="description" content="Ordinals wallet" />
-                <meta name="keywords" content="Bitcoin, Ordinals, Wallet, Ledger, Alby" /> {/* Add this line */}
+                <meta name="description" content="Manage your Bitcoin Ordinals securely with the Ordimint Wallet, featuring Ledger and Alby integration for a seamless Ordinal management experience." />
+                <meta name="keywords" content="Bitcoin, Ordinals, Wallet, Ledger, Alby, Crypto, Digital Assets, Management" />
             </Head>
+
             <h1>Wallet</h1>
             <div>
 

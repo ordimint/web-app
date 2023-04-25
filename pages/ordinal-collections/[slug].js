@@ -43,7 +43,7 @@ const CollectionDetailPage = ({ collectionMeta, collection }) => {
             <Head>
                 <title>Collection - {collectionMeta.name}</title>
                 <meta name="description" content={collectionMeta.description} />
-                <meta name="keywords" content="Bitcoin, Ordinals Collection" />
+                <meta name="keywords" content="Bitcoin, Ordinals,Collections, Minting, Inscription, Wallet, Integrated, Ledger, Alby, Digital Artefacts" />
             </Head>
             <Container>
                 <Breadcrumb>

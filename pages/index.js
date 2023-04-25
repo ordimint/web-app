@@ -347,10 +347,11 @@ function Home() {
     return (
         <div className="App" >
             <Head>
-                <meta name="description" content="A simple Wallet and Inscription service for Bitcoin Ordinals" />
+                <meta name="description" content="Ordimint offers an easy-to-use Wallet and Inscription service for Bitcoin Ordinals, enabling seamless Ordinal management and minting of unique Bitcoin inscriptions." />
                 <title>Ordimint - Inscribe</title>
-                <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT" />
+                <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT, Wallet, Asset Management, Minting" />
             </Head>
+
             <Container>
                 <Row>
                     <div className='main-middle'>

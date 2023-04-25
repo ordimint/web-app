@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import Head from 'next/head';
 import { Breadcrumb } from 'react-bootstrap';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import { useRouter } from 'next/router'
@@ -80,6 +81,12 @@ export default function NostrWallet() {
 
     return (
         <>
+            <Head>
+                <title>Ordimint - Alby Browser Extension Wallet Integration</title>
+                <meta name="description" content="Effortlessly manage your Bitcoin Ordinals with Ordimint's Alby browser extension wallet integration, offering a seamless and user-friendly experience for your Inscriptions." />
+                <meta name="keywords" content="Bitcoin, Ordinals, Alby, Browser Extension, Wallet, Integration, Digital Assets, Digital Artefacts" />
+            </Head>
+
             <Container>
                 <Breadcrumb>
                     <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>

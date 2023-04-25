@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { Breadcrumb } from 'react-bootstrap';
+import Head from 'next/head';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import Alert from 'react-bootstrap/Alert';
 import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
@@ -91,6 +92,12 @@ const LedgerWallet = () => {
 
     return (
         <div>
+            <Head>
+                <title>Ordimint - Ledger Hardware Wallet Integration</title>
+                <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
+                <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
+            </Head>
+
             <Container>
                 <Breadcrumb>
                     <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>

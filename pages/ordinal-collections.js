@@ -46,9 +46,10 @@ const CollectionsCatalog = () => {
         <div className="collections-catalog">
             <Head>
                 <title>Ordimint - Ordinal Collections</title>
-                <meta name="description" content="A searchable site with all Ordinal collections" />
-                <meta name="keywords" content="Bitcoin, Ordinal Collections,Searchable" />
+                <meta name="description" content="Explore Ordimint's comprehensive and searchable database of Bitcoin Ordinal Collections, showcasing Ordinals and their inscriptions in one convenient location." />
+                <meta name="keywords" content="Bitcoin, Ordinals, Collections,Inscriptions, Searchable, Digital Assets, Inscriptions, NFT" />
             </Head>
+
             <Container fluid>
                 <h1 className="text-center py-3">Collections</h1>
                 <Form>
