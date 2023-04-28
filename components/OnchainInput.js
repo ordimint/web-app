@@ -6,10 +6,10 @@ const OnchainInput = (props) => {
 
         <div >
             <InputGroup className="mb-3" id='onchain-input'>
-                <InputGroup.Text id="basic-addon1">Receiver address</InputGroup.Text>
+                {/* <InputGroup.Text id="basic-addon1">Receiver address</InputGroup.Text> */}
                 <Form.Control
                     value={props.onChainAddress}
-                    placeholder="No address entered"
+                    placeholder="Enter a Bitcoin address"
                     aria-label="onchain-address"
                     aria-describedby="basic-addon1"
                     onChange={(e) => props.setOnChainAddress(e.target.value)}

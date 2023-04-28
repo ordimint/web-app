@@ -6,7 +6,7 @@ import InvoiceModal from '../components/modals/InvoiceModal';
 import { validate } from 'bitcoin-address-validation';
 import Footer from '../components/Footer';
 import Image from 'next/image';
-import { Row, Container, Button, Tab, Tabs } from "react-bootstrap";
+import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
 import { useState } from "react";
 import AlbyLogo from '../public/media/alby_icon_yellow.svg';
 import LedgerLogo from '../public/media/ledger-logo-small.svg';
@@ -27,6 +27,7 @@ import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
+import InscriptionNumberSwitch from '../components/InscriptionNumberSwitch';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -104,7 +105,8 @@ function Home() {
     const handleRestoreWalletModalClose = () => setShowRestoreWalletModal(false);
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
-
+    /////Inscription number + or -
+    const [positiveInscriptionNumber, setPositiveInscriptionNumber] = useState(true);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
 
@@ -353,203 +355,214 @@ function Home() {
             </Head>
 
             <Container>
-                <Row>
-                    <div className='main-middle'>
-                        <h5>What do you want to inscribe:</h5>
-                        <div id="tab-container">
-                            <Tabs
-                                transition={false}
-                                activeKey={tabKey}
-                                onSelect={(k) => setTabKey(k)}
-                                justify
-                                fill
-                            >
+                <div className='main-middle'>
+                    <Row>
+                        <Col id='left-side-container'>
+                            <div id="tab-container">
+                                <p>What do you want to inscribe:</p>
+                                <Tabs
+                                    transition={false}
+                                    activeKey={tabKey}
+                                    onSelect={(k) => setTabKey(k)}
+                                    justify
+                                    fill
+                                >
 
-                                <Tab eventKey="file" title="File">
-                                    <FileUpload
-                                        file={file}
-                                        setFile={setFile}
-                                        setFileSize={setFileSize}
-                                        setFileType={setFileType}
-                                        fileTooBig={fileTooBig}
-                                        fileSize={fileSize}
-                                    />
-                                </Tab>
-                                <Tab eventKey="text" title="Text">
-                                    <TextInput
-                                        setFileSize={setFileSize}
-                                        textInput={textInput}
-                                        setTextInput={setTextInput}
-                                    />
-                                </Tab>
-                                <Tab eventKey="news" title="News">
-                                    <NewsInput
-                                        setFileSize={setFileSize}
-                                        setNewsAuthor={setNewsAuthor}
-                                        setNewsText={setNewsText}
-                                        setNewsTitle={setNewsTitle}
-                                        setNewsUrl={setNewsUrl}
-                                    />
-                                </Tab>
-                                <Tab eventKey="domain" title="Domain">
-                                    <DomainInput
-                                        setFileSize={setFileSize}
-                                        domainInput={domainInput}
-                                        setDomainInput={setDomainInput}
+                                    <Tab eventKey="file" title="File">
+                                        <FileUpload
+                                            file={file}
+                                            setFile={setFile}
+                                            setFileSize={setFileSize}
+                                            setFileType={setFileType}
+                                            fileTooBig={fileTooBig}
+                                            fileSize={fileSize}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="text" title="Text">
+                                        <TextInput
+                                            setFileSize={setFileSize}
+                                            textInput={textInput}
+                                            setTextInput={setTextInput}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="news" title="News">
+                                        <NewsInput
+                                            setFileSize={setFileSize}
+                                            setNewsAuthor={setNewsAuthor}
+                                            setNewsText={setNewsText}
+                                            setNewsTitle={setNewsTitle}
+                                            setNewsUrl={setNewsUrl}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="domain" title="Domain">
+                                        <DomainInput
+                                            setFileSize={setFileSize}
+                                            domainInput={domainInput}
+                                            setDomainInput={setDomainInput}
 
-                                    />
-                                </Tab>
-                                <Tab eventKey="brc" title="BRC-20">
-                                    <BRC
-                                        setTokenTicker={setTokenTicker}
-                                        setFileSize={setFileSize}
-                                        tokenSupply={tokenSupply}
-                                        setTokenSupply={setTokenSupply}
-                                        tokenName={tokenTicker}
-                                        setTokenName={setTokenTicker}
-                                        mintLimit={mintLimit}
-                                        setMintLimit={setMintLimit}
-                                        mintAmount={mintAmount}
-                                        setMintAmount={setMintAmount}
-                                        onChange={setbrcRadioButton}
-                                        brcRadioButton={brcRadioButton}
-                                    />
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="brc" title="BRC-20">
+                                        <BRC
+                                            setTokenTicker={setTokenTicker}
+                                            setFileSize={setFileSize}
+                                            tokenSupply={tokenSupply}
+                                            setTokenSupply={setTokenSupply}
+                                            tokenName={tokenTicker}
+                                            setTokenName={setTokenTicker}
+                                            mintLimit={mintLimit}
+                                            setMintLimit={setMintLimit}
+                                            mintAmount={mintAmount}
+                                            setMintAmount={setMintAmount}
+                                            onChange={setbrcRadioButton}
+                                            brcRadioButton={brcRadioButton}
+                                        />
 
-                                </Tab>
-                            </Tabs>
-                        </div>
+                                    </Tab>
+                                </Tabs>
+                            </div>
+                        </Col>
+                        <Col id="right-side-container">
+                            {/* <div id="inscription-number-selection">
+                                <p>Do you want a positive or negative <br /> Inscription Number?</p>
+                                <InscriptionNumberSwitch
+                                    onChange={(value) => setPositiveInscriptionNumber(value)}
+                                />
 
+                            </div> */}
 
-                        {
-                            (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
-                                <>
-                                    {nostrPublicKey ? (
-                                        <>
-                                            <div className="success-alert-input">
-                                                <OnchainInput
-                                                    onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
-                                                    setOnChainAddress={setOnChainAddress}
-                                                />
-                                                <WalletConnectModal
-                                                    address={getAddressInfoNostr(nostrPublicKey).address}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-                                            </div>
-                                        </>
-                                    ) : ledgerPublicKey ? (
-                                        <>
-                                            <div className="success-alert-input">
-                                                <OnchainInput
-                                                    onChainAddress={onChainAddress}
-                                                    setOnChainAddress={setOnChainAddress}
-                                                />
-                                                <WalletConnectModal
-                                                    address={onChainAddress}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="success-alert-input">
-                                                <OnchainInput
-                                                    onChainAddress={onChainAddress}
-                                                    setOnChainAddress={setOnChainAddress}
-                                                />
-                                                <WalletConnectModal
-                                                    address={onChainAddress}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-                                            </div>
-                                        </>
-                                    )}
-                                </>
-                            ) : (
-                                <div id="input-button">
-                                    <p>How do you want to receive your Ordinal?
-                                        <br />
-                                        Enter an on-chain address or use a wallet.
-                                    </p>
-                                    <OnchainInput
-                                        onChainAddress={onChainAddress}
-                                        setOnChainAddress={setOnChainAddress}
-                                    />
-                                    <div id="wallet-buttons">
-                                        <Button
-                                            className="m-1"
-                                            onClick={async () => {
-                                                setNostrPublicKey(await connectWallet());
-                                                setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address);
-                                                setShowWalletConnectModal(true);
-                                            }}
-                                            variant="success"
-                                            size="md"
-                                        >
-                                            <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
-                                        </Button>
+                            {
+                                (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
+                                    <>
+                                        {nostrPublicKey ? (
+                                            <>
+                                                <div className="success-alert-input">
+                                                    <OnchainInput
+                                                        onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
+                                                        setOnChainAddress={setOnChainAddress}
+                                                    />
+                                                    <WalletConnectModal
+                                                        address={getAddressInfoNostr(nostrPublicKey).address}
+                                                        show={showWalletConnectModal}
+                                                        handleClose={() => setShowWalletConnectModal(false)}
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : ledgerPublicKey ? (
+                                            <>
+                                                <div className="success-alert-input">
+                                                    <OnchainInput
+                                                        onChainAddress={onChainAddress}
+                                                        setOnChainAddress={setOnChainAddress}
+                                                    />
+                                                    <WalletConnectModal
+                                                        address={onChainAddress}
+                                                        show={showWalletConnectModal}
+                                                        handleClose={() => setShowWalletConnectModal(false)}
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="success-alert-input">
+                                                    <OnchainInput
+                                                        onChainAddress={onChainAddress}
+                                                        setOnChainAddress={setOnChainAddress}
+                                                    />
+                                                    <WalletConnectModal
+                                                        address={onChainAddress}
+                                                        show={showWalletConnectModal}
+                                                        handleClose={() => setShowWalletConnectModal(false)}
+                                                    />
+                                                </div>
+                                            </>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div id="input-button">
+                                        <p>How do you want to receive your Ordinal?
+                                            <br />
+                                            Enter an on-chain address or use a wallet.
+                                        </p>
+                                        <OnchainInput
+                                            onChainAddress={onChainAddress}
+                                            setOnChainAddress={setOnChainAddress}
+                                        />
+                                        <div id="wallet-buttons">
+                                            <Button
+                                                className="m-1"
+                                                onClick={async () => {
+                                                    setNostrPublicKey(await connectWallet());
+                                                    setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address);
+                                                    setShowWalletConnectModal(true);
+                                                }}
+                                                variant="success"
+                                                size="md"
+                                            >
+                                                <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
+                                            </Button>
 
-                                        <Button
-                                            className="m-1"
-                                            onClick={async () => {
-                                                setLedgerPublicKey(await getLedgerPubkey(false));
-                                                setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address);
-                                            }}
-                                            variant="success"
-                                            size="md"
-                                        >
-                                            <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
-                                        </Button>
+                                            <Button
+                                                className="m-1"
+                                                onClick={async () => {
+                                                    setLedgerPublicKey(await getLedgerPubkey(false));
+                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address);
+                                                }}
+                                                variant="success"
+                                                size="md"
+                                            >
+                                                <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <Button onClick={renderSelectWalletModal}
+                                                variant="success"
+                                                size="md"
+                                            >
+                                                <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <Button onClick={renderSelectWalletModal}
-                                            variant="success"
-                                            size="md"
-                                        >
-                                            <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
-                                        </Button>
-                                    </div>
-                                </div>
-                            )
-                        }
+                                )
+                            }
+                            <div id="fee-select-container">
+                                <p>How fast should your Ordinal be minted?</p>
+                                <FeeRange
+                                    setFee={(e) => {
+                                        setFee(e.target.value)
+                                    }}
+                                    value={fee}
+                                />
+                            </div>
+                        </Col>
+                    </Row>
 
 
-                        <FeeRange
-                            setFee={(e) => {
-                                setFee(e.target.value)
-                            }}
-                            value={fee}
-                        />
-                        <Price
-                            price={price}
-                        />
-                        <Button
-                            onClick={() => {
-                                getInvoice(price);
-                                renderAlert(false);
-                                // showInvoiceModal();
-                                hideConfigModal();
-                                updatePaymentrequest();
-                                setSpinner(true);
-                                isPaid = false;
-                            }}
-                            variant="success"
-                            size="lg"
-                        // disabled
-                        >
-                            Pay with Lightning
-                        </Button>
-                        <div id='info-text-home-bottom'>
-                            <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
-                            <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
-                        </div>
-                        <Footer />
+                    <Price
+                        price={price}
+                    />
+                    <Button
+                        onClick={() => {
+                            getInvoice(price);
+                            renderAlert(false);
+                            // showInvoiceModal();
+                            hideConfigModal();
+                            updatePaymentrequest();
+                            setSpinner(true);
+                            isPaid = false;
+                        }}
+                        variant="success"
+                        size="lg"
+                    // disabled
+                    >
+                        Pay with Lightning
+                    </Button>
+                    <div id='info-text-home-bottom'>
+                        <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
+                        <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
                     </div>
-
-                </Row>
-
+                    <Footer />
+                </div>
             </Container >
             <AlertModal
                 show={alertModalparams.show}

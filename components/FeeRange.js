@@ -36,21 +36,21 @@ const FeeRange = (props) => {
 
     return (
         <div>
-            <Container>
-                <div id="fee-range" className="mt-3">
-                    <ToggleButtonGroup type="radio" name="options" id="fee-selector" value={selectedFee}>
-                        <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
-                            {minFee} sats/vByte <br></br><b> normal </b> <br></br>
-                        </ToggleButton>
-                        <ToggleButton id="tbg-radio-4" value={mediumFee} onChange={() => handleFeeChange(mediumFee)} title="normal">
-                            {mediumFee} sats/vByte <br></br><b> fast</b> <br></br>
-                        </ToggleButton>
-                        <ToggleButton id="tbg-radio-5" value={maxFee} onChange={() => handleFeeChange(maxFee)} title="fast">
-                            {maxFee} sats/vByte <br></br><b> turbo</b> <br></br>
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </div>
-            </Container>
+
+            <div id="fee-range">
+                <ToggleButtonGroup type="radio" name="options" className='toggle-button-custom' value={selectedFee}>
+                    <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
+                        {minFee} sats/vByte <br></br><b> normal </b> <br></br>
+                    </ToggleButton>
+                    <ToggleButton id="tbg-radio-4" value={mediumFee} onChange={() => handleFeeChange(mediumFee)} title="normal">
+                        {mediumFee} sats/vByte <br></br><b> fast</b> <br></br>
+                    </ToggleButton>
+                    <ToggleButton id="tbg-radio-5" value={maxFee} onChange={() => handleFeeChange(maxFee)} title="fast">
+                        {maxFee} sats/vByte <br></br><b> turbo</b> <br></br>
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </div>
+
         </div>
     );
 };
