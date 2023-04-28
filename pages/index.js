@@ -436,7 +436,8 @@ function Home() {
                                     <>
                                         {nostrPublicKey ? (
                                             <>
-                                                <div className="success-alert-input">
+                                                <div className="success-alert-input input-button">
+                                                    <p>Your receiver address:</p>
                                                     <OnchainInput
                                                         onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
                                                         setOnChainAddress={setOnChainAddress}
@@ -450,7 +451,8 @@ function Home() {
                                             </>
                                         ) : ledgerPublicKey ? (
                                             <>
-                                                <div className="success-alert-input">
+                                                <div className="success-alert-input input-button">
+                                                    <p>Your receiver address:</p>
                                                     <OnchainInput
                                                         onChainAddress={onChainAddress}
                                                         setOnChainAddress={setOnChainAddress}
@@ -464,22 +466,24 @@ function Home() {
                                             </>
                                         ) : (
                                             <>
-                                                <div className="success-alert-input">
+                                                <div className="success-alert-input input-button">
+                                                    <p>Your receiver address:</p>
                                                     <OnchainInput
                                                         onChainAddress={onChainAddress}
                                                         setOnChainAddress={setOnChainAddress}
                                                     />
-                                                    <WalletConnectModal
-                                                        address={onChainAddress}
-                                                        show={showWalletConnectModal}
-                                                        handleClose={() => setShowWalletConnectModal(false)}
-                                                    />
                                                 </div>
+                                                <WalletConnectModal
+                                                    address={onChainAddress}
+                                                    show={showWalletConnectModal}
+                                                    handleClose={() => setShowWalletConnectModal(false)}
+                                                />
+
                                             </>
                                         )}
                                     </>
                                 ) : (
-                                    <div id="input-button">
+                                    <div className="input-button">
                                         <p>How do you want to receive your Ordinal?
                                             <br />
                                             Enter an on-chain address or use a wallet.
