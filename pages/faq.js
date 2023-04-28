@@ -17,18 +17,8 @@ const FAQ = () => {
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>What is this?</Accordion.Header>
                                 <Accordion.Body>
-                                    <p>
-                                        To begin, it's essential to have a basic understanding of <a href="https://ordinals.com" target="_blank"
-                                            rel="noreferrer" >Ordinals</a>.{" "}
-                                        Ordimint, a user-friendly web application, enables you to create and manage your own Ordinals on the Bitcoin Blockchain without the need to install
-                                        the <a href="https://ordinals.com" target="_blank"
-                                            rel="noreferrer" >Ord wallet</a> or synchronize the entire blockchain, which in itself is not a bad process.
-                                    </p>
-                                    <p>
-                                        As developers committed to simplifying Bitcoin technology, we believe that Bitcoin should be accessible to all, allowing everyone to harness its full potential.
-                                        In addition to our web application, we offer a secure, non-custodial Ordinal wallet for added convenience. We also have a <a href="https://ledger.com" target="_blank" rel="noreferrer">Ledger</a> hardware wallet integration as well as
-                                        a wallet that is linked to your Nostr account via <a href="https://getalby.com/" target="_blank" rel="noreferrer">Alby</a> browser extension.
-                                    </p>
+                                    <p>Ordimint is a user-friendly Lightning app that enables users to create inscriptions on the Bitcoin blockchain. The app features a non-custodial wallet, which connects to your Nostr key through the <a href="https://getalby.com" target="_blank">Alby</a> browser extension. Additionally, it offers <a href="https://www.ledger.com" target="_blank">Ledger</a> hardware wallet integration and a non-custodial web wallet.</p>
+                                    <p>Ordimint also hosts its own <a href="https://explorer.ordimint.com" target="_blank">Ordinal explorer</a> and utilizes a Lightning backend, powered by <a href="https://lnbits.com" target="_blank">Lnbits</a> and its dedicated node. To enhance the user experience, a collection page is available for browsing all existing Ordinal collections.</p>
                                 </Accordion.Body>
 
                             </Accordion.Item>
