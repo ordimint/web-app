@@ -90,6 +90,7 @@ function Home() {
     const [file, setFile] = useState(defaultImage);
     const [fileSize, setFileSize] = useState(1000);
     const [fileType, setFileType] = useState("jpeg");
+    const [fileName, setFileName] = useState('');
     ////// Wallet selction modal
     const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
     const closeSelectWalletModal = () => setShowSelectWalletModal(false);
@@ -179,7 +180,7 @@ function Home() {
     const fileTooBig = () => {
         showAlertModal({
             show: true,
-            text: "File is too big! (>0.5MB)",
+            text: "File is too big! (>0.7MB)",
             type: "danger",
         });
     }
@@ -261,17 +262,17 @@ function Home() {
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, dataUrl, fileType, false, fee);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, textInput, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, textInput, 'txt', true, fee);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{ "p": "sns", "op": "reg", "name": "${domainInput}.sats" }`
-                socket.emit("createOrder", paymentHash, onChainAddress, domainString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, domainString, 'txt', true, fee);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -290,7 +291,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, newsString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, newsString, 'txt', true, fee);
             }
             if (tabKey === 'brc') {
                 var brcString = "";
@@ -302,7 +303,7 @@ function Home() {
                     brcString = `{ "p": "brc-20", "op": "mint", "tick": "${tokenTicker}", "amt": "${mintAmount}" }`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, brcString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, brcString, 'txt', true, fee);
 
             }
 
@@ -369,14 +370,27 @@ function Home() {
                                 >
 
                                     <Tab eventKey="file" title="File">
-                                        <FileUpload
+                                        {/* <FileUpload
                                             file={file}
                                             setFile={setFile}
                                             setFileSize={setFileSize}
                                             setFileType={setFileType}
                                             fileTooBig={fileTooBig}
                                             fileSize={fileSize}
+                                            setFileName={setFileName}
+                                            fileName={fileName}
+                                        /> */}
+                                        <FileUpload
+                                            file={file}
+                                            fileType={fileType}
+                                            fileName={fileName}
+                                            setFile={setFile}
+                                            setFileType={setFileType}
+                                            setFileName={setFileName}
+                                            setFileSize={setFileSize}
+                                            fileTooBig={fileTooBig}
                                         />
+
                                     </Tab>
                                     <Tab eventKey="text" title="Text">
                                         <TextInput
@@ -423,13 +437,13 @@ function Home() {
                             </div>
                         </Col>
                         <Col id="right-side-container">
-                            {/* <div id="inscription-number-selection">
+                            <div id="inscription-number-selection">
                                 <p>Do you want a positive or negative <br /> Inscription Number?</p>
                                 <InscriptionNumberSwitch
                                     onChange={(value) => setPositiveInscriptionNumber(value)}
                                 />
 
-                            </div> */}
+                            </div>
 
                             {
                                 (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (

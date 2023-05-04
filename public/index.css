@@ -386,7 +386,7 @@ div.preview-image-container img {
 }
 @media screen and (max-width: 420px) {
   #text-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -454,7 +454,7 @@ div.wallet-card {
 
 @media screen and (max-width: 420px) {
   #domain-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -487,7 +487,7 @@ div.wallet-card {
 
 @media screen and (max-width: 420px) {
   #news-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -547,7 +547,7 @@ span.input-group-text.required .required:after {
 
 @media screen and (max-width: 420px) {
   #brc-20-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -718,4 +718,18 @@ span.input-group-text.required .required:after {
   align-items: stretch;
   align-content: stretch;
   flex-wrap: wrap;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
 }
