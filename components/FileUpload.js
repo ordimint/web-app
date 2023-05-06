@@ -15,6 +15,7 @@ const FileUpload = (props) => {
 
   const compressAndSetImage = async (file) => {
     try {
+
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 0.3,
         maxWidthOrHeight: 1280,
@@ -27,10 +28,12 @@ const FileUpload = (props) => {
       setCompressedImageURL(URL.createObjectURL(compressedFile));
       props.setFile(URL.createObjectURL(compressedFile));
       props.setFileName(compressedFile.name);
+
     } catch (error) {
       console.error('Image compression failed:', error);
     }
   };
+
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -83,7 +86,7 @@ const FileUpload = (props) => {
 
 
   const isImage = (fileType) => {
-    return ['apng', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'webp'].includes(fileType);
+    return ['apng', 'gif', 'jpg', 'jpeg', 'png', 'webp'].includes(fileType);
   };
 
   return (
@@ -100,7 +103,7 @@ const FileUpload = (props) => {
                 src={compressImage && compressedImageURL ? compressedImageURL : props.file}
               />
             ) : (
-              <div className="non-image-filename-preview">{props.fileName}</div>
+              <h5 className="non-image-filename-preview">{props.fileName}</h5>
             )}
           </div>
         )}
