@@ -2,24 +2,29 @@ import React, { useState, useCallback } from 'react';
 import { Form, Image } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
+import { AiOutlineCloudUpload } from 'react-icons/ai';
 
 const acceptedFileTypes =
-  '.apng, .flac, .gif, .html, .jpg, .mp3, .pdf, .png, .svg, .txt, .wav, .webm, .webp';
+  'image/apng, image/gif, image/jpeg, image/jpg, image/png, image/svg+xml, image/webp, .html, .txt, audio/flac, audio/mpeg, audio/wav, video/webm, application/pdf';
 
 const FileUpload = (props) => {
-  const [compressImage, setCompressImage] = useState(false);
+  const [compressImage, setCompressImage] = useState(true);
   const [originalFile, setOriginalFile] = useState(null);
+  const [compressedImageURL, setCompressedImageURL] = useState(null);
+
 
   const compressAndSetImage = async (file) => {
     try {
       const compressedFile = await imageCompression(file, {
-        maxSizeMB: 0.5, // Reduce the maximum output size
-        maxWidthOrHeight: 1280, // Reduce the maximum width or height
-        quality: 0.8, // Reduce the quality of the output image
-        exifOrientation: true, // Preserve EXIF orientation
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 1280,
+        quality: 0.3,
+        resize: true,
+        exifOrientation: true,
         useWebWorker: true,
       });
       props.setFileSize(compressedFile.size);
+      setCompressedImageURL(URL.createObjectURL(compressedFile));
       props.setFile(URL.createObjectURL(compressedFile));
       props.setFileName(compressedFile.name);
     } catch (error) {
@@ -28,21 +33,37 @@ const FileUpload = (props) => {
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (!acceptedFileTypes.includes(fileExtension)) {
+      alert('Unsupported file type. Please upload a supported file.');
+      return;
+    }
+
     if (acceptedFiles[0].size > 700000) {
       props.fileTooBig();
     } else {
       const fileType = acceptedFiles[0].name.split('.').pop();
       props.setFileType(fileType);
+      setOriginalFile(acceptedFiles[0]);
+
       if (compressImage && isImage(fileType)) {
         await compressAndSetImage(acceptedFiles[0]);
       } else {
         props.setFileSize(acceptedFiles[0].size);
         props.setFile(URL.createObjectURL(acceptedFiles[0]));
         props.setFileName(acceptedFiles[0].name);
-        setOriginalFile(acceptedFiles[0]);
       }
     }
   }, [compressImage]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: acceptedFileTypes,
+    maxFiles: 1,
+  });
+
 
   const handleCompressionChange = async (e) => {
     const isChecked = e.target.checked;
@@ -61,12 +82,6 @@ const FileUpload = (props) => {
   };
 
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: acceptedFileTypes,
-  });
-
-
   const isImage = (fileType) => {
     return ['apng', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'webp'].includes(fileType);
   };
@@ -82,7 +97,7 @@ const FileUpload = (props) => {
                 fluid="true"
                 thumbnail="true"
                 alt="Uploaded file preview"
-                src={props.file}
+                src={compressImage && compressedImageURL ? compressedImageURL : props.file}
               />
             ) : (
               <div className="non-image-filename-preview">{props.fileName}</div>
@@ -94,7 +109,13 @@ const FileUpload = (props) => {
           {isDragActive ? (
             <p>Drop the files here...</p>
           ) : (
-            <p>Drag and drop a file here, or click to select a file you want to inscribe.</p>
+            <>
+              <AiOutlineCloudUpload size={48} className="upload-icon" />
+              <p>
+
+                {' '}
+                Drag and drop a file here, or click to select a file you want to inscribe.</p>
+            </>
           )}
         </div>
         {isImage(props.fileType) && (

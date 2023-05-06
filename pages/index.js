@@ -87,7 +87,7 @@ function Home() {
     //////OnChain-Address
     const [onChainAddress, setOnChainAddress] = useState("");
     ///////File
-    const [file, setFile] = useState(defaultImage);
+    const [file, setFile] = useState(null);
     const [fileSize, setFileSize] = useState(1000);
     const [fileType, setFileType] = useState("jpeg");
     const [fileName, setFileName] = useState('');
@@ -218,7 +218,7 @@ function Home() {
                 text: "Please provide a valid BTC address",
                 type: "danger",
             });
-        } else if (file === defaultImage && tabKey === 'file') {
+        } else if (file === null && tabKey === 'file') {
             showAlertModal({
                 show: true,
                 text: "Please provide your own image",

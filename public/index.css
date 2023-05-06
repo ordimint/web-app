@@ -721,10 +721,14 @@ span.input-group-text.required .required:after {
 }
 
 .dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   border: 2px dashed #ccc;
-  border-radius: 5px;
+  border-radius: 12px;
   padding: 20px;
-  text-align: center;
+  /* text-align: center; */
   cursor: pointer;
 }
 

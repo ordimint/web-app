@@ -19,9 +19,9 @@ const FeeRange = (props) => {
     useEffect(() => {
         const fetchFees = async () => {
             const result = await getFeesRecommended();
-            setMinFee(result.hourFee);
+            setMinFee(result.economyFee);
             setMediumFee(result.halfHourFee);
-            setMaxFee(result.fastestFee + 5);
+            setMaxFee(result.fastestFee);
             setSelectedFee(result.halfHourFee);
             props.setFee({ target: { value: result.halfHourFee } });
         };
@@ -40,7 +40,7 @@ const FeeRange = (props) => {
             <div id="fee-range">
                 <ToggleButtonGroup type="radio" name="options" className='toggle-button-custom' value={selectedFee}>
                     <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
-                        {minFee} sats/vByte <br></br><b> 1 day </b> <br></br>
+                        {minFee} sats/vByte <br></br><b> &gt; 1 day </b> <br></br>
                     </ToggleButton>
                     <ToggleButton id="tbg-radio-4" value={mediumFee} onChange={() => handleFeeChange(mediumFee)} title="normal">
                         {mediumFee} sats/vByte <br></br><b> 4 hours</b> <br></br>
