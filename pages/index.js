@@ -156,16 +156,16 @@ function Home() {
                 newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
                 break;
             case "text":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostText));
+                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostText));
                 break;
             case "news":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostNews));
+                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostNews));
                 break;
             case "domain":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostDomain));
+                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostDomain));
                 break;
             case "brc":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostBRC));
+                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostBRC));
                 break;
             default:
                 newPrice = 10000;
@@ -437,13 +437,13 @@ function Home() {
                             </div>
                         </Col>
                         <Col id="right-side-container">
-                            <div id="inscription-number-selection">
+                            {/* <div id="inscription-number-selection">
                                 <p>Do you want a positive or negative <br /> Inscription Number?</p>
                                 <InscriptionNumberSwitch
                                     onChange={(value) => setPositiveInscriptionNumber(value)}
                                 />
 
-                            </div>
+                            </div> */}
 
                             {
                                 (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (

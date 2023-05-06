@@ -8,6 +8,24 @@ const acceptedFileTypes =
 
 const FileUpload = (props) => {
   const [compressImage, setCompressImage] = useState(false);
+  const [originalFile, setOriginalFile] = useState(null);
+
+  const compressAndSetImage = async (file) => {
+    try {
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 0.5, // Reduce the maximum output size
+        maxWidthOrHeight: 1280, // Reduce the maximum width or height
+        quality: 0.8, // Reduce the quality of the output image
+        exifOrientation: true, // Preserve EXIF orientation
+        useWebWorker: true,
+      });
+      props.setFileSize(compressedFile.size);
+      props.setFile(URL.createObjectURL(compressedFile));
+      props.setFileName(compressedFile.name);
+    } catch (error) {
+      console.error('Image compression failed:', error);
+    }
+  };
 
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles[0].size > 700000) {
@@ -15,36 +33,39 @@ const FileUpload = (props) => {
     } else {
       const fileType = acceptedFiles[0].name.split('.').pop();
       props.setFileType(fileType);
-
       if (compressImage && isImage(fileType)) {
-        try {
-          const compressedFile = await imageCompression(acceptedFiles[0], {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 1920,
-            useWebWorker: true,
-          });
-          props.setFileSize(compressedFile.size);
-          props.setFile(URL.createObjectURL(compressedFile));
-          props.setFileName(compressedFile.name);
-        } catch (error) {
-          console.error('Image compression failed:', error);
-        }
+        await compressAndSetImage(acceptedFiles[0]);
       } else {
         props.setFileSize(acceptedFiles[0].size);
         props.setFile(URL.createObjectURL(acceptedFiles[0]));
         props.setFileName(acceptedFiles[0].name);
+        setOriginalFile(acceptedFiles[0]);
       }
     }
   }, [compressImage]);
+
+  const handleCompressionChange = async (e) => {
+    const isChecked = e.target.checked;
+    setCompressImage(isChecked);
+
+    if (props.file && isImage(props.fileType)) {
+      if (isChecked) {
+        await compressAndSetImage(await fetch(props.file).then((res) => res.blob()));
+      } else if (originalFile) {
+        // Revert to the original file
+        props.setFileSize(originalFile.size);
+        props.setFile(URL.createObjectURL(originalFile));
+        props.setFileName(originalFile.name);
+      }
+    }
+  };
+
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: acceptedFileTypes,
   });
 
-  const handleCompressionChange = (e) => {
-    setCompressImage(e.target.checked);
-  };
 
   const isImage = (fileType) => {
     return ['apng', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'webp'].includes(fileType);
@@ -73,7 +94,7 @@ const FileUpload = (props) => {
           {isDragActive ? (
             <p>Drop the files here...</p>
           ) : (
-            <p>Drag and drop some files here, or click to select files</p>
+            <p>Drag and drop a file here, or click to select a file you want to inscribe.</p>
           )}
         </div>
         {isImage(props.fileType) && (
