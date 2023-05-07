@@ -20,7 +20,7 @@ const DomainInput = (props) => {
 
                             (e) => {
                                 props.setDomainInput(e.target.value);
-                                props.setFileSize(((e.target.value.length) + 1000));
+                                props.setFileSize(((e.target.value.length)));
                                 // props.checkDomain(e.target.value)
                             }
 

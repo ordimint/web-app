@@ -152,27 +152,43 @@ function Home() {
         setShowWalletConnectModal(true)
     };
 
+    // useEffect(() => {
+    //     let newPrice;
+    //     switch (tabKey) {
+    //         case "file":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
+    //             break;
+    //         case "text":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostText));
+    //             break;
+    //         case "news":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostNews));
+    //             break;
+    //         case "domain":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostDomain));
+    //             break;
+    //         case "brc":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostBRC));
+    //             break;
+    //         default:
+    //             newPrice = 10000;
+    //     }
+    //     setPrice(newPrice);
+    // }, [fileSize, fee, tabKey]);
+
     useEffect(() => {
-        let newPrice;
-        switch (tabKey) {
-            case "file":
-                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
-                break;
-            case "text":
-                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostText));
-                break;
-            case "news":
-                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostNews));
-                break;
-            case "domain":
-                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostDomain));
-                break;
-            case "brc":
-                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostBRC));
-                break;
-            default:
-                newPrice = 10000;
-        }
+        const outputCosts = {
+            file: outputCostPicture,
+            text: outputCostText,
+            news: outputCostNews,
+            domain: outputCostDomain,
+            brc: outputCostBRC,
+        };
+
+        const newPrice = outputCosts[tabKey]
+            ? Math.trunc(((fileSize / 4) + 150) * fee * securityBuffer) + parseInt(outputCosts[tabKey])
+            : 30000;
+
         setPrice(newPrice);
     }, [fileSize, fee, tabKey]);
 
@@ -287,7 +303,7 @@ function Home() {
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
-                const domainString = `{ "p": "sns", "op": "reg", "name": "${domainInput}.sats" }`
+                const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
                 socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, domainString, 'txt', true, fee);
             }
             if (tabKey === 'news') {
@@ -312,14 +328,14 @@ function Home() {
             if (tabKey === 'brc') {
                 var brcString = "";
                 if (brcRadioButton === "deploy") {
-                    brcString = `{ "p": "brc-20", "op": "deploy", "tick": "${tokenTicker}", "max": "${tokenSupply}", "lim": "${mintLimit}" }`
+                    brcString = `{"p":"brc-20","op":"deploy","tick":"${tokenTicker}","max":"${tokenSupply}","lim":"${mintLimit}"}`
 
                 }
                 else if (brcRadioButton === "mint") {
-                    brcString = `{ "p": "brc-20", "op": "mint", "tick": "${tokenTicker}", "amt": "${mintAmount}" }`
+                    brcString = `{"p":"brc-20","op":"mint","tick":"${tokenTicker}","amt":"${mintAmount}"}`
                 }
                 else if (brcRadioButton === "transfer") {
-                    brcString = `{ "p": "brc-20", "op": "transfer", "tick": "${tokenTicker}", "amt": "${transferAmount}" }`
+                    brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
                 socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, brcString, 'txt', true, fee);

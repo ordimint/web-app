@@ -72,7 +72,7 @@ const BRC = (props) => {
           aria-describedby="basic-addon1"
           onInput={
             (e) => {
-              props.setFileSize(((e.target.value.length) + 1000));
+              props.setFileSize(((e.target.value.length)));
               props.setTokenTicker(e.target.value);
             }
           }
