@@ -93,7 +93,7 @@ function Home() {
     const [onChainAddress, setOnChainAddress] = useState("");
     ///////File
     const [file, setFile] = useState(null);
-    const [fileSize, setFileSize] = useState(1000);
+    const [fileSize, setFileSize] = useState(10);
     const [fileType, setFileType] = useState("jpeg");
     const [fileName, setFileName] = useState('');
     ////// Wallet selction modal
