@@ -28,6 +28,7 @@ import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
 import InscriptionNumberSwitch from '../components/InscriptionNumberSwitch';
+import BRCPreviewModal from '../components/modals/BRCPreviewModal';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -44,7 +45,6 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 function Home() {
-    const defaultImage = '/media/dorian-nakamoto.jpg';
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
@@ -63,6 +63,7 @@ function Home() {
     const [tokenSupply, setTokenSupply] = useState('21000');
     const [mintLimit, setMintLimit] = useState('1000');
     const [mintAmount, setMintAmount] = useState('1000');
+    const [transferAmount, setTransferAmount] = useState('1000');
 
     const [showSpinner, setSpinner] = useState(true);
     const [payment_request, setPaymentrequest] = useState(0);
@@ -75,6 +76,10 @@ function Home() {
     const [isConfigModal, showConfigModal] = useState(false);
     const renderConfigModal = () => showConfigModal(true);
     const hideConfigModal = () => showConfigModal(false);
+    //////Modal BRC Preview
+    const [showBRCPreviewModal, setShowBRCPreviewModal] = useState(false);
+    const closeBRCPreviewModal = () => setShowBRCPreviewModal(false);
+    const showBRCPreviewModalFunc = () => setShowBRCPreviewModal(true);
 
     //////Alert - Modal
     const [alertModalparams, showAlertModal] = useState({
@@ -146,8 +151,6 @@ function Home() {
         }
         setShowWalletConnectModal(true)
     };
-
-
 
     useEffect(() => {
         let newPrice;
@@ -247,12 +250,25 @@ function Home() {
             });
         }
         else {
+            if (tabKey === 'brc') {
+                awaitBRCPreviewConfirmation();
+            } else {
 
-            socket.emit("getInvoice", price);
-
-            showInvoiceModal();
+                socket.emit("getInvoice", price);
+                showInvoiceModal();
+            }
         }
     };
+
+    const awaitBRCPreviewConfirmation = () => {
+        setShowBRCPreviewModal(true);
+    }
+
+    const handleBRCPreviewConfirmation = () => {
+        setShowBRCPreviewModal(false);
+        socket.emit("getInvoice", price);
+        showInvoiceModal();
+    }
 
     socket.off("invoicePaid").on("invoicePaid", async (paymentHash) => {
         if (paymentHash === clientPaymentHash && !isPaid) {
@@ -301,6 +317,9 @@ function Home() {
                 }
                 else if (brcRadioButton === "mint") {
                     brcString = `{ "p": "brc-20", "op": "mint", "tick": "${tokenTicker}", "amt": "${mintAmount}" }`
+                }
+                else if (brcRadioButton === "transfer") {
+                    brcString = `{ "p": "brc-20", "op": "transfer", "tick": "${tokenTicker}", "amt": "${transferAmount}" }`
                 }
                 console.log(brcString);
                 socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, brcString, 'txt', true, fee);
@@ -430,6 +449,8 @@ function Home() {
                                             setMintAmount={setMintAmount}
                                             onChange={setbrcRadioButton}
                                             brcRadioButton={brcRadioButton}
+                                            transferAmount={transferAmount}
+                                            setTransferAmount={setTransferAmount}
                                         />
 
                                     </Tab>
@@ -588,10 +609,23 @@ function Home() {
                 variant={alertModalparams.type}
                 handleClose={hideAlertModal}
             />
+            <BRCPreviewModal
+                show={showBRCPreviewModal}
+                handleClose={closeBRCPreviewModal}
+                tokenSupply={tokenSupply}
+                tokenTicker={tokenTicker}
+                mintLimit={mintLimit}
+                mintAmount={mintAmount}
+                brcRadioButton={brcRadioButton}
+                transferAmount={transferAmount}
+                onOK={handleBRCPreviewConfirmation}
+
+            />
             <ReceiveAddressModal
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 nostrPublicKey={nostrPublicKey}
+
             />
             <InvoiceModal
                 show={visibleInvoiceModal}
