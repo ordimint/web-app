@@ -11,8 +11,9 @@ const FAQ = () => {
             </Head>
             <h1 className='mb-3'>FAQ</h1>
             <Container>
-                <Row xs={1} sm={1} md={1} lg={1}>
+                <Row xs={1} sm={1} md={1} lg={2}>
                     <Col>
+                        <h2 className='mt-3'>General</h2>
                         <Accordion>
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>What is this?</Accordion.Header>
@@ -60,7 +61,7 @@ const FAQ = () => {
                                     <p>The main difference between a Bitcoin inscription and an NFT is that a Bitcoin inscription is specific to the Bitcoin blockchain and is created by inscribing content onto satoshis, so the data is stored on-chain. In contrast, while an NFT can be created on various blockchain platforms, they are most likely only linked to an external off-chain storage.</p>
                                 </Accordion.Body>
                             </Accordion.Item>
-                            <Accordion.Item eventKey="0444">
+                            {/* <Accordion.Item eventKey="0444">
                                 <Accordion.Header>What is the difference between a positive and negative Inscription number?</Accordion.Header>
                                 <Accordion.Body>
                                     <p>
@@ -74,7 +75,7 @@ const FAQ = () => {
                                     </ol>
                                     <p>So Ordimint offers you now the option to chose between a positive(original) Inscription number or a negative one.</p>
                                 </Accordion.Body>
-                            </Accordion.Item>
+                            </Accordion.Item> */}
 
 
                             <Accordion.Item eventKey="0111">
@@ -83,6 +84,11 @@ const FAQ = () => {
                                     <p>apng, flac, gif, html, jpg, mp3, pdf, png, svg, txt, wav, webm, webp</p>
                                 </Accordion.Body>
                             </Accordion.Item>
+                        </Accordion>
+                    </Col>
+                    <Col>
+                        <h2 className='mt-3'>Wallets</h2>
+                        <Accordion>
                             <Accordion.Item eventKey="01111">
                                 <Accordion.Header>Can I send an Ordinal to any BTC address?</Accordion.Header>
                                 <Accordion.Body>
@@ -95,6 +101,7 @@ const FAQ = () => {
                                         <b>With our wallet, you can send and receive your Ordinals securely.</b>
                                     </p>
                                 </Accordion.Body>
+
                             </Accordion.Item>
                             <Accordion.Item eventKey="011111">
                                 <Accordion.Header>How does the Alby wallet work?</Accordion.Header>
@@ -151,6 +158,62 @@ const FAQ = () => {
                                     </p>
                                     <p>
                                         Remember to always keep your seed phrase and backup file safe, as they are the only ways to recover your wallet in case of loss or damage.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Col>
+                    <Col className='mt-3'>
+                        <h2>BRC-20</h2>
+                        <Accordion>
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>What are BRC-20 tokens?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        BRC-20 tokens are an experimental standard demonstrating off-chain balance states with inscriptions on the Bitcoin network. They are not meant to be a definitive standard for fungibility and should not be used for financial decisions.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="1">
+                                <Accordion.Header>What is the idea behind BRC-20 tokens?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        The experiment aims to explore if ordinal theory can facilitate fungibility on Bitcoin by creating, minting, and transferring BRC-20 tokens using deploy, mint, and transfer functions.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="2">
+                                <Accordion.Header>How do I get a BRC-20 token balance?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        You can either deploy your own BRC-20 token or mint from existing deployments. Be cautious when using inscription services, as some may inscribe to themselves first and then forward it to the customer. This is not the case wiht our inscription service. We will inscribe directly to your wallet.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="3">
+                                <Accordion.Header>How do I transfer a BRC-20 token balance?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        Inscribe the transfer function to your ordinal compatible wallet and ensure that you have a valid balance on the address you are inscribing to.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="4">
+                                <Accordion.Header>What are the key components of BRC-20 token operations?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        BRC-20 tokens have deploy, mint, and transfer operations, each with specific keys and parameters such as protocol, operation type, ticker, max supply, mint limit, decimals, and amount to mint or transfer.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="5">
+                                <Accordion.Header>What are the limitations and precautions for using BRC-20 tokens?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        BRC-20 tokens are experimental, and their design can be improved. They should not be used for financial decisions.
+                                    </p>
+                                    <p>
+                                        Note: This summary is based on an experimental BRC-20 token standard and should be used for informational purposes only. Use BRC-20 tokens at your own risk, as they may not be suitable for financial decisions or have lasting value.
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
