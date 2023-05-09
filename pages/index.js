@@ -388,6 +388,15 @@ function Home() {
                 <meta name="description" content="Ordimint offers an easy-to-use Wallet and Inscription service for Bitcoin Ordinals, enabling seamless Ordinal management and minting of unique Bitcoin inscriptions." />
                 <title>Ordimint - Inscribe</title>
                 <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT, Wallet, Asset Management, Minting" />
+                <meta property="og:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://ordimint.com/logo-dark.jpeg" />
+                <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
+
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
+                <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
+                <meta name="twitter:image" content="https://ordimint.com/logo-dark.jpeg" />
             </Head>
 
             <Container>
@@ -588,7 +597,9 @@ function Home() {
                                     }}
                                     value={fee}
                                 />
+                                <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p>
                             </div>
+
                         </Col>
                     </Row>
 

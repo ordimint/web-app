@@ -12,9 +12,9 @@ import Head from 'next/head';
 import { Breadcrumb } from 'react-bootstrap';
 
 
-const CollectionDetailPage = ({ collectionMeta, collection }) => {
+const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
     const router = useRouter();
-    const { slug } = router.query;
+
     // const [collectionMeta, setCollectionMeta] = useState([])
     // const [collection, setCollection] = useState([])
     const [isText, setIsText] = useState(false)
@@ -41,9 +41,26 @@ const CollectionDetailPage = ({ collectionMeta, collection }) => {
     return (
         <div>
             <Head>
-                <title>Collection - {collectionMeta.name}</title>
+                <title>Ordinal Collection - {collectionMeta.name}</title>
                 <meta name="description" content={collectionMeta.description} />
                 <meta name="keywords" content="Bitcoin, Ordinals,Collections, Minting, Inscription, Wallet, Integrated, Ledger, Alby, Digital Artefacts" />
+                {/* Twitter Card meta tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:site" content="@ordimint" />
+
+                <meta name="twitter:creator" content="@ordimint" />
+                <meta name="twitter:title" content={`Ordinal Collection - ${collectionMeta.name}`} />
+                <meta name="twitter:description" content={collectionMeta.description} />
+                <meta name="twitter:image" content={`https://explorer.ordimint.com/preview/${collectionMeta.inscription_icon}`} />
+
+                {/* Open Graph (Facebook) meta tags */}
+                <meta property="og:title" content={`Ordinal Collection - ${collectionMeta.name}`} />
+                <meta property="og:description" content={collectionMeta.description} />
+                <meta property="og:url" content={`https://ordimint.com/${slug}`} />
+                <meta property="og:image" content={`https://explorer.ordimint.com/preview/${collectionMeta.inscription_icon}`} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content="Ordimint" />
+
             </Head>
             <Container>
                 <Breadcrumb>
@@ -165,6 +182,7 @@ export async function getServerSideProps(context) {
         props: {
             collectionMeta,
             collection,
+            slug
         },
     };
 }
