@@ -1,13 +1,33 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Form, InputGroup, Container } from 'react-bootstrap'
+import { Form, InputGroup, Button } from 'react-bootstrap'
 
 const BRC = (props) => {
+
+  const transferFields = (
+    <>
+      <InputGroup className='news-input-group'>
+        <InputGroup.Text htmlFor='basic-url' required>
+          Amount
+        </InputGroup.Text>
+        <Form.Control
+          type='number'
+          aria-label='transfer-amount'
+          aria-describedby='basic-addon1'
+          value={props.transferAmount}
+          onInput={(e) => {
+            props.setTransferAmount(e.target.value);
+          }}
+        />
+      </InputGroup>
+    </>
+  );
+
 
   return (
     <div id="brc-20-input-container">
       <div className='mt-2'>
-        <p>Deploy new token or mint existing one.</p>
+        <p>Deploy, mint or transfer BRC-20 token.</p>
       </div>
       <Form className="mt-2">
 
@@ -30,6 +50,15 @@ const BRC = (props) => {
             onChange={(e) => { props.onChange(e.target.value) }}
             checked={props.brcRadioButton === "mint"}
           />
+          <Form.Check
+            inline
+            label="Transfer"
+            value="transfer"
+            name="group1"
+            type="radio"
+            onChange={(e) => { props.onChange(e.target.value) }}
+            checked={props.brcRadioButton === "transfer"}
+          />
         </div>
 
       </Form>
@@ -43,13 +72,13 @@ const BRC = (props) => {
           aria-describedby="basic-addon1"
           onInput={
             (e) => {
-              props.setFileSize(((e.target.value.length) + 1000));
+              props.setFileSize(((e.target.value.length)));
               props.setTokenTicker(e.target.value);
             }
           }
         />
       </InputGroup>
-      {props.brcRadioButton === "deploy" ?
+      {props.brcRadioButton === "deploy" ? (
         <>
           <InputGroup className='news-input-group'>
             <InputGroup.Text htmlFor="basic-url" required>Total Supply</InputGroup.Text>
@@ -79,31 +108,31 @@ const BRC = (props) => {
               }
             />
           </InputGroup>
-        </>
-        :
-
-        <>
-          <InputGroup className='news-input-group'>
-            <InputGroup.Text htmlFor="basic-url" required>Amount</InputGroup.Text>
-            <Form.Control
-              type='number'
-              aria-label="deploy-amount"
-              aria-describedby="basic-addon1"
-              value={props.mintAmount}
-              onInput={
-                (e) => {
-                  props.setMintAmount(e.target.value);
+        </>)
+        : props.brcRadioButton === 'transfer' ? (
+          transferFields
+        ) : (
+          <>
+            <InputGroup className='news-input-group'>
+              <InputGroup.Text htmlFor="basic-url" required>Amount</InputGroup.Text>
+              <Form.Control
+                type='number'
+                aria-label="deploy-amount"
+                aria-describedby="basic-addon1"
+                value={props.mintAmount}
+                onInput={
+                  (e) => {
+                    props.setMintAmount(e.target.value);
+                  }
                 }
-              }
-            />
-          </InputGroup>
+              />
+            </InputGroup>
 
-        </>
+          </>)
 
 
       }
       <p><a href="https://domo-2.gitbook.io/brc-20-experiment/" target="_blank" rel="noopener noreferrer" >Read more about BRC-20 tokens here</a></p>
-
     </div>
   )
 }

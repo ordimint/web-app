@@ -53,7 +53,7 @@ const NewsInput = (props) => {
 
                         (e) => {
                             props.setNewsText(e.target.value);
-                            props.setFileSize(((e.target.value.length) + 1000));
+                            props.setFileSize(((e.target.value.length)));
                         }
 
                     }

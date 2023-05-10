@@ -9,7 +9,7 @@ const TextInput = (props) => {
 
                     (e) => {
                         props.setTextInput(e.target.value);
-                        props.setFileSize(((e.target.value.length) + 1000));
+                        props.setFileSize(((e.target.value.length)));
                     }
 
                 }

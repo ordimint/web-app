@@ -221,8 +221,8 @@ h2.accordion-header button {
 }
 
 @media screen and (min-width: 420px) {
-  #onchain-input {
-    min-width: 400px;
+  #onchain-input input {
+    min-width: 350px;
     max-width: 400px;
   }
 }
@@ -232,6 +232,9 @@ h2.accordion-header button {
 }
 
 #fee-range {
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -309,15 +312,19 @@ div.bitcoin-address a {
   margin: 3px;
 }
 
-#input-button {
+.input-button {
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 15px;
 }
 
 .success-alert-input {
-  max-width: min-content;
+  /* max-width: min-content; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -346,8 +353,13 @@ div.preview-image-container img {
   background-color: black;
 }
 @media screen and (max-width: 420px) {
-  .preview-image-container {
+  #tab-container {
     width: 350px;
+  }
+}
+@media screen and (max-width: 768px) {
+  #left-side-container {
+    margin-bottom: 10px;
   }
 }
 
@@ -374,7 +386,7 @@ div.preview-image-container img {
 }
 @media screen and (max-width: 420px) {
   #text-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -442,7 +454,7 @@ div.wallet-card {
 
 @media screen and (max-width: 420px) {
   #domain-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -475,7 +487,7 @@ div.wallet-card {
 
 @media screen and (max-width: 420px) {
   #news-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -516,6 +528,13 @@ span.input-group-text.required .required:after {
 #tab-container .nav-link {
   white-space: nowrap;
 }
+#tab-container {
+  height: 100%;
+  text-align: center;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 15px;
+}
 
 #brc-20-input-container {
   display: flex;
@@ -528,7 +547,7 @@ span.input-group-text.required .required:after {
 
 @media screen and (max-width: 420px) {
   #brc-20-input-container {
-    width: 350px;
+    width: 100%;
   }
 }
 
@@ -643,8 +662,78 @@ span.input-group-text.required .required:after {
   width: 100%;
   border: none;
 }
-#fee-selector label {
+.toggle-button-custom label {
   --bs-btn-color: white;
   --bs-btn-bg: black;
   --bs-btn-border-color: white;
+}
+
+#inscription-number-selection {
+  width: 100%;
+
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 0px 0px 10px 0px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+#left-side-container {
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+  flex-wrap: wrap;
+}
+
+#right-side-container {
+  height: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+  flex-wrap: wrap;
+}
+
+#fee-select-container {
+  max-width: 450px;
+  padding: 15px;
+  margin-top: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+  flex-wrap: wrap;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  /* text-align: center; */
+  cursor: pointer;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
 }

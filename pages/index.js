@@ -6,7 +6,7 @@ import InvoiceModal from '../components/modals/InvoiceModal';
 import { validate } from 'bitcoin-address-validation';
 import Footer from '../components/Footer';
 import Image from 'next/image';
-import { Row, Container, Button, Tab, Tabs } from "react-bootstrap";
+import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
 import { useState } from "react";
 import AlbyLogo from '../public/media/alby_icon_yellow.svg';
 import LedgerLogo from '../public/media/ledger-logo-small.svg';
@@ -27,6 +27,8 @@ import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
+import InscriptionNumberSwitch from '../components/InscriptionNumberSwitch';
+import BRCPreviewModal from '../components/modals/BRCPreviewModal';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -43,7 +45,6 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 function Home() {
-    const defaultImage = '/media/dorian-nakamoto.jpg';
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
@@ -62,6 +63,7 @@ function Home() {
     const [tokenSupply, setTokenSupply] = useState('21000');
     const [mintLimit, setMintLimit] = useState('1000');
     const [mintAmount, setMintAmount] = useState('1000');
+    const [transferAmount, setTransferAmount] = useState('1000');
 
     const [showSpinner, setSpinner] = useState(true);
     const [payment_request, setPaymentrequest] = useState(0);
@@ -74,6 +76,10 @@ function Home() {
     const [isConfigModal, showConfigModal] = useState(false);
     const renderConfigModal = () => showConfigModal(true);
     const hideConfigModal = () => showConfigModal(false);
+    //////Modal BRC Preview
+    const [showBRCPreviewModal, setShowBRCPreviewModal] = useState(false);
+    const closeBRCPreviewModal = () => setShowBRCPreviewModal(false);
+    const showBRCPreviewModalFunc = () => setShowBRCPreviewModal(true);
 
     //////Alert - Modal
     const [alertModalparams, showAlertModal] = useState({
@@ -86,9 +92,10 @@ function Home() {
     //////OnChain-Address
     const [onChainAddress, setOnChainAddress] = useState("");
     ///////File
-    const [file, setFile] = useState(defaultImage);
-    const [fileSize, setFileSize] = useState(1000);
+    const [file, setFile] = useState(null);
+    const [fileSize, setFileSize] = useState(10);
     const [fileType, setFileType] = useState("jpeg");
+    const [fileName, setFileName] = useState('');
     ////// Wallet selction modal
     const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
     const closeSelectWalletModal = () => setShowSelectWalletModal(false);
@@ -104,7 +111,8 @@ function Home() {
     const handleRestoreWalletModalClose = () => setShowRestoreWalletModal(false);
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
-
+    /////Inscription number + or -
+    const [positiveInscriptionNumber, setPositiveInscriptionNumber] = useState(true);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
 
@@ -144,29 +152,43 @@ function Home() {
         setShowWalletConnectModal(true)
     };
 
-
+    // useEffect(() => {
+    //     let newPrice;
+    //     switch (tabKey) {
+    //         case "file":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
+    //             break;
+    //         case "text":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostText));
+    //             break;
+    //         case "news":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostNews));
+    //             break;
+    //         case "domain":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostDomain));
+    //             break;
+    //         case "brc":
+    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostBRC));
+    //             break;
+    //         default:
+    //             newPrice = 10000;
+    //     }
+    //     setPrice(newPrice);
+    // }, [fileSize, fee, tabKey]);
 
     useEffect(() => {
-        let newPrice;
-        switch (tabKey) {
-            case "file":
-                newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
-                break;
-            case "text":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostText));
-                break;
-            case "news":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostNews));
-                break;
-            case "domain":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostDomain));
-                break;
-            case "brc":
-                newPrice = (Math.trunc((fileSize) * fee * securityBuffer) + parseInt(outputCostBRC));
-                break;
-            default:
-                newPrice = 10000;
-        }
+        const outputCosts = {
+            file: outputCostPicture,
+            text: outputCostText,
+            news: outputCostNews,
+            domain: outputCostDomain,
+            brc: outputCostBRC,
+        };
+
+        const newPrice = outputCosts[tabKey]
+            ? Math.trunc(((fileSize / 4) + 150) * fee * securityBuffer) + parseInt(outputCosts[tabKey])
+            : 30000;
+
         setPrice(newPrice);
     }, [fileSize, fee, tabKey]);
 
@@ -177,7 +199,7 @@ function Home() {
     const fileTooBig = () => {
         showAlertModal({
             show: true,
-            text: "File is too big! (>0.5MB)",
+            text: "File is too big! (>0.7MB)",
             type: "danger",
         });
     }
@@ -215,7 +237,7 @@ function Home() {
                 text: "Please provide a valid BTC address",
                 type: "danger",
             });
-        } else if (file === defaultImage && tabKey === 'file') {
+        } else if (file === null && tabKey === 'file') {
             showAlertModal({
                 show: true,
                 text: "Please provide your own image",
@@ -244,12 +266,25 @@ function Home() {
             });
         }
         else {
+            if (tabKey === 'brc') {
+                awaitBRCPreviewConfirmation();
+            } else {
 
-            socket.emit("getInvoice", price);
-
-            showInvoiceModal();
+                socket.emit("getInvoice", price);
+                showInvoiceModal();
+            }
         }
     };
+
+    const awaitBRCPreviewConfirmation = () => {
+        setShowBRCPreviewModal(true);
+    }
+
+    const handleBRCPreviewConfirmation = () => {
+        setShowBRCPreviewModal(false);
+        socket.emit("getInvoice", price);
+        showInvoiceModal();
+    }
 
     socket.off("invoicePaid").on("invoicePaid", async (paymentHash) => {
         if (paymentHash === clientPaymentHash && !isPaid) {
@@ -259,17 +294,17 @@ function Home() {
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, dataUrl, fileType, false, fee);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, textInput, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, textInput, 'txt', true, fee);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
-                const domainString = `{ "p": "sns", "op": "reg", "name": "${domainInput}.sats" }`
-                socket.emit("createOrder", paymentHash, onChainAddress, domainString, 'txt', true, fee);
+                const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, domainString, 'txt', true, fee);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -288,19 +323,22 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, newsString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, newsString, 'txt', true, fee);
             }
             if (tabKey === 'brc') {
                 var brcString = "";
                 if (brcRadioButton === "deploy") {
-                    brcString = `{ "p": "brc-20", "op": "deploy", "tick": "${tokenTicker}", "max": "${tokenSupply}", "lim": "${mintLimit}" }`
+                    brcString = `{"p":"brc-20","op":"deploy","tick":"${tokenTicker}","max":"${tokenSupply}","lim":"${mintLimit}"}`
 
                 }
                 else if (brcRadioButton === "mint") {
-                    brcString = `{ "p": "brc-20", "op": "mint", "tick": "${tokenTicker}", "amt": "${mintAmount}" }`
+                    brcString = `{"p":"brc-20","op":"mint","tick":"${tokenTicker}","amt":"${mintAmount}"}`
+                }
+                else if (brcRadioButton === "transfer") {
+                    brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, brcString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, brcString, 'txt', true, fee);
 
             }
 
@@ -350,206 +388,247 @@ function Home() {
                 <meta name="description" content="Ordimint offers an easy-to-use Wallet and Inscription service for Bitcoin Ordinals, enabling seamless Ordinal management and minting of unique Bitcoin inscriptions." />
                 <title>Ordimint - Inscribe</title>
                 <meta name="keywords" content="Bitcoin, Lightning, Ordinals, Inscriptions, NFT, Wallet, Asset Management, Minting" />
+                <meta property="og:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://ordimint.com/logo-dark.jpeg" />
+                <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
+
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
+                <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
+                <meta name="twitter:image" content="https://ordimint.com/logo-dark.jpeg" />
             </Head>
 
             <Container>
-                <Row>
-                    <div className='main-middle'>
-                        <h5>What do you want to inscribe:</h5>
-                        <div id="tab-container">
-                            <Tabs
-                                transition={false}
-                                activeKey={tabKey}
-                                onSelect={(k) => setTabKey(k)}
-                                justify
-                                fill
-                            >
+                <div className='main-middle'>
+                    <Row>
+                        <Col id='left-side-container'>
+                            <div id="tab-container">
+                                <p>What do you want to inscribe:</p>
+                                <Tabs
+                                    transition={false}
+                                    activeKey={tabKey}
+                                    onSelect={(k) => setTabKey(k)}
+                                    justify
+                                    fill
+                                >
 
-                                <Tab eventKey="file" title="File">
-                                    <FileUpload
-                                        file={file}
-                                        setFile={setFile}
-                                        setFileSize={setFileSize}
-                                        setFileType={setFileType}
-                                        fileTooBig={fileTooBig}
-                                        fileSize={fileSize}
-                                    />
-                                </Tab>
-                                <Tab eventKey="text" title="Text">
-                                    <TextInput
-                                        setFileSize={setFileSize}
-                                        textInput={textInput}
-                                        setTextInput={setTextInput}
-                                    />
-                                </Tab>
-                                <Tab eventKey="news" title="News">
-                                    <NewsInput
-                                        setFileSize={setFileSize}
-                                        setNewsAuthor={setNewsAuthor}
-                                        setNewsText={setNewsText}
-                                        setNewsTitle={setNewsTitle}
-                                        setNewsUrl={setNewsUrl}
-                                    />
-                                </Tab>
-                                <Tab eventKey="domain" title="Domain">
-                                    <DomainInput
-                                        setFileSize={setFileSize}
-                                        domainInput={domainInput}
-                                        setDomainInput={setDomainInput}
+                                    <Tab eventKey="file" title="File">
+                                        {/* <FileUpload
+                                            file={file}
+                                            setFile={setFile}
+                                            setFileSize={setFileSize}
+                                            setFileType={setFileType}
+                                            fileTooBig={fileTooBig}
+                                            fileSize={fileSize}
+                                            setFileName={setFileName}
+                                            fileName={fileName}
+                                        /> */}
+                                        <FileUpload
+                                            file={file}
+                                            fileType={fileType}
+                                            fileName={fileName}
+                                            setFile={setFile}
+                                            setFileType={setFileType}
+                                            setFileName={setFileName}
+                                            setFileSize={setFileSize}
+                                            fileTooBig={fileTooBig}
+                                        />
 
-                                    />
-                                </Tab>
-                                <Tab eventKey="brc" title="BRC-20">
-                                    <BRC
-                                        setTokenTicker={setTokenTicker}
-                                        setFileSize={setFileSize}
-                                        tokenSupply={tokenSupply}
-                                        setTokenSupply={setTokenSupply}
-                                        tokenName={tokenTicker}
-                                        setTokenName={setTokenTicker}
-                                        mintLimit={mintLimit}
-                                        setMintLimit={setMintLimit}
-                                        mintAmount={mintAmount}
-                                        setMintAmount={setMintAmount}
-                                        onChange={setbrcRadioButton}
-                                        brcRadioButton={brcRadioButton}
-                                    />
+                                    </Tab>
+                                    <Tab eventKey="text" title="Text">
+                                        <TextInput
+                                            setFileSize={setFileSize}
+                                            textInput={textInput}
+                                            setTextInput={setTextInput}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="news" title="News">
+                                        <NewsInput
+                                            setFileSize={setFileSize}
+                                            setNewsAuthor={setNewsAuthor}
+                                            setNewsText={setNewsText}
+                                            setNewsTitle={setNewsTitle}
+                                            setNewsUrl={setNewsUrl}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="domain" title="Domain">
+                                        <DomainInput
+                                            setFileSize={setFileSize}
+                                            domainInput={domainInput}
+                                            setDomainInput={setDomainInput}
 
-                                </Tab>
-                            </Tabs>
-                        </div>
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="brc" title="BRC-20">
+                                        <BRC
+                                            setTokenTicker={setTokenTicker}
+                                            setFileSize={setFileSize}
+                                            tokenSupply={tokenSupply}
+                                            setTokenSupply={setTokenSupply}
+                                            tokenName={tokenTicker}
+                                            setTokenName={setTokenTicker}
+                                            mintLimit={mintLimit}
+                                            setMintLimit={setMintLimit}
+                                            mintAmount={mintAmount}
+                                            setMintAmount={setMintAmount}
+                                            onChange={setbrcRadioButton}
+                                            brcRadioButton={brcRadioButton}
+                                            transferAmount={transferAmount}
+                                            setTransferAmount={setTransferAmount}
+                                        />
 
+                                    </Tab>
+                                </Tabs>
+                            </div>
+                        </Col>
+                        <Col id="right-side-container">
+                            {/* <div id="inscription-number-selection">
+                                <p>Do you want a positive or negative <br /> Inscription Number?</p>
+                                <InscriptionNumberSwitch
+                                    onChange={(value) => setPositiveInscriptionNumber(value)}
+                                />
 
-                        {
-                            (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
-                                <>
-                                    {nostrPublicKey ? (
-                                        <>
-                                            <div className="success-alert-input">
-                                                <OnchainInput
-                                                    onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
-                                                    setOnChainAddress={setOnChainAddress}
-                                                />
-                                                <WalletConnectModal
-                                                    address={getAddressInfoNostr(nostrPublicKey).address}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-                                            </div>
-                                        </>
-                                    ) : ledgerPublicKey ? (
-                                        <>
-                                            <div className="success-alert-input">
-                                                <OnchainInput
-                                                    onChainAddress={onChainAddress}
-                                                    setOnChainAddress={setOnChainAddress}
-                                                />
+                            </div> */}
+
+                            {
+                                (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
+                                    <>
+                                        {nostrPublicKey ? (
+                                            <>
+                                                <div className="success-alert-input input-button">
+                                                    <p>Your receiver address:</p>
+                                                    <OnchainInput
+                                                        onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
+                                                        setOnChainAddress={setOnChainAddress}
+                                                    />
+                                                    <WalletConnectModal
+                                                        address={getAddressInfoNostr(nostrPublicKey).address}
+                                                        show={showWalletConnectModal}
+                                                        handleClose={() => setShowWalletConnectModal(false)}
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : ledgerPublicKey ? (
+                                            <>
+                                                <div className="success-alert-input input-button">
+                                                    <p>Your receiver address:</p>
+                                                    <OnchainInput
+                                                        onChainAddress={onChainAddress}
+                                                        setOnChainAddress={setOnChainAddress}
+                                                    />
+                                                    <WalletConnectModal
+                                                        address={onChainAddress}
+                                                        show={showWalletConnectModal}
+                                                        handleClose={() => setShowWalletConnectModal(false)}
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="success-alert-input input-button">
+                                                    <p>Your receiver address:</p>
+                                                    <OnchainInput
+                                                        onChainAddress={onChainAddress}
+                                                        setOnChainAddress={setOnChainAddress}
+                                                    />
+                                                </div>
                                                 <WalletConnectModal
                                                     address={onChainAddress}
                                                     show={showWalletConnectModal}
                                                     handleClose={() => setShowWalletConnectModal(false)}
                                                 />
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="success-alert-input">
-                                                <OnchainInput
-                                                    onChainAddress={onChainAddress}
-                                                    setOnChainAddress={setOnChainAddress}
-                                                />
-                                                <WalletConnectModal
-                                                    address={onChainAddress}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-                                            </div>
-                                        </>
-                                    )}
-                                </>
-                            ) : (
-                                <div id="input-button">
-                                    <p>How do you want to receive your Ordinal?
-                                        <br />
-                                        Enter an on-chain address or use a wallet.
-                                    </p>
-                                    <OnchainInput
-                                        onChainAddress={onChainAddress}
-                                        setOnChainAddress={setOnChainAddress}
-                                    />
-                                    <div id="wallet-buttons">
-                                        <Button
-                                            className="m-1"
-                                            onClick={async () => {
-                                                setNostrPublicKey(await connectWallet());
-                                                setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address);
-                                                setShowWalletConnectModal(true);
-                                            }}
-                                            variant="success"
-                                            size="md"
-                                        >
-                                            <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
-                                        </Button>
 
-                                        <Button
-                                            className="m-1"
-                                            onClick={async () => {
-                                                setLedgerPublicKey(await getLedgerPubkey(false));
-                                                setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address);
-                                            }}
-                                            variant="success"
-                                            size="md"
-                                        >
-                                            <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
-                                        </Button>
+                                            </>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div className="input-button">
+                                        <p>How do you want to receive your Ordinal?
+                                            <br />
+                                            Enter an on-chain address or use a wallet.
+                                        </p>
+                                        <OnchainInput
+                                            onChainAddress={onChainAddress}
+                                            setOnChainAddress={setOnChainAddress}
+                                        />
+                                        <div id="wallet-buttons">
+                                            <Button
+                                                className="m-1"
+                                                onClick={async () => {
+                                                    setNostrPublicKey(await connectWallet());
+                                                    setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address);
+                                                    setShowWalletConnectModal(true);
+                                                }}
+                                                variant="success"
+                                                size="md"
+                                            >
+                                                <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
+                                            </Button>
+
+                                            <Button
+                                                className="m-1"
+                                                onClick={async () => {
+                                                    setLedgerPublicKey(await getLedgerPubkey(false));
+                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address);
+                                                }}
+                                                variant="success"
+                                                size="md"
+                                            >
+                                                <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <Button onClick={renderSelectWalletModal}
+                                                variant="success"
+                                                size="md"
+                                            >
+                                                <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <Button onClick={renderSelectWalletModal}
-                                            variant="success"
-                                            size="md"
-                                        >
-                                            <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
-                                        </Button>
-                                    </div>
-                                </div>
-                            )
-                        }
+                                )
+                            }
+                            <div id="fee-select-container">
+                                <p>How fast should your Ordinal be minted?</p>
+                                <FeeRange
+                                    setFee={(e) => {
+                                        setFee(e.target.value)
+                                    }}
+                                    value={fee}
+                                />
+                                <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p>
+                            </div>
+
+                        </Col>
+                    </Row>
 
 
-                        <FeeRange
-                            setFee={(e) => {
-                                setFee(e.target.value)
-                            }}
-                            value={fee}
-                        />
-                        <Price
-                            price={price}
-                        />
-                        <Button
-                            onClick={() => {
-                                getInvoice(price);
-                                renderAlert(false);
-                                // showInvoiceModal();
-                                hideConfigModal();
-                                updatePaymentrequest();
-                                setSpinner(true);
-                                isPaid = false;
-                            }}
-                            variant="success"
-                            size="lg"
-                        // disabled
-                        >
-                            Pay with Lightning
-                        </Button>
-                        <div id='info-text-home-bottom'>
-                            <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
-                            <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
-                        </div>
-                        <Footer />
+                    <Price
+                        price={price}
+                    />
+                    <Button
+                        onClick={() => {
+                            getInvoice(price);
+                            renderAlert(false);
+                            // showInvoiceModal();
+                            hideConfigModal();
+                            updatePaymentrequest();
+                            setSpinner(true);
+                            isPaid = false;
+                        }}
+                        variant="success"
+                        size="lg"
+                    // disabled
+                    >
+                        Pay with Lightning
+                    </Button>
+                    <div id='info-text-home-bottom'>
+                        <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
+                        <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
                     </div>
-
-                </Row>
-
+                    <Footer />
+                </div>
             </Container >
             <AlertModal
                 show={alertModalparams.show}
@@ -557,10 +636,23 @@ function Home() {
                 variant={alertModalparams.type}
                 handleClose={hideAlertModal}
             />
+            <BRCPreviewModal
+                show={showBRCPreviewModal}
+                handleClose={closeBRCPreviewModal}
+                tokenSupply={tokenSupply}
+                tokenTicker={tokenTicker}
+                mintLimit={mintLimit}
+                mintAmount={mintAmount}
+                brcRadioButton={brcRadioButton}
+                transferAmount={transferAmount}
+                onOK={handleBRCPreviewConfirmation}
+
+            />
             <ReceiveAddressModal
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 nostrPublicKey={nostrPublicKey}
+
             />
             <InvoiceModal
                 show={visibleInvoiceModal}
