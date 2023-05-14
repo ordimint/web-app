@@ -43,7 +43,7 @@ function AuctionModal(props) {
                         setSelectedWallet={setSelectedWallet}
                     />
 
-                    <div className='back-next-button-modal'>
+                    <div className='back-next-button-modal m-3'>
                         {currentStep !== 0 && (
                             <Button onClick={handleBack}>Back</Button>
                         )}
