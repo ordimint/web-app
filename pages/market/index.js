@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import AuctionCountdown from '../../components/AuctionCountdown'
 import { io } from "socket.io-client";
-import InvoiceModal from '../../components/modals/InvoiceModal'
+import AuctionModal from '../../components/modals/AuctionModal'
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port_auctions);
@@ -13,19 +13,13 @@ var isPaid = false; //Is only necessary in the case of socket event is fireing m
 
 
 const AuctionsPage = () => {
-    ////Invoice Modal
-    const [visibleInvoiceModal, setShowInvoiceModal] = useState(false);
-    const closeInvoiceModal = () => setShowInvoiceModal(false);
-    const showInvoiceModal = () => setShowInvoiceModal(true);
+    ////Auction Modal
+    const [visibleAuctionModal, setShowAuctionModal] = useState(false);
+    const closeAuctionModal = () => setShowAuctionModal(false);
+    const showAuctionModal = () => setShowAuctionModal(true);
 
     const [payment_request, setPaymentrequest] = useState(0);
-    /////Config Modal
-    ///////Modal Configdata
-    const [isConfigModal, showConfigModal] = useState(false);
-    const renderConfigModal = () => showConfigModal(true);
-    const hideConfigModal = () => showConfigModal(false);
-    const [showSpinner, setSpinner] = useState(true);
-    const [showPaymentSuccessfull, setPaymentAlert] = useState(false);
+
     const [price, setPrice] = useState(2);
 
 
@@ -34,17 +28,16 @@ const AuctionsPage = () => {
 
     });
 
-    const getInvoice = (price) => {
+    const getAuction = (price) => {
+        socket.emit("getAuction", price);
 
-        socket.emit("getInvoice", price);
-        showInvoiceModal();
     }
     //////Updates the QR-Code
     const updatePaymentrequest = () => {
-        socket.on("lnbitsInvoice", (invoiceData) => {
+        socket.on("lnbitsAuction", (invoiceData) => {
             setPaymentrequest(invoiceData.payment_request);
             clientPaymentHash = invoiceData.payment_hash;
-            setSpinner(false);
+
         });
     };
 
@@ -52,19 +45,18 @@ const AuctionsPage = () => {
     return (
         <div className='main-middle'>
             <h1 className=" py-3">Marketplace</h1>
-            <AuctionCountdown />
+            {/* <AuctionCountdown /> */}
             <Container fluid>
                 <Row className='m-2'>
                     <Col>
                         <Button
                             onClick={() => {
-                                getInvoice(price);
-                                // renderAlert(false);
-                                hideConfigModal();
+                                getAuction(price);
+                                showAuctionModal();
                                 updatePaymentrequest();
-                                setSpinner(true);
                                 isPaid = false;
                             }}
+                            price={price}
                             variant="success"
                             size="md"
                         >Sell something</Button>
@@ -72,18 +64,9 @@ const AuctionsPage = () => {
 
                 </Row>
             </Container>
-            <InvoiceModal
-                show={visibleInvoiceModal}
-                showSpinner={showSpinner}
-                isConfigModal={isConfigModal}
-                value={payment_request}
-                paymentHash={clientPaymentHash}
-                showNewInvoice={() => {
-                    getInvoice(price);
-                    setSpinner(true);
-                }}
-                handleClose={closeInvoiceModal}
-                showPaymentAlert={showPaymentSuccessfull}
+            <AuctionModal
+                show={visibleAuctionModal}
+                handleClose={closeAuctionModal}
             />
         </div>
     )

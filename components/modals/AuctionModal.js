@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
+import SelectWallet from './AuctionSteps/SelectWallet';
+import SelectOrdinal from './AuctionSteps/SelectOrdinal';
+import Ordimint from '../../pages/wallet/ordimint'
+import { Modal, Button } from 'react-bootstrap';
 
 const steps = [
-    { name: 'Step 1', component: Step1 },
-    { name: 'Step 2', component: Step2 },
-    { name: 'Step 3', component: Step3 },
-    // Add more steps here
+    { name: 'Connect Wallet', component: (props) => <SelectWallet {...props} /> },
+    { name: 'Select your Ordinal', component: (props) => <SelectOrdinal {...props} /> },
 ];
 
-function Modal() {
+function AuctionModal(props) {
+    if (!props.show) {
+        return null;
+    }
+
     const [currentStep, setCurrentStep] = useState(0);
+    const [selectedWallet, setSelectedWallet] = useState('Ordimint');
 
     const handleNext = () => {
         if (currentStep < steps.length - 1) {
@@ -25,15 +32,32 @@ function Modal() {
     const CurrentComponent = steps[currentStep].component;
 
     return (
-        <div>
-            <h1>{steps[currentStep].name}</h1>
-            <CurrentComponent />
-            <button disabled={currentStep === 0} onClick={handleBack}>Back</button>
-            <button disabled={currentStep === steps.length - 1} onClick={handleNext}>Next</button>
-        </div>
+        <>
+            <Modal show={props.show} onHide={props.handleClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{steps[currentStep].name}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <CurrentComponent
+                        selectedWallet={selectedWallet}
+                        setSelectedWallet={setSelectedWallet}
+                    />
+
+                    <div className='back-next-button-modal'>
+                        {currentStep !== 0 && (
+                            <Button onClick={handleBack}>Back</Button>
+                        )}
+                        {currentStep !== steps.length - 1 ? (
+                            <Button onClick={handleNext}>Next</Button>
+                        ) : (
+                            <Button type="submit">Submit</Button>
+                        )}
+                    </div>
+
+                </Modal.Body>
+            </Modal>
+        </>
     );
 }
 
-export default Modal;
-
-
+export default AuctionModal;
