@@ -5,68 +5,61 @@ import UtxoImageAuction from './UtxoImageAuction';
 import InscriptionsDetailsAuction from './InscriptionsDetailsAuction';
 
 export default function UtxoInfoAuction({ utxosReady, ownedUtxos, setShowUtxoModal, setCurrentUtxo, inscriptionUtxosByUtxo }) {
-    if (!utxosReady) return (<>
+    if (!utxosReady) return (
 
-        <br /><br />
-        <TailSpin stroke="#000000" speed={.75} />
-        <br /><br />
-    </>)
+        <>
+            <p>Wallet loading...</p>
+            <br /><br />
+            <TailSpin stroke="#ffffff" speed={.75} />
+            <br /><br />
+        </>)
 
 
 
-    return (<div>
-        {
-            ownedUtxos.length === 0 ?
-                <>
-                    <div>
-                        This address doesn't own anything yet... <a href="/">Inscribe something</a>
-                    </div>
-                </>
-                :
-                <>
-                    <br />
-                    <Container id="ordinal-container" fluid>
-                        <Row xs={1} sm={2} md={2} lg={4} xl={4} xxl={4} id="wallet-thumbnails">
-                            {ownedUtxos.map(it => {
+    return (
 
-                                return (
-                                    <Col className="ordinal-column" key={it.txid}>
-                                        <Card className="hover-pointer gallery-item wallet-card"
+        <div>
+            {
+                ownedUtxos.length === 0 ?
+                    <>
+                        <div>
+                            This address doesn't own anything yet... <a href="/">Inscribe something</a>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <br />
+                        <Container id="ordinal-container" fluid>
+
+                            <ol id="wallet-thumbnails-auction">
+                                {ownedUtxos.map(it => {
+                                    return (
+                                        <li
+                                            className="hover-pointer gallery-item wallet-list-item-auction"
+                                            key={it.txid}
                                             onClick={() => {
-                                                setCurrentUtxo(it)
-                                                setShowUtxoModal(true)
+                                                setCurrentUtxo(it);
                                             }}
-
                                         >
-                                            <Card.Body className="wallet-card" >
-                                                {
-                                                    !inscriptionUtxosByUtxo[`${it.txid}:${it.vout}`] ?
-                                                        <>
-                                                            <br /><br />
-                                                            <TailSpin stroke="#000000" speed={.75} />
-                                                            <br /><br />
-                                                        </>
-                                                        :
-                                                        <>
-
-                                                            <UtxoImageAuction utxo={it} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />
-
-                                                        </>
-                                                }
-
-                                            </Card.Body>
+                                            {
+                                                !inscriptionUtxosByUtxo[`${it.txid}:${it.vout}`] ?
+                                                    <>
+                                                        <br /><br />
+                                                        <TailSpin stroke="#ffffff" speed={.75} />
+                                                        <br /><br />
+                                                    </>
+                                                    :
+                                                    <UtxoImageAuction utxo={it} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />
+                                            }
                                             <InscriptionsDetailsAuction utxo={it} />
-                                            <div className='wallet-card-button'>
-                                                <Button >Details</Button>
-                                            </div>
-                                        </Card>
-                                    </Col>
+                                        </li>
+                                    )
+                                })}
+                            </ol>
 
-                                )
-                            })}
-                        </Row>
-                    </Container>
-                </>
-        }
-    </div >)
+                        </Container>
+
+                    </>
+            }
+        </div >)
 }

@@ -47,7 +47,7 @@ const FeeRange = (props) => {
                         value={mediumFee}
                         onChange={() => handleFeeChange(mediumFee)}
                         title="normal"
-                        disabled
+
                     >
                         {mediumFee} sats/vByte <br></br><b> 4 hours</b> <br></br>
                     </ToggleButton>
@@ -55,7 +55,7 @@ const FeeRange = (props) => {
                         value={maxFee}
                         onChange={() => handleFeeChange(maxFee)}
                         title="fast"
-                        disabled
+
                     >
                         {maxFee} sats/vByte <br></br><b> 1 hour</b> <br></br>
                     </ToggleButton>

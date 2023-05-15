@@ -758,3 +758,22 @@ span.input-group-text.required .required:after {
   --bs-btn-bg: black;
   --bs-btn-border-color: white;
 }
+
+#wallet-thumbnails-auction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wallet-list-item-auction {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  max-width: 50%;
+}
+
+.wallet-list-item-auction:hover {
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+}

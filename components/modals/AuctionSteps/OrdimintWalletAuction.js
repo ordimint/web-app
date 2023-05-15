@@ -72,15 +72,15 @@ const OrdimintWalletAuction = () => {
     return (
         <div>
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
-                <h1 className='m-3'>Ordimint Wallet</h1>
+                {/* <h1 className='m-3'>Ordimint Wallet</h1> */}
                 {
                     address ?
                         <div>
-                            <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small"
+                            {/* <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small"
                                 onClick={async () =>
                                     setShowReceiveAddressModal(true)}>
                                 Receive<BsBoxArrowInDownLeft />
-                            </Button>
+                            </Button> */}
                         </div>
                         :
                         <>
@@ -108,7 +108,7 @@ const OrdimintWalletAuction = () => {
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
                             // setShowUtxoModal={setShowUtxoModal}
-                            setCurrentUtxo={setCurrentUtxo}
+                            setCurrentUtxo={props.setCurrentUtxo}
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
                         />
                     </div>}

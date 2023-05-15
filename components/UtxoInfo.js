@@ -5,9 +5,9 @@ import UtxoImage from './UtxoImage';
 import InscriptionsDetails from './InscriptionsDetails';
 export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, setCurrentUtxo, inscriptionUtxosByUtxo }) {
   if (!utxosReady) return (<>
-
+    <p>Wallet loading...</p>
     <br /><br />
-    <TailSpin stroke="#000000" speed={.75} />
+    <TailSpin stroke="#ffffff" speed={.75} />
     <br /><br />
   </>)
 
@@ -42,7 +42,7 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
                           !inscriptionUtxosByUtxo[`${it.txid}:${it.vout}`] ?
                             <>
                               <br /><br />
-                              <TailSpin stroke="#000000" speed={.75} />
+                              <TailSpin stroke="#ffffff" speed={.75} />
                               <br /><br />
                             </>
                             :

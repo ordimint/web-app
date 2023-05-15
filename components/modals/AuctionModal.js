@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import SelectWallet from './AuctionSteps/SelectWallet';
 import SelectOrdinal from './AuctionSteps/SelectOrdinal';
-import Ordimint from '../../pages/wallet/ordimint'
+import CreateOffer from './AuctionSteps/CreateOffer';
 import { Modal, Button } from 'react-bootstrap';
 
 const steps = [
     { name: 'Connect Wallet', component: (props) => <SelectWallet {...props} /> },
     { name: 'Select your Ordinal', component: (props) => <SelectOrdinal {...props} /> },
+    { name: 'Create offer', component: (props) => <CreateOffer {...props} /> },
 ];
 
 function AuctionModal(props) {
@@ -16,6 +17,7 @@ function AuctionModal(props) {
 
     const [currentStep, setCurrentStep] = useState(0);
     const [selectedWallet, setSelectedWallet] = useState('Ordimint');
+    const [currentUtxo, setCurrentUtxo] = useState(null)
 
     const handleNext = () => {
         if (currentStep < steps.length - 1) {
@@ -38,10 +40,12 @@ function AuctionModal(props) {
                     <Modal.Title>{steps[currentStep].name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <CurrentComponent
+                    <h3>Coming soon!</h3>
+                    {/* <CurrentComponent
                         selectedWallet={selectedWallet}
                         setSelectedWallet={setSelectedWallet}
-                    />
+                        setCurrentUtxo={setCurrentUtxo}
+                    /> */}
 
                     <div className='back-next-button-modal m-3'>
                         {currentStep !== 0 && (

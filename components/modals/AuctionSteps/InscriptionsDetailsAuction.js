@@ -28,7 +28,7 @@ const InscriptionsDetailsAuction = (props) => {
         <div>
 
             {inscriptionData &&
-                <h4>#{inscriptionData.inscription_number}</h4>
+                <h5>Inscription #{inscriptionData.inscription_number}</h5>
 
             }
 
