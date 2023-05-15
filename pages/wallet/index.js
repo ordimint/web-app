@@ -77,7 +77,7 @@ const WalletPage = () => {
                         <Card.Body>
                             <Card.Title>Ledger</Card.Title>
                             <Card.Text>
-                                Connect your Ledger hardware wallet.
+                                Connect your Ledger hardware wallet via USB.
                             </Card.Text>
                             <Link href="/wallet/ledger">
                                 <Button variant="primary"

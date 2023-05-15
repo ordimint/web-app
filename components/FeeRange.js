@@ -22,8 +22,8 @@ const FeeRange = (props) => {
             setMinFee(result.economyFee);
             setMediumFee(result.halfHourFee);
             setMaxFee(result.fastestFee);
-            setSelectedFee(result.economyFee);
-            props.setFee({ target: { value: result.economyFee } });
+            setSelectedFee(result.halfHourFee);
+            props.setFee({ target: { value: result.halfHourFee } });
         };
 
         fetchFees();

@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import AuctionCountdown from '../../components/AuctionCountdown'
 import { io } from "socket.io-client";
 import AuctionModal from '../../components/modals/AuctionModal'
+import AuctionContainer from '../../components/AuctionContainer';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port_auctions);
@@ -64,6 +65,7 @@ const AuctionsPage = () => {
 
                 </Row>
             </Container>
+            <AuctionContainer />
             <AuctionModal
                 show={visibleAuctionModal}
                 handleClose={closeAuctionModal}

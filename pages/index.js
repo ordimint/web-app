@@ -597,7 +597,7 @@ function Home() {
                                     }}
                                     value={fee}
                                 />
-                                <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p>
+                                {/* <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p> */}
                             </div>
 
                         </Col>
