@@ -67,6 +67,7 @@ const AuctionsPage = () => {
             </Container>
             <AuctionContainer />
             <AuctionModal
+                socket={socket}
                 show={visibleAuctionModal}
                 handleClose={closeAuctionModal}
             />

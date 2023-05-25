@@ -9,14 +9,13 @@ import ReceiveAddressModal from '../ReceiveAddressModal';
 import { getAddressInfoNostr, connectWallet } from '../../WalletConfig/utils.js';
 
 
-const AlbyWalletAuction = () => {
+const AlbyWalletAuction = (props) => {
 
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
     const [inscriptionUtxosByUtxo, setInscriptionUtxosByUtxo] = useState({})
-    const [currentUtxo, setCurrentUtxo] = useState(null)
 
     useEffect(() => {
         async function fetchUtxosForAddress() {
@@ -68,7 +67,7 @@ const AlbyWalletAuction = () => {
                         <UtxoInfoAuction
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
-                            setCurrentUtxo={setCurrentUtxo}
+                            setCurrentUtxo={props.setCurrentUtxo}
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
                         />
                     </div>

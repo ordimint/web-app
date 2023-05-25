@@ -30,5 +30,7 @@ module.exports = withTM({
                 permanent: true,
             },
         ]
+    }, images: {
+        domains: ['explorer.ordimint.com'],
     },
 });

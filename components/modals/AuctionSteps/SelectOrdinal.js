@@ -14,7 +14,7 @@ const SelectOrdinal = (props) => {
     const [publicKey, setPublicKey] = useState('');
 
     useEffect(() => {
-
+        props.setCurrentUtxo(null);
         if (props.selectedWallet === 'Ordimint') {
             // Do something
         }
@@ -30,11 +30,16 @@ const SelectOrdinal = (props) => {
     const renderWallet = () => {
         switch (props.selectedWallet) {
             case 'Ordimint':
-                return <OrdimintWalletAuction />;
+                return <OrdimintWalletAuction setCurrentUtxo={props.setCurrentUtxo}
+
+                />;
             case 'Alby':
-                return <AlbyWalletAuction />;
+                return <AlbyWalletAuction setCurrentUtxo={props.setCurrentUtxo}
+
+                />;
             case 'Ledger':
-                return <LedgerWalletAuction />;
+                return <LedgerWalletAuction setCurrentUtxo={props.setCurrentUtxo}
+                />;
             default:
                 return <p>Could not connect to wallet</p>;
         }
@@ -43,9 +48,7 @@ const SelectOrdinal = (props) => {
     return (
         <>
             {
-
                 renderWallet()
-
             }
         </>
     )

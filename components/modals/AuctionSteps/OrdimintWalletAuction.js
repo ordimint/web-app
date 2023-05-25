@@ -15,7 +15,6 @@ const OrdimintWalletAuction = () => {
     const [address, setAddress] = useState(null);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
-    const [currentUtxo, setCurrentUtxo] = useState(null)
     const [inscriptionUtxosByUtxo, setInscriptionUtxosByUtxo] = useState({})
 
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
