@@ -737,3 +737,56 @@ span.input-group-text.required .required:after {
   max-height: 200px;
   object-fit: cover;
 }
+
+.back-next-button-modal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-content: space-around;
+}
+.back-next-button-modal button {
+  margin: 5px;
+}
+
+.wallet-connect-button-auction-modal {
+  margin: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: space-around;
+}
+.toggle-button-custom-auction label {
+  --bs-btn-color: white;
+  --bs-btn-bg: black;
+  --bs-btn-border-color: white;
+}
+
+.wallet-list-item-auction {
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  height: 100%;
+}
+
+.wallet-list-item-auction:hover {
+  border: 2px solid #cbe80a;
+  border-radius: 12px;
+}
+
+.wallet-list-item-auction.active {
+  border: 2px solid #cbe80a;
+  border-radius: 12px;
+}
+
+#create-offer-content {
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+}
+
+#ordinal-auction-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

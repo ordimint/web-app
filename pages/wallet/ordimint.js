@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Container, Alert, Breadcrumb } from 'react-bootstrap';
-import * as bitcoin from 'bitcoinjs-lib'
-import * as ecc from 'tiny-secp256k1'
-import ECPairFactory from 'ecpair';
-import { IoIosCopy } from "react-icons/io";
+// import * as bitcoin from 'bitcoinjs-lib'
+// import * as ecc from 'tiny-secp256k1'
+// import ECPairFactory from 'ecpair';
+// import { IoIosCopy } from "react-icons/io";
 import UtxoModal from '../../components/modals/UtxoModal';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import UtxoInfo from '../../components/UtxoInfo';

@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import Head from 'next/head';
 import { Breadcrumb } from 'react-bootstrap';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
-import { useRouter } from 'next/router'
 import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import SelectFeeRateModal from '../../components/modals/SelectFeeRateModal';

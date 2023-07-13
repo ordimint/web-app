@@ -47,7 +47,7 @@ const CheckOrder = () => {
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
                 {txhash ? (
                     <div>
-                        <div className="mt-2 order-status">
+                        {/* <div className="mt-2 order-status">
                             <p>Preview:</p>
                             <div className="iframe-container">
                                 <iframe
@@ -55,7 +55,7 @@ const CheckOrder = () => {
                                     title="Inscription preview"
                                 ></iframe>
                             </div>
-                        </div>
+                        </div> */}
                         <h4 className="mt-3 order-status">
                             <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">
                                 Minting Transaction

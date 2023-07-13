@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { TailSpin } from 'react-loading-icons';
 
-const InscriptionsDetails = (props) => {
+const InscriptionsDetailsAuction = (props) => {
 
     const [inscriptionData, setInscriptionData] = useState(null)
 
@@ -15,10 +14,10 @@ const InscriptionsDetails = (props) => {
         try {
             const response = await fetch(`https://ordapi.xyz/output/${utxo.txid}:${utxo.vout}`)
             const inscriptionPerOutput = await response.json()
-            console.log(inscriptionPerOutput)
             const response2 = await fetch(`https://ordapi.xyz${inscriptionPerOutput.inscriptions}`)
             const response2JSON = await response2.json()
             setInscriptionData(response2JSON)
+            console.log(response2JSON)
 
         }
         catch (e) {
@@ -29,17 +28,16 @@ const InscriptionsDetails = (props) => {
     return (
         <div>
 
-            {inscriptionData ?
-                <h4>#{inscriptionData.inscription_number}</h4> : <p>
-                    <br />
-                    <TailSpin stroke="#ffffff" speed={0.75} />
-                    <br />
-                    Loading...</p>
+            {inscriptionData &&
+
+
+                <h5>Inscription #{inscriptionData.inscription_number}</h5>
+
 
             }
 
-        </div>
+        </div >
     )
 }
 
-export default InscriptionsDetails
+export default InscriptionsDetailsAuction

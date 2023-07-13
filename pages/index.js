@@ -152,29 +152,7 @@ function Home() {
         setShowWalletConnectModal(true)
     };
 
-    // useEffect(() => {
-    //     let newPrice;
-    //     switch (tabKey) {
-    //         case "file":
-    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostPicture));
-    //             break;
-    //         case "text":
-    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostText));
-    //             break;
-    //         case "news":
-    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostNews));
-    //             break;
-    //         case "domain":
-    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostDomain));
-    //             break;
-    //         case "brc":
-    //             newPrice = (Math.trunc((fileSize / 4) * fee * securityBuffer) + parseInt(outputCostBRC));
-    //             break;
-    //         default:
-    //             newPrice = 10000;
-    //     }
-    //     setPrice(newPrice);
-    // }, [fileSize, fee, tabKey]);
+
 
     useEffect(() => {
         const outputCosts = {
@@ -597,7 +575,7 @@ function Home() {
                                     }}
                                     value={fee}
                                 />
-                                <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p>
+                                {/* <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p> */}
                             </div>
 
                         </Col>
