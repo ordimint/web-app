@@ -68,12 +68,13 @@ function AuctionModal(props) {
                     <Modal.Title>{steps[currentStep].name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <CurrentComponent
+                    <h3>Comming soon!</h3>
+                    {/* <CurrentComponent
                         selectedWallet={selectedWallet}
                         setSelectedWallet={setSelectedWallet}
                         setCurrentUtxo={setCurrentUtxo}
                         currentUtxo={currentUtxo}
-                    />
+                    /> */}
 
 
                 </Modal.Body>

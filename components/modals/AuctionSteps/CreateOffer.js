@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Form from 'react-bootstrap/Form'
-import TailSpin from 'react-loading-icons/dist/esm/components/tail-spin'
+import { TailSpin } from 'react-loading-icons';
 const CreateOffer = (props) => {
     const [inscriptionData, setInscriptionData] = useState(null)
 

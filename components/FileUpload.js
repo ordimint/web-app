@@ -21,7 +21,8 @@ const FileUpload = (props) => {
         maxWidthOrHeight: 1280,
         quality: 0.3,
         resize: true,
-        exifOrientation: true,
+        initialQuality: 0.5,
+        alwaysKeepResolution: true,
         useWebWorker: true,
       });
       props.setFileSize(compressedFile.size);
