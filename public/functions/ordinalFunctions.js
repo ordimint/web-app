@@ -32,5 +32,51 @@ async function getInscriptionNumber(inscriptionID) {
     }
 }
 
+function parseTextInscription(jsonStr) {
+    let jsonObj;
 
-export { getInscriptionNumber, getContentType }
+    // Try parsing the JSON string
+    try {
+        jsonObj = JSON.parse(jsonStr);
+    } catch (e) {
+        // If an error is thrown, the JSON is invalid, so just return the original string
+        return jsonStr;
+    }
+
+    // Handle different p flags
+    switch (jsonObj.p) {
+        case "ons":
+            return {
+                pFlag: "ons",
+                op: jsonObj.op,
+                title: jsonObj.title,
+                url: jsonObj.url,
+                author: jsonObj.author,
+                body: jsonObj.body
+            };
+
+        case "sns":
+            return {
+                pFlag: "sns",
+                op: jsonObj.op,
+                name: jsonObj.name
+            };
+
+        case "brc-20":
+            return {
+                pFlag: "brc-20",
+                op: jsonObj.op,
+                tick: jsonObj.tick,
+                amt: jsonObj.amt
+            };
+
+        default:
+            // If p flag is not recognized, return the original string
+            return jsonStr;
+    }
+}
+
+
+
+
+export { getInscriptionNumber, getContentType, parseTextInscription }

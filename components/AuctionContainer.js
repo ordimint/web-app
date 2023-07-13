@@ -4,7 +4,8 @@ import { Container } from 'react-bootstrap'
 const AuctionContainer = () => {
     return (
         <Container className='text-center' fluid>
-            <h4>Coming soon!</h4>
+            <h2>Available offers</h2>
+
         </Container>
     )
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
+
 const InscriptionsDetailsAuction = (props) => {
 
     const [inscriptionData, setInscriptionData] = useState(null)
@@ -13,10 +14,10 @@ const InscriptionsDetailsAuction = (props) => {
         try {
             const response = await fetch(`https://ordapi.xyz/output/${utxo.txid}:${utxo.vout}`)
             const inscriptionPerOutput = await response.json()
-            console.log(inscriptionPerOutput)
             const response2 = await fetch(`https://ordapi.xyz${inscriptionPerOutput.inscriptions}`)
             const response2JSON = await response2.json()
             setInscriptionData(response2JSON)
+            console.log(response2JSON)
 
         }
         catch (e) {
@@ -28,11 +29,14 @@ const InscriptionsDetailsAuction = (props) => {
         <div>
 
             {inscriptionData &&
+
+
                 <h5>Inscription #{inscriptionData.inscription_number}</h5>
+
 
             }
 
-        </div>
+        </div >
     )
 }
 

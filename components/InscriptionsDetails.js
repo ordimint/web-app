@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
+import { TailSpin } from 'react-loading-icons';
+
 const InscriptionsDetails = (props) => {
 
     const [inscriptionData, setInscriptionData] = useState(null)
@@ -27,8 +29,12 @@ const InscriptionsDetails = (props) => {
     return (
         <div>
 
-            {inscriptionData &&
-                <h4>#{inscriptionData.inscription_number}</h4>
+            {inscriptionData ?
+                <h4>#{inscriptionData.inscription_number}</h4> : <p>
+                    <br />
+                    <TailSpin stroke="#ffffff" speed={0.75} />
+                    <br />
+                    Loading...</p>
 
             }
 

@@ -742,6 +742,11 @@ span.input-group-text.required .required:after {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  align-content: space-around;
+}
+.back-next-button-modal button {
+  margin: 5px;
 }
 
 .wallet-connect-button-auction-modal {
@@ -759,21 +764,29 @@ span.input-group-text.required .required:after {
   --bs-btn-border-color: white;
 }
 
-#wallet-thumbnails-auction {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .wallet-list-item-auction {
-  display: flex;
-  flex-direction: column;
-  margin: 10px;
-  padding: 10px;
-  max-width: 50%;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  height: 100%;
 }
 
 .wallet-list-item-auction:hover {
-  border: 2px solid #dee2e6;
+  border: 2px solid #cbe80a;
   border-radius: 12px;
+}
+
+.wallet-list-item-auction.active {
+  border: 2px solid #cbe80a;
+  border-radius: 12px;
+}
+
+#create-offer-content {
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+}
+
+#ordinal-auction-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
