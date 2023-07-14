@@ -28,9 +28,9 @@ const AlbyWalletAuction = (props) => {
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
                 // if (!utxo.status.confirmed) continue
                 let currentUtxo = utxo
-                console.log('utxo', utxo)
+                // console.log('utxo', utxo)
 
-                console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
+                // console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
                     const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]

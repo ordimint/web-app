@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
-import AuctionCountdown from '../../components/AuctionCountdown'
 import { io } from "socket.io-client";
 import AuctionModal from '../../components/modals/AuctionModal'
 import AuctionContainer from '../../components/AuctionContainer';
@@ -24,23 +23,13 @@ const AuctionsPage = () => {
     const [price, setPrice] = useState(2);
 
 
-    socket.off("connect").on("connect", () => {
-        /////Checks for already paid invoice if browser switche tab on mobile
 
-    });
 
-    const getAuction = (price) => {
-        socket.emit("getAuction", price);
 
-    }
-    //////Updates the QR-Code
-    const updatePaymentrequest = () => {
-        socket.on("lnbitsAuction", (invoiceData) => {
-            setPaymentrequest(invoiceData.payment_request);
-            clientPaymentHash = invoiceData.payment_hash;
 
-        });
-    };
+
+
+
 
 
     return (
@@ -52,9 +41,7 @@ const AuctionsPage = () => {
                     <Col>
                         <Button
                             onClick={() => {
-                                getAuction(price);
                                 showAuctionModal();
-                                updatePaymentrequest();
                                 isPaid = false;
                             }}
                             price={price}

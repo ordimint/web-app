@@ -3,16 +3,16 @@ import SelectWallet from './AuctionSteps/SelectWallet';
 import SelectOrdinal from './AuctionSteps/SelectOrdinal';
 import CreateOffer from './AuctionSteps/CreateOffer';
 import { Modal, Button, Alert } from 'react-bootstrap';
-import { getInvoice, getPrice } from '../../../functions/invoices';
-import AlertModal from './AlterModal';
+import PayOffer from './AuctionSteps/PayOffer';
 
 const steps = [
     { name: 'Connect Wallet', component: (props) => <SelectWallet {...props} /> },
     { name: 'Select your Ordinal', component: (props) => <SelectOrdinal {...props} /> },
     { name: 'Create offer', component: (props) => <CreateOffer {...props} /> },
+    { name: 'Pay for listing', component: (props) => <PayOffer {...props} /> },
 ];
 
-
+var isPaid = false;
 
 function AuctionModal(props) {
     if (!props.show) {
@@ -22,27 +22,57 @@ function AuctionModal(props) {
     const [currentStep, setCurrentStep] = useState(0);
     const [selectedWallet, setSelectedWallet] = useState('Ordimint');
     const [currentUtxo, setCurrentUtxo] = useState(null)
+    const [inscriptionData, setInscriptionData] = useState(null)
+    const [clientPaymentHash, setClientPaymentHash] = useState(null)
     const [invoice, setInvoice] = useState({})
-    const [price, setPrice] = useState(4000)
+    const [price, setPrice] = useState(process.env.REACT_APP_default_auction_price)
 
 
 
 
 
-    useEffect(() => {
-        console.log(currentUtxo);
-    }, [currentUtxo]);
+    // useEffect(() => {
+    //     console.log(currentUtxo);
+    // }, [currentUtxo]);
 
     const createOrder = async () => {
         try {
-            props.socket.emit("getInvoice", price);
-            setInvoice(invoice)
+            await props.socket.emit("getInvoice", price);
+
         }
         catch (e) {
             console.log(e)
         }
-        console.log(invoice)
+
     }
+
+    props.socket.off("connect").on("connect", () => {
+        /////Checks for already paid invoice if browser switche tab on mobile
+        if (clientPaymentHash !== undefined) {
+            console.log("check invoice");
+            console.log(clientPaymentHash);
+            checkInvoice();
+        }
+    });
+
+    const checkInvoice = () => {
+        props.socket.emit("checkInvoice", clientPaymentHash);
+    };
+
+    props.socket.on("lnbitsInvoice", (invoiceData) => {
+        setInvoice(invoiceData.payment_request);
+        setClientPaymentHash(invoiceData.payment_hash);
+        // console.log(invoiceData);
+    });
+
+    props.socket.off("invoicePaid").on("invoicePaid", async (paymentHash) => {
+        if (paymentHash === clientPaymentHash && isPaid === false) {
+            isPaid = true;
+            await props.socket.emit("createPSBT", { inscriptionID: inscriptionData.id, paymentHash: paymentHash });
+            console.log("invoice paid");
+        }
+    });
+
 
     const handleNext = () => {
         if (currentStep < steps.length - 1) {
@@ -63,7 +93,12 @@ function AuctionModal(props) {
 
     return (
         <>
-            <Modal show={props.show} onHide={props.handleClose} centered>
+            <Modal
+                show={props.show}
+                onHide={props.handleClose}
+                backdrop='static'
+                centered>
+
                 <Modal.Header closeButton>
                     <Modal.Title>{steps[currentStep].name}</Modal.Title>
                 </Modal.Header>
@@ -71,8 +106,11 @@ function AuctionModal(props) {
                     <CurrentComponent
                         selectedWallet={selectedWallet}
                         setSelectedWallet={setSelectedWallet}
+                        inscriptionData={inscriptionData}
+                        setInscriptionData={setInscriptionData}
                         setCurrentUtxo={setCurrentUtxo}
                         currentUtxo={currentUtxo}
+                        invoice={invoice}
                     />
 
 
@@ -82,19 +120,21 @@ function AuctionModal(props) {
                         {currentStep !== 0 && (
                             <Button onClick={handleBack}>Back</Button>
                         )}
-                        {currentStep !== steps.length - 1 ? (
+                        {currentStep < steps.length - 2 ? (
                             <Button onClick={handleNext}
                                 disabled={currentStep === 1 && currentUtxo === null}
                             >Next</Button>
-                        ) : (
+                        ) : currentStep === steps.length - 2 && (
                             <Button type="submit"
-                                onClick={createOrder}
-                            >Submit</Button>
+                                onClick={async () => {
+                                    await createOrder();
+                                    handleNext();
+                                }}
+                            >Create Offer</Button>
+
                         )}
                     </div>
-
                 </Modal.Footer>
-
             </Modal>
         </>
     );

@@ -15,7 +15,7 @@ const InscriptionsDetails = (props) => {
         try {
             const response = await fetch(`https://ordapi.xyz/output/${utxo.txid}:${utxo.vout}`)
             const inscriptionPerOutput = await response.json()
-            console.log(inscriptionPerOutput)
+            // console.log(inscriptionPerOutput)
             const response2 = await fetch(`https://ordapi.xyz${inscriptionPerOutput.inscriptions}`)
             const response2JSON = await response2.json()
             setInscriptionData(response2JSON)
@@ -30,7 +30,7 @@ const InscriptionsDetails = (props) => {
         <div>
 
             {inscriptionData ?
-                <h4>#{inscriptionData.inscription_number}</h4> : <p>
+                <p>#{inscriptionData.inscription_number}</p> : <p>
                     <br />
                     <TailSpin stroke="#ffffff" speed={0.75} />
                     <br />
