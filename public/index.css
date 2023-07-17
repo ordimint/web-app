@@ -790,3 +790,7 @@ span.input-group-text.required .required:after {
   justify-content: center;
   align-items: center;
 }
+
+#mobile-menu div.container {
+  padding-right: 0;
+}

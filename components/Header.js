@@ -52,7 +52,7 @@ const Header = (props) => {
                                 </Container>
                             </Offcanvas.Title>
                         </Offcanvas.Header>
-                        <Offcanvas.Body>
+                        <Offcanvas.Body id="mobile-menu">
                             <Nav variant="pills" className="container">
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/')} href="/">
@@ -78,11 +78,11 @@ const Header = (props) => {
                                 </Nav.Item>
                             </Nav>
                             <Nav >
-                                {/* <Nav.Item >
+                                <Nav.Item >
                                     <a href="https://api.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >API</Button>
+                                        <Button >API (New)</Button>
                                     </a>
-                                </Nav.Item> */}
+                                </Nav.Item>
                                 <Nav.Item >
                                     <a href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <Button >Explorer</Button>
