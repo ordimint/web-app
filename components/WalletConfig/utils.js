@@ -11,12 +11,15 @@ export const outputValue = (currentUtxo, sendFeeRate) => {
 }
 
 export const ordinalsUrl = (utxo) => {
-  return `https://explorer.ordimint.com/output/${utxo.txid}:${utxo.vout}`
+  const baseUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+  return `${baseUrl}/output/${utxo.txid}:${utxo.vout}`;
 }
 
 export const ordinalsImageUrl = (utxo) => {
-  return `https://explorer.ordimint.com/content/${utxo.txid}i${utxo.vout}`
+  const baseUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+  return `${baseUrl}/content/${utxo.txid}i${utxo.vout}`;
 }
+
 
 export const cloudfrontUrl = (utxo) => {
   return `https://d2v3k2do8kym1f.cloudfront.net/minted-items/${utxo.txid}:${utxo.vout}`

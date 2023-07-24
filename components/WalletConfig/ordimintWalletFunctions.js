@@ -7,6 +7,7 @@ const ECPair = ECPairFactory(ecc);
 const bip39 = require('bip39');
 const bip32 = BIP32Factory(ecc);
 bitcoin.initEccLib(ecc);
+import { TESTNET } from './constance';
 
 const crypto =
     typeof window !== 'undefined' && window.crypto
@@ -18,7 +19,7 @@ function toXOnly(key) {
 }
 
 export const getOrdimintAddress = async (pubkey) => {
-    const address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')) }).address;
+    const address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
     return address;
 }
 
@@ -31,7 +32,7 @@ export const generateWallet = async () => {
     const keyPair = root.derivePath(path);
     const newPrivateKey = keyPair.toWIF();
     const newOrdimintPubkey = await (Buffer.from(keyPair.publicKey, 'hex')).toString('hex');
-    const newAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(keyPair.publicKey, 'hex')) }).address;
+    const newAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(keyPair.publicKey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
 
     return {
         newOrdimintPubkey,
@@ -66,7 +67,7 @@ export const restoreWallet = (event) => {
             try {
                 restoredPrivateKey = privateKeyMatch[1].trim()
                 restoredKeyPair = ECPair.fromWIF(restoredPrivateKey)
-                restoredAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')) }).address
+                restoredAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address
                 restoredPubkey = await Buffer.from(restoredKeyPair.publicKey, 'hex').toString('hex');
                 resolve({ restoredPrivateKey, restoredKeyPair, restoredAddress, restoredPubkey });
             } catch (err) {

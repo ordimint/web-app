@@ -6,6 +6,7 @@ import * as bitcoin from 'bitcoinjs-lib'
 import * as ecc from 'tiny-secp256k1'
 import * as secp256k1 from "secp256k1";
 import ECPairFactory from 'ecpair';
+import { TESTNET } from './constance'
 
 const ECPair = ECPairFactory(ecc);
 
@@ -59,7 +60,7 @@ export const getAddressInfoLedger = async (ledgerPublicKey, verify) => {
         transport.close()
     }
     console.log(`Ledger pub: ${ledgerPublicKey}`)
-    const addrInfo = bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(ledgerPublicKey, 'hex')) })
+    const addrInfo = bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(ledgerPublicKey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
     console.log(`addrInfo: ${addrInfo.address}`)
 
     return addrInfo

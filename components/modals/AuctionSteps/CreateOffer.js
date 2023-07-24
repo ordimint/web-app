@@ -3,7 +3,26 @@ import { useState, useEffect } from 'react'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Form from 'react-bootstrap/Form'
 import { TailSpin } from 'react-loading-icons';
+import Button from 'react-bootstrap/Button'
+import AlertModal from '../AlterModal'
 const CreateOffer = (props) => {
+
+    //////Alert - Modal
+    const [alertModalparams, showAlertModal] = useState({
+        show: false,
+        text: "",
+        type: "",
+    });
+    const hideAlertModal = () =>
+        showAlertModal({ show: false, text: "", type: "" });
+
+    const noPriceSet = () => {
+        showAlertModal({
+            show: true,
+            text: "Please provide a price for your offer",
+            type: "danger",
+        });
+    }
 
 
     useEffect(() => {
@@ -51,10 +70,25 @@ const CreateOffer = (props) => {
 
             <InputGroup className="mb-3">
                 <InputGroup.Text>Price</InputGroup.Text>
-                <Form.Control aria-label="Amount in Sats" />
+                <Form.Control
+                    aria-label="Amount in Sats"
+                    onChange={(e) => props.setPrice(e.target.value)}
+                />
                 <InputGroup.Text>Sats</InputGroup.Text>
             </InputGroup>
+            <Button onClick={
 
+                props.signPSBT
+            }>Sign with your wallet</Button>
+
+
+
+            <AlertModal
+                show={alertModalparams.show}
+                text={alertModalparams.text}
+                variant={alertModalparams.type}
+                handleClose={hideAlertModal}
+            />
         </>
     )
 }

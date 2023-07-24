@@ -68,7 +68,8 @@ const OrdimintWallet = () => {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!address) return
-            const response = await axios.get(`https://mempool.space/api/address/${address}/utxo`)
+            const mempoolUrl = TESTNET ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
@@ -79,7 +80,8 @@ const OrdimintWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                    const explorerUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
@@ -95,6 +97,7 @@ const OrdimintWallet = () => {
             setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
             setUtxosReady(true)
         }
+
 
         fetchUtxosForAddress()
     }, [ordimintPubkey, address]);

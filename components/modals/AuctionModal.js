@@ -25,9 +25,17 @@ function AuctionModal(props) {
     const [inscriptionData, setInscriptionData] = useState(null)
     const [clientPaymentHash, setClientPaymentHash] = useState(null)
     const [invoice, setInvoice] = useState({})
+    const [isPSBTsigned, setIsPSBTsigned] = useState(false)
     const [price, setPrice] = useState(process.env.REACT_APP_default_auction_price)
 
-
+    const signPSBT = async () => {
+        try {
+            await props.socket.emit("signPSBT", { inscriptionID: inscriptionData.id, price: price });
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
 
 
 
@@ -111,6 +119,8 @@ function AuctionModal(props) {
                         setCurrentUtxo={setCurrentUtxo}
                         currentUtxo={currentUtxo}
                         invoice={invoice}
+                        signPSBT={signPSBT}
+                        setPrice={setPrice}
                     />
 
 
@@ -130,7 +140,9 @@ function AuctionModal(props) {
                                     await createOrder();
                                     handleNext();
                                 }}
+                                disabled={!isPSBTsigned}
                             >Create Offer</Button>
+
 
                         )}
                     </div>

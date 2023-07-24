@@ -17,7 +17,7 @@ import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } fr
 import { getLedgerPubkey, getAddressInfoLedger } from '../../components/WalletConfig/connectLedger';
 import axios from 'axios';
 import { Spinner } from 'react-bootstrap';
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+
 
 
 const LedgerWallet = () => {
@@ -50,7 +50,8 @@ const LedgerWallet = () => {
                 return
             }
             console.log('address', address)
-            const response = await axios.get(`https://mempool.space/api/address/${address}/utxo`)
+            const mempoolUrl = TESTNET ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             console.log('response', response)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
@@ -62,7 +63,8 @@ const LedgerWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                    const explorerUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
@@ -78,6 +80,7 @@ const LedgerWallet = () => {
             setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
             setUtxosReady(true)
         }
+
         fetchUtxosForLedger()
 
 

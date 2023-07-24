@@ -53,13 +53,13 @@ export default function ConfirmationModal({
 
     if (ledgerPublicKey) {
       inputAddressInfo = await getAddressInfoLedger(ledgerPublicKey, false)
-      txHex = await axios.get(`https://mempool.space/api/tx/${currentUtxo.txid}/hex`)
+      txHex = await axios.get(`https://${TESTNET ? 'mempool.space/testnet' : 'mempool.space'}/api/tx/${currentUtxo.txid}/hex`);
       // console.log("inputAddressInfo redeem output", inputAddressInfo)
       // console.log("txHex", txHex)
     }
 
     if (ordimintPubkey) {
-      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(ordimintPubkey, 'hex')) })
+      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(ordimintPubkey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
       console.log("Adress Info Ordimint Address info", inputAddressInfo)
     }
 
@@ -147,11 +147,11 @@ export default function ConfirmationModal({
 
 
 
-    const res = await axios.post(`https://mempool.space/api/tx`, hex).catch(err => {
-      console.error(err)
-      // alert(err)
-      return null
-    })
+    const res = await axios.post(`https://${TESTNET ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
+      console.error(err);
+      return null;
+    });
+
     if (!res) return false
 
     setSentTxid(fullTx.getId())
