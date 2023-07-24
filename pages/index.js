@@ -27,7 +27,7 @@ import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
-import InscriptionNumberSwitch from '../components/InscriptionNumberSwitch';
+import TestnetSwitch from '../components/TestnetSwitch';
 import BRCPreviewModal from '../components/modals/BRCPreviewModal';
 
 
@@ -112,7 +112,7 @@ function Home() {
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     /////Inscription number + or -
-    const [positiveInscriptionNumber, setPositiveInscriptionNumber] = useState(true);
+    const [testnet, setTestnet] = useState(false);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
 
@@ -155,20 +155,25 @@ function Home() {
 
 
     useEffect(() => {
-        const outputCosts = {
-            file: outputCostPicture,
-            text: outputCostText,
-            news: outputCostNews,
-            domain: outputCostDomain,
-            brc: outputCostBRC,
-        };
+        if (testnet === true) {
+            setPrice(process.env.REACT_APP_output_cost_testnet);
+        }
+        else {
+            const outputCosts = {
+                file: outputCostPicture,
+                text: outputCostText,
+                news: outputCostNews,
+                domain: outputCostDomain,
+                brc: outputCostBRC,
+            };
 
-        const newPrice = outputCosts[tabKey]
-            ? Math.trunc(((fileSize / 4) + 150) * fee * securityBuffer) + parseInt(outputCosts[tabKey])
-            : 30000;
+            const newPrice = outputCosts[tabKey]
+                ? Math.trunc(((fileSize / 4) + 150) * fee * securityBuffer) + parseInt(outputCosts[tabKey])
+                : 30000;
 
-        setPrice(newPrice);
-    }, [fileSize, fee, tabKey]);
+            setPrice(newPrice);
+        }
+    }, [fileSize, fee, tabKey, testnet]);
 
     ///////Successfull payment alert
     const renderAlert = (show) => {
@@ -272,17 +277,17 @@ function Home() {
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, textInput, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, domainString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -301,7 +306,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, newsString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee);
             }
             if (tabKey === 'brc') {
                 var brcString = "";
@@ -316,7 +321,7 @@ function Home() {
                     brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, brcString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee);
 
             }
 
@@ -461,13 +466,13 @@ function Home() {
                             </div>
                         </Col>
                         <Col id="right-side-container">
-                            {/* <div id="inscription-number-selection">
-                                <p>Do you want a positive or negative <br /> Inscription Number?</p>
-                                <InscriptionNumberSwitch
-                                    onChange={(value) => setPositiveInscriptionNumber(value)}
+                            <div id="inscription-number-selection">
+                                <p>Do you want to inscribe on <br /> Mainnet or Testnet?<br /><a href="/faq"> (Ready our FAQ)</a ></p>
+                                <TestnetSwitch
+                                    onChange={(value) => setTestnet(value)}
                                 />
 
-                            </div> */}
+                            </div>
 
                             {
                                 (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
