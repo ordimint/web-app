@@ -45,7 +45,7 @@ const FileUpload = (props) => {
       return;
     }
 
-    if (acceptedFiles[0].size > 700000) {
+    if (acceptedFiles[0].size > 700000 && !props.testnet) {
       props.fileTooBig();
     } else {
       const fileType = acceptedFiles[0].name.split('.').pop();

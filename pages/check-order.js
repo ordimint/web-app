@@ -1,16 +1,16 @@
 import { React, useState } from 'react'
 import { InputGroup, Form, Container, Button, Figure, Col, Row } from 'react-bootstrap'
-import axios from 'axios'
-import Footer from '../components/Footer';
-import Head from 'next/head';
 
+import axios from 'axios'
+import Head from 'next/head';
 const CheckOrder = () => {
 
     const [orderID, setOrderID] = useState("");
     const [orderStatus, setOrderStatus] = useState("");
+    const [testnet, setTestnet] = useState(false)
     const [txhash, setTxhash] = useState("");
     const [inscriptionID, setInscriptionID] = useState("");
-    // const [sendingTxHash, setSendingTxHash] = useState("")
+
     const checkOrder = async () => {
 
         if (orderID === "") {
@@ -25,6 +25,9 @@ const CheckOrder = () => {
             if (response.data.mintingTransaction) {
                 setTxhash(response.data.mintingTransaction);
                 setInscriptionID(response.data.inscription_ID);
+            }
+            if (response.data.testnet) {
+                setTestnet(true)
             }
         })
             // if error
@@ -57,12 +60,12 @@ const CheckOrder = () => {
                             </div>
                         </div> */}
                         <h4 className="mt-3 order-status">
-                            <a href={`https://mempool.space/de/tx/${txhash}`} target="_blank" rel="noreferrer">
+                            <a href={testnet ? `https://mempool.space/testnet/tx/${txhash}` : `https://mempool.space/tx/${txhash}`} target="_blank" rel="noreferrer">
                                 Minting Transaction
                             </a>
                         </h4>
                         <h4 className="mt-3 order-status">
-                            <a href={`https://explorer.ordimint.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
+                            <a href={testnet ? `http://testnet.ordimint.com/inscription/${inscriptionID}` : `https://explorer.ordimint.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
                                 Your Inscription (when minted)
                             </a>
                         </h4>

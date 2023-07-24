@@ -40,7 +40,7 @@ const outputCostText = process.env.REACT_APP_output_cost_text;
 const outputCostDomain = process.env.REACT_APP_output_cost_domain;
 const outputCostNews = process.env.REACT_APP_output_cost_news;
 const outputCostBRC = process.env.REACT_APP_output_cost_brc;
-
+const outputCostTestnet = process.env.REACT_APP_output_cost_testnet;
 const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
@@ -156,7 +156,7 @@ function Home() {
 
     useEffect(() => {
         if (testnet === true) {
-            setPrice(process.env.REACT_APP_output_cost_testnet);
+            setPrice(outputCostTestnet);
         }
         else {
             const outputCosts = {
@@ -397,16 +397,7 @@ function Home() {
                                 >
 
                                     <Tab eventKey="file" title="File">
-                                        {/* <FileUpload
-                                            file={file}
-                                            setFile={setFile}
-                                            setFileSize={setFileSize}
-                                            setFileType={setFileType}
-                                            fileTooBig={fileTooBig}
-                                            fileSize={fileSize}
-                                            setFileName={setFileName}
-                                            fileName={fileName}
-                                        /> */}
+
                                         <FileUpload
                                             file={file}
                                             fileType={fileType}
@@ -415,6 +406,7 @@ function Home() {
                                             setFileType={setFileType}
                                             setFileName={setFileName}
                                             setFileSize={setFileSize}
+                                            testnet={testnet}
                                             fileTooBig={fileTooBig}
                                         />
 
