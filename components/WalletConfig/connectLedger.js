@@ -6,7 +6,7 @@ import * as bitcoin from 'bitcoinjs-lib'
 import * as ecc from 'tiny-secp256k1'
 import * as secp256k1 from "secp256k1";
 import ECPairFactory from 'ecpair';
-import { TESTNET } from './constance'
+
 
 const ECPair = ECPairFactory(ecc);
 
@@ -18,32 +18,35 @@ function toXOnly(key) {
 
 
 export const getLedgerPubkey = async (ledgerVerify) => {
-
-    const transport = await TransportWebUSB.create();
-    console.log("Transport created", transport)
-    // listen(log => console.log(log))
+    let ledgerPublicKey = null;
+    let transport = null;
     try {
+        transport = await TransportWebUSB.create();
+        console.log("Transport created", transport)
         const appBtc = new AppBtc({ transport, currency: "bitcoin" });
         const { publicKey } = await appBtc.getWalletPublicKey(
             "86'/0'/100'/0/0",
             { verify: ledgerVerify, format: "bech32m" }
         );
-
         const pubkeyBuffer = Buffer.from(publicKey, 'hex')
         const pubkey = ECPair.fromPublicKey(pubkeyBuffer)
-        transport.close()
-        return pubkey.publicKey.toString('hex')
-
+        ledgerPublicKey = pubkey.publicKey.toString('hex')
     } catch (e) {
         console.log(e)
         console.log("Error connecting to Ledger", e.message);
         alert("Error connecting to Ledger", e.message || e)
+    } finally {
+        transport.close()
+        return ledgerPublicKey;
     }
-
 }
 
 
-export const getAddressInfoLedger = async (ledgerPublicKey, verify) => {
+
+export const getAddressInfoLedger = async (ledgerPublicKey, verify, testnet) => {
+    if (ledgerPublicKey === null) {
+        throw new Error('Ledger public key is null');
+    }
     if (verify) {
         const transport = await TransportWebUSB.create();
         try {
@@ -60,7 +63,10 @@ export const getAddressInfoLedger = async (ledgerPublicKey, verify) => {
         transport.close()
     }
     console.log(`Ledger pub: ${ledgerPublicKey}`)
-    const addrInfo = bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(ledgerPublicKey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+    console.log(`Type of ledgerPublicKey: ${typeof ledgerPublicKey}`);
+    console.log(`Value of ledgerPublicKey: ${ledgerPublicKey}`);
+
+    const addrInfo = bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(ledgerPublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
     console.log(`addrInfo: ${addrInfo.address}`)
 
     return addrInfo

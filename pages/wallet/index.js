@@ -7,10 +7,13 @@ import Footer from '../../components/Footer'
 // import OrdimintWallet from '../components/OrdimintWallet';
 import Head from 'next/head';
 import Link from 'next/link';
+import TestnetSwicht from '../../components/TestnetSwitch';
+
 const WalletPage = () => {
 
     const [selectedWallet, setSelectedWallet] = useState(false)
     const [wallet, setWallet] = useState("")
+
     return (
 
         <div className='main-middle' >
@@ -30,7 +33,9 @@ const WalletPage = () => {
             </Head>
 
             <h1>Wallet</h1>
+            <TestnetSwicht
 
+            />
             <div>
                 <p className='m-3 text-center'>Our non-custodial Ordinal wallet enables effortless integration with various external wallets, allowing you to select from the available options.<br></br> Alternatively, you can choose to benefit from our own integrated wallet solution.</p>
                 <div id="wallet-connect-cards">

@@ -4,7 +4,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import { io } from "socket.io-client";
 import AuctionModal from '../../components/modals/AuctionModal'
 import AuctionContainer from '../../components/AuctionContainer';
-
+import TestnetSwitch from '../../components/TestnetSwitch';
 
 var socket = io.connect(process.env.REACT_APP_socket_port_auctions);
 var clientPaymentHash;
@@ -23,19 +23,10 @@ const AuctionsPage = () => {
     const [price, setPrice] = useState(2);
 
 
-
-
-
-
-
-
-
-
-
     return (
         <div className='main-middle'>
             <h1 className=" py-3">Marketplace</h1>
-            {/* <AuctionCountdown /> */}
+            <TestnetSwitch />
             <Container fluid>
                 <Row className='m-2'>
                     <Col>

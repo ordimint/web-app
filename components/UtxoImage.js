@@ -3,13 +3,13 @@ import { ordinalsImageUrl, cloudfrontUrl } from "./WalletConfig/utils"
 import { Figure, Button } from 'react-bootstrap'
 import { useState } from 'react'
 
-export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo }) {
+export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet }) {
 
   const [isText, setIsText] = useState(false)
   const [text, setText] = useState("")
 
   async function setContentType(utxo) {
-    const contentURL = await ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`])
+    const contentURL = await ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet)
     const response = await fetch(contentURL)
     const contentType = response.headers.get('content-type')
     if (contentType.includes("text")) {
@@ -33,7 +33,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo }) {
             <Figure>
               <Figure.Image
                 thumbnail
-                src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`]) : cloudfrontUrl(utxo)}
+                src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet) : cloudfrontUrl(utxo)}
               />
               <Figure.Caption>
 

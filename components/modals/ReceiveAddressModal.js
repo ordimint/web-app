@@ -6,7 +6,7 @@ import { getAddressInfoLedger } from '../WalletConfig/connectLedger';
 import { QRCodeCanvas, } from "qrcode.react";
 
 export default function ReceiveAddressModal({ showReceiveAddressModal,
-  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey, ordimintAddress }) {
+  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey, ordimintAddress, testnet }) {
 
   const [ledgerAddress, setLedgerAddress] = useState(null)
 
@@ -14,7 +14,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
   useEffect(() => {
     if (!ledgerPublicKey) return
     async function getLedgerAddress() {
-      setLedgerAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address)
+      setLedgerAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address)
     }
     getLedgerAddress()
 
@@ -23,7 +23,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
   useEffect(() => {
     if (!showReceiveAddressModal || !ledgerPublicKey) return
     async function verifyAddress() {
-      await getAddressInfoLedger(ledgerPublicKey, true).address
+      await getAddressInfoLedger(ledgerPublicKey, true, testnet).address
 
     }
     verifyAddress()
@@ -32,7 +32,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
 
   function getAddressForQRCode() {
     if (nostrPublicKey) {
-      return getAddressInfoNostr(nostrPublicKey).address;
+      return getAddressInfoNostr(nostrPublicKey, testnet).address;
     } else if (ledgerPublicKey) {
       return ledgerAddress;
     } else if (ordimintAddress) {
@@ -60,7 +60,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
         <br />
         <Button variant="primary" onClick={() => {
           if (nostrPublicKey) {
-            navigator.clipboard.writeText(getAddressInfoNostr(nostrPublicKey).address)
+            navigator.clipboard.writeText(getAddressInfoNostr(nostrPublicKey, testnet).address)
           }
           if (ledgerPublicKey) {
             navigator.clipboard.writeText(ledgerAddress)

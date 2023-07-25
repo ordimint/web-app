@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { ordinalsUrl, shortenStr } from '../WalletConfig/utils';
 import UtxoImage from '../UtxoImage';
 
+
 export default function UtxoModal({
   setShowBeginSendModal,
   showUtxoModal,
@@ -11,6 +12,7 @@ export default function UtxoModal({
   currentUtxo,
   inscriptionUtxosByUtxo,
   SENDS_ENABLED,
+  testnet
 }) {
   return (
     <Modal show={showUtxoModal} onHide={() => { setShowUtxoModal(false) }} className="py-5">
@@ -19,13 +21,13 @@ export default function UtxoModal({
       </Modal.Header>
       <Modal.Body className="modal-body p-4" style={{ border: "0px;" }}>
         <div className="modal-preview-in-utxomodal">
-          {currentUtxo && <UtxoImage utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+          {currentUtxo && <UtxoImage utxo={currentUtxo} testnet={testnet} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
         </div>
         <b>Utxo:</b>
         <div className='bitcoin-address container fluid'>
           <p>
 
-            <a href={currentUtxo && ordinalsUrl(currentUtxo)} target="_blank" rel="noreferrer">{currentUtxo && `${currentUtxo.txid}:${currentUtxo.vout}`}</a>
+            <a href={currentUtxo && ordinalsUrl(currentUtxo, testnet)} target="_blank" rel="noreferrer">{currentUtxo && `${currentUtxo.txid}:${currentUtxo.vout}`}</a>
 
           </p>
         </div>

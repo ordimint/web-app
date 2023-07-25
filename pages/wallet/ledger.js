@@ -13,14 +13,15 @@ import SentModal from '../../components/modals/SentModal';
 import BeginSendModal from '../../components/modals/BeginSendModal';
 import UtxoModal from '../../components/modals/UtxoModal';
 import UtxoInfo from '../../components/UtxoInfo';
-import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 import { getLedgerPubkey, getAddressInfoLedger } from '../../components/WalletConfig/connectLedger';
 import axios from 'axios';
 import { Spinner } from 'react-bootstrap';
-
+import { TestnetContext } from '../../contexts/TestnetContext';
 
 
 const LedgerWallet = () => {
+    const { testnet } = React.useContext(TestnetContext);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
@@ -46,11 +47,11 @@ const LedgerWallet = () => {
                 return
             }
             if (!address) {
-                await setAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address)
+                await setAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address)
                 return
             }
             console.log('address', address)
-            const mempoolUrl = TESTNET ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             console.log('response', response)
             const tempInscriptionsByUtxo = {}
@@ -63,7 +64,7 @@ const LedgerWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const explorerUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
                     const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
@@ -164,6 +165,7 @@ const LedgerWallet = () => {
 
 
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 ledgerPublicKey={ledgerPublicKey}
@@ -174,6 +176,7 @@ const LedgerWallet = () => {
                 showUtxoModal={showUtxoModal}
                 currentUtxo={currentUtxo}
                 SENDS_ENABLED={SENDS_ENABLED}
+                testnet={testnet}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <BeginSendModal
@@ -184,7 +187,7 @@ const LedgerWallet = () => {
                 setDestinationBtcAddress={setDestinationBtcAddress}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 isBtcInputAddressValid={isBtcInputAddressValid}
-                TESTNET={TESTNET}
+                testnet={testnet}
                 setShowUtxoModal={setShowUtxoModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />

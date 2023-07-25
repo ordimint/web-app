@@ -14,11 +14,14 @@ import UtxoModal from '../../components/modals/UtxoModal';
 import AlbyLogo from '../../public/media/alby_icon_yellow.svg';
 import UtxoInfo from '../../components/UtxoInfo';
 import { getAddressInfoNostr, connectWallet } from '../../components/WalletConfig/utils';
-import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import { TestnetContext } from '../../contexts/TestnetContext';
+
 
 const axios = require('axios')
 
 export default function NostrWallet() {
+    const { testnet } = React.useContext(TestnetContext);
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
@@ -38,8 +41,8 @@ export default function NostrWallet() {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!nostrPublicKey) return
-            const address = getAddressInfoNostr(nostrPublicKey).address
-            const mempoolUrl = TESTNET ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const address = getAddressInfoNostr(nostrPublicKey, testnet).address
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
@@ -51,7 +54,7 @@ export default function NostrWallet() {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const explorerUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
                     const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
@@ -129,6 +132,7 @@ export default function NostrWallet() {
                 {nostrPublicKey &&
                     <div>
                         <UtxoInfo
+                            testnet={testnet}
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
                             setShowUtxoModal={setShowUtxoModal}
@@ -142,6 +146,7 @@ export default function NostrWallet() {
 
 
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 nostrPublicKey={nostrPublicKey}
@@ -153,6 +158,7 @@ export default function NostrWallet() {
                 showUtxoModal={showUtxoModal}
                 currentUtxo={currentUtxo}
                 SENDS_ENABLED={SENDS_ENABLED}
+                testnet={testnet}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <BeginSendModal
@@ -163,7 +169,7 @@ export default function NostrWallet() {
                 setDestinationBtcAddress={setDestinationBtcAddress}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 isBtcInputAddressValid={isBtcInputAddressValid}
-                TESTNET={TESTNET}
+                testnet={testnet}
                 setShowUtxoModal={setShowUtxoModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />

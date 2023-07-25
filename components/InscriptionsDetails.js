@@ -1,3 +1,4 @@
+import { testnet } from 'bitcoinjs-lib/src/networks';
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { TailSpin } from 'react-loading-icons';
@@ -27,18 +28,22 @@ const InscriptionsDetails = (props) => {
 
     }
     return (
-        <div>
+        <>
+            {
+                props.testnet ? <></>
+                    :
+                    <div>
 
-            {inscriptionData ?
-                <p>#{inscriptionData.inscription_number}</p> : <p>
-                    <br />
-                    <TailSpin stroke="#ffffff" speed={0.75} />
-                    <br />
-                    Loading...</p>
-
+                        {inscriptionData ?
+                            <p>#{inscriptionData.inscription_number}</p> : <p>
+                                <br />
+                                <TailSpin stroke="#ffffff" speed={0.75} />
+                                <br />
+                                Loading...</p>
+                        }
+                    </div>
             }
-
-        </div>
+        </>
     )
 }
 

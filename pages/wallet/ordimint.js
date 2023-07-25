@@ -16,10 +16,10 @@ import axios from 'axios';
 import OrdimintWalletInfo from '../../components/modals/OrdimintWalletInfo';
 import GenerateWalletModal from '../../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../../components/modals/RestoreWalletModal';
-import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 import { generateWallet, restoreWallet } from '../../components/WalletConfig/ordimintWalletFunctions';
 import Footer from '../../components/Footer';
-
+import { TestnetContext } from '../../contexts/TestnetContext';
 // const ECPair = ECPairFactory(ecc);
 // const bip39 = require('bip39');
 // const { BIP32Factory } = require('bip32')
@@ -31,6 +31,7 @@ import Footer from '../../components/Footer';
 
 
 const OrdimintWallet = () => {
+    const { testnet } = React.useContext(TestnetContext);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     const [privateKey, setPrivateKey] = useState(null);
     const [address, setAddress] = useState(null);
@@ -68,7 +69,7 @@ const OrdimintWallet = () => {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!address) return
-            const mempoolUrl = TESTNET ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
@@ -80,7 +81,7 @@ const OrdimintWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const explorerUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
                     const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
@@ -102,8 +103,8 @@ const OrdimintWallet = () => {
         fetchUtxosForAddress()
     }, [ordimintPubkey, address]);
 
-    const handleGenerateWallet = async () => {
-        const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet();
+    const handleGenerateWallet = async (testnet) => {
+        const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet(testnet);
         setPrivateKey(newPrivateKey);
         setAddress(newAddress);
         setSeedPhrase(mnemonic);
@@ -111,9 +112,9 @@ const OrdimintWallet = () => {
         handleGenerateWalletModalShow();
     };
 
-    const handleRestoreWallet = async (event) => {
+    const handleRestoreWallet = async (event, testnet) => {
         try {
-            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event);
+            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event, testnet);
             setAddress(restoredAddress);
             setPrivateKey(restoredPrivateKey);
             setOrdimintPubkey(restoredPubkey);
@@ -159,7 +160,7 @@ const OrdimintWallet = () => {
 
                                 </Alert>
                                 <div className="d-flex justify-content-evenly">
-                                    <Button variant="primary" onClick={handleGenerateWallet}>Generate Wallet</Button>
+                                    <Button variant="primary" onClick={() => handleGenerateWallet(testnet)}>Generate Wallet</Button>
 
                                     <Button variant="secondary" onClick={handleRestoreWalletModalShow}>Restore Wallet</Button>
                                 </div>
@@ -192,7 +193,7 @@ const OrdimintWallet = () => {
             <RestoreWalletModal
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
-                restoreWallet={(e) => handleRestoreWallet(e)}
+                restoreWallet={(e) => handleRestoreWallet(e, testnet)}
             // setOrdimintPubkey={setOrdimintPubkey}
             // setAddress={setAddress}
             // setPrivateKey={setPrivateKey}
@@ -207,6 +208,7 @@ const OrdimintWallet = () => {
             />
 
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 ordimintAddress={address}
@@ -217,6 +219,7 @@ const OrdimintWallet = () => {
                 setShowUtxoModal={setShowUtxoModal}
                 showUtxoModal={showUtxoModal}
                 currentUtxo={currentUtxo}
+                testnet={testnet}
                 SENDS_ENABLED={SENDS_ENABLED}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
@@ -228,7 +231,7 @@ const OrdimintWallet = () => {
                 setDestinationBtcAddress={setDestinationBtcAddress}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 isBtcInputAddressValid={isBtcInputAddressValid}
-                TESTNET={TESTNET}
+                testnet={testnet}
                 setShowUtxoModal={setShowUtxoModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
@@ -249,6 +252,7 @@ const OrdimintWallet = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
+                testnet={testnet}
                 ordimintPubkey={ordimintPubkey}
                 privateKey={privateKey}
                 destinationBtcAddress={destinationBtcAddress}

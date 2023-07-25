@@ -1,9 +1,9 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useContext } from 'react';
 import { io } from "socket.io-client";
 import FileUpload from '../components/FileUpload';
 import OnchainInput from '../components/OnchainInput';
 import InvoiceModal from '../components/modals/InvoiceModal';
-import { validate } from 'bitcoin-address-validation';
+import { validate, Network } from 'bitcoin-address-validation'
 import Footer from '../components/Footer';
 import Image from 'next/image';
 import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
@@ -29,6 +29,8 @@ import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
 import TestnetSwitch from '../components/TestnetSwitch';
 import BRCPreviewModal from '../components/modals/BRCPreviewModal';
+import { TestnetContext } from '../contexts/TestnetContext';
+
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -112,7 +114,7 @@ function Home() {
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     /////Inscription number + or -
-    const [testnet, setTestnet] = useState(false);
+    const { testnet } = useContext(TestnetContext);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
 
@@ -125,7 +127,7 @@ function Home() {
 
     const handleGenerateWallet = async () => {
         try {
-            const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet();
+            const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet(testnet);
             setPrivateKey(newPrivateKey);
             setOrdimintPubkey(newOrdimintPubkey);
             setOnChainAddress(newAddress);
@@ -139,9 +141,9 @@ function Home() {
 
     };
 
-    const handleRestoreWallet = async (event) => {
+    const handleRestoreWallet = async (event, testnet) => {
         try {
-            const { restoredAddress, restoredPubkey } = await restoreWallet(event);
+            const { restoredAddress, restoredPubkey } = await restoreWallet(event, testnet);
             setOrdimintPubkey(restoredPubkey);
             setOnChainAddress(restoredAddress);
             await handleRestoreWalletModalClose();
@@ -214,10 +216,10 @@ function Home() {
 
     //Get the invoice
     const getInvoice = (price) => {
-        if (validate(onChainAddress) === false) {
+        if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
             showAlertModal({
                 show: true,
-                text: "Please provide a valid BTC address",
+                text: `Please provide a valid ${testnet ? 'Testnet' : ''} BTC address`,
                 type: "danger",
             });
         } else if (file === null && tabKey === 'file') {
@@ -346,17 +348,17 @@ function Home() {
     useEffect(() => {
         if (!ledgerPublicKey) return
         async function getLedgerAddress() {
-            await setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address)
+            await setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address)
         }
         getLedgerAddress()
 
-    }, [ledgerPublicKey])
+    }, [ledgerPublicKey, testnet])
 
     useEffect(() => {
         if (!ledgerPublicKey) return
         async function verifyAddress() {
             setShowWalletConnectModal(true)
-            await getAddressInfoLedger(ledgerPublicKey, true)
+            await getAddressInfoLedger(ledgerPublicKey, true, testnet)
 
         }
         verifyAddress()
@@ -461,7 +463,7 @@ function Home() {
                             <div id="inscription-number-selection">
                                 <p>Do you want to inscribe on <br /> Mainnet or Testnet?<br /><a href="/faq"> (Ready our FAQ)</a ></p>
                                 <TestnetSwitch
-                                    onChange={(value) => setTestnet(value)}
+
                                 />
 
                             </div>
@@ -474,11 +476,11 @@ function Home() {
                                                 <div className="success-alert-input input-button">
                                                     <p>Your receiver address:</p>
                                                     <OnchainInput
-                                                        onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
+                                                        onChainAddress={getAddressInfoNostr(nostrPublicKey, testnet).address}
                                                         setOnChainAddress={setOnChainAddress}
                                                     />
                                                     <WalletConnectModal
-                                                        address={getAddressInfoNostr(nostrPublicKey).address}
+                                                        address={getAddressInfoNostr(nostrPublicKey, testnet).address}
                                                         show={showWalletConnectModal}
                                                         handleClose={() => setShowWalletConnectModal(false)}
                                                     />
@@ -532,7 +534,7 @@ function Home() {
                                                 className="m-1"
                                                 onClick={async () => {
                                                     setNostrPublicKey(await connectWallet());
-                                                    setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address);
+                                                    setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address, testnet);
                                                     setShowWalletConnectModal(true);
                                                 }}
                                                 variant="success"
@@ -545,7 +547,7 @@ function Home() {
                                                 className="m-1"
                                                 onClick={async () => {
                                                     setLedgerPublicKey(await getLedgerPubkey(false));
-                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address);
+                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
                                                 }}
                                                 variant="success"
                                                 size="md"
@@ -624,6 +626,7 @@ function Home() {
 
             />
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 nostrPublicKey={nostrPublicKey}
@@ -645,7 +648,7 @@ function Home() {
             <SelectWalletModal
                 show={showSelectWalletModal}
                 handleClose={closeSelectWalletModal}
-                handleGenerateWallet={handleGenerateWallet}
+                handleGenerateWallet={() => handleGenerateWallet(testnet)}
                 handleRestoreWallet={() => {
                     closeSelectWalletModal();
                     handleRestoreWalletModalShow()
@@ -661,9 +664,10 @@ function Home() {
             />
 
             <RestoreWalletModal
+                testnet={testnet}
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
-                restoreWallet={(e) => handleRestoreWallet(e)}
+                restoreWallet={(e) => handleRestoreWallet(e, testnet)}
             // setOrdimintPubkey={setOrdimintPubkey}
             // setAddress={setAddress}
             // setPrivateKey={setPrivateKey}

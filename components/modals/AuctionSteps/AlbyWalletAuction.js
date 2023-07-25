@@ -7,11 +7,11 @@ import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import UtxoInfoAuction from './UtxoInfoAuction.js';
 import ReceiveAddressModal from '../ReceiveAddressModal';
 import { getAddressInfoNostr, connectWallet } from '../../WalletConfig/utils.js';
-import { TESTNET } from '../../WalletConfig/constance.js';
+import { TestnetContext } from '../../../contexts/TestnetContext.js';
 
 
 const AlbyWalletAuction = (props) => {
-
+    const { testnet } = React.useContext(TestnetContext);
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
@@ -21,8 +21,8 @@ const AlbyWalletAuction = (props) => {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!nostrPublicKey) return
-            const address = getAddressInfoNostr(nostrPublicKey).address
-            const mempoolUrl = TESTNET ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const address = getAddressInfoNostr(nostrPublicKey, testnet).address
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
@@ -34,7 +34,7 @@ const AlbyWalletAuction = (props) => {
 
                 // console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const explorerUrl = TESTNET ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
                     const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
@@ -70,6 +70,7 @@ const AlbyWalletAuction = (props) => {
                     <div>
                         <UtxoInfoAuction
                             utxosReady={utxosReady}
+                            testnet={testnet}
                             ownedUtxos={ownedUtxos}
                             setCurrentUtxo={props.setCurrentUtxo}
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
@@ -81,6 +82,7 @@ const AlbyWalletAuction = (props) => {
 
 
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 nostrPublicKey={nostrPublicKey}

@@ -7,7 +7,7 @@ const ECPair = ECPairFactory(ecc);
 const bip39 = require('bip39');
 const bip32 = BIP32Factory(ecc);
 bitcoin.initEccLib(ecc);
-import { TESTNET } from './constance';
+
 
 const crypto =
     typeof window !== 'undefined' && window.crypto
@@ -18,12 +18,12 @@ function toXOnly(key) {
     return key.length === 33 ? key.slice(1, 33) : key;
 }
 
-export const getOrdimintAddress = async (pubkey) => {
-    const address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
+export const getOrdimintAddress = async (pubkey, testnet) => {
+    const address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
     return address;
 }
 
-export const generateWallet = async () => {
+export const generateWallet = async (testnet) => {
     const entropy = crypto.getRandomValues(new Uint8Array(16));
     const mnemonic = bip39.entropyToMnemonic(Buffer.from(entropy).toString('hex'));
     const seed = bip39.mnemonicToSeedSync(mnemonic);
@@ -32,7 +32,7 @@ export const generateWallet = async () => {
     const keyPair = root.derivePath(path);
     const newPrivateKey = keyPair.toWIF();
     const newOrdimintPubkey = await (Buffer.from(keyPair.publicKey, 'hex')).toString('hex');
-    const newAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(keyPair.publicKey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
+    const newAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(keyPair.publicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
 
     return {
         newOrdimintPubkey,
@@ -44,7 +44,7 @@ export const generateWallet = async () => {
 
 
 
-export const restoreWallet = (event) => {
+export const restoreWallet = (event, testnet) => {
     return new Promise(async (resolve, reject) => {
         let restoredPrivateKey, restoredKeyPair, restoredAddress, restoredPubkey;
         const file = event.target.files[0];
@@ -67,7 +67,7 @@ export const restoreWallet = (event) => {
             try {
                 restoredPrivateKey = privateKeyMatch[1].trim()
                 restoredKeyPair = ECPair.fromWIF(restoredPrivateKey)
-                restoredAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')), network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address
+                restoredAddress = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(restoredKeyPair.publicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address
                 restoredPubkey = await Buffer.from(restoredKeyPair.publicKey, 'hex').toString('hex');
                 resolve({ restoredPrivateKey, restoredKeyPair, restoredAddress, restoredPubkey });
             } catch (err) {

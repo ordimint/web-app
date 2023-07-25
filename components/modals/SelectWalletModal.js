@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-const SelectWalletModal = ({ show, handleClose, handleGenerateWallet, handleHowDoesItWork, handleRestoreWallet }) => {
+const SelectWalletModal = ({ show, handleClose, handleGenerateWallet, handleRestoreWallet }) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

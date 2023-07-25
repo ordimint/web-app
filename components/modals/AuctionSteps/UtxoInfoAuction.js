@@ -4,7 +4,7 @@ import { Row, Col, Card, Container, Button, Pagination } from 'react-bootstrap';
 import UtxoImageAuction from './UtxoImageAuction';
 import InscriptionsDetails from '../../InscriptionsDetails';
 
-export default function UtxoInfoAuction({ utxosReady, ownedUtxos, setCurrentUtxo, inscriptionUtxosByUtxo }) {
+export default function UtxoInfoAuction({ utxosReady, ownedUtxos, setCurrentUtxo, inscriptionUtxosByUtxo, testnet }) {
     const [activeItemId, setActiveItemId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
@@ -65,9 +65,12 @@ export default function UtxoInfoAuction({ utxosReady, ownedUtxos, setCurrentUtxo
                                                     <br />
                                                 </>
                                             ) : (
-                                                <UtxoImageAuction utxo={it} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />
+                                                <UtxoImageAuction utxo={it} testnet={testnet} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />
                                             )}
-                                            <InscriptionsDetails utxo={it} />
+                                            <InscriptionsDetails
+                                                utxo={it}
+                                                testnet={testnet}
+                                            />
                                         </div>
                                     </Col>
                                 );

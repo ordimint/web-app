@@ -26,17 +26,22 @@ const InscriptionsDetailsAuction = (props) => {
 
     }
     return (
-        <div>
+        <>
+            {
+                props.testnet ? <></>
+                    :
+                    <div>
 
-            {inscriptionData &&
-
-
-                <h5>Inscription #{inscriptionData.inscription_number}</h5>
-
-
+                        {inscriptionData ?
+                            <p>#{inscriptionData.inscription_number}</p> : <p>
+                                <br />
+                                <TailSpin stroke="#ffffff" speed={0.75} />
+                                <br />
+                                Loading...</p>
+                        }
+                    </div>
             }
-
-        </div >
+        </>
     )
 }
 
