@@ -365,6 +365,16 @@ function Home() {
 
     }, [onChainAddress, ledgerPublicKey])
 
+    useEffect(() => {
+        if (!ordimintPubkey) return;
+        async function getOrdimintAddressAsync() {
+            const address = await getOrdimintAddress(ordimintPubkey, testnet);
+            setOnChainAddress(address);
+        }
+        getOrdimintAddressAsync();
+    }, [ordimintPubkey, testnet]);
+
+
 
 
     return (

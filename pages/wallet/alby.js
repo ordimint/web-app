@@ -16,6 +16,7 @@ import UtxoInfo from '../../components/UtxoInfo';
 import { getAddressInfoNostr, connectWallet } from '../../components/WalletConfig/utils';
 import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 import { TestnetContext } from '../../contexts/TestnetContext';
+import TestnetSwitch from '../../components/TestnetSwitch';
 
 
 const axios = require('axios')
@@ -50,9 +51,9 @@ export default function NostrWallet() {
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
                 // if (!utxo.status.confirmed) continue
                 let currentUtxo = utxo
-                console.log('utxo', utxo)
+                // console.log('utxo', utxo)
 
-                console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
+                // console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
                     const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
                     const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
@@ -74,14 +75,11 @@ export default function NostrWallet() {
 
         connectOnLoad()
         fetchUtxosForAddress()
-    }, [nostrPublicKey]);
+    }, [nostrPublicKey, testnet]);
 
     async function connectOnLoad() {
         setNostrPublicKey(await connectWallet())
     }
-
-
-
 
 
     return (
@@ -100,6 +98,7 @@ export default function NostrWallet() {
             </Container>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+                <TestnetSwitch />
                 <h1 className="text-center m-3">Alby Wallet</h1>
                 {
                     nostrPublicKey ?
@@ -178,12 +177,14 @@ export default function NostrWallet() {
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 currentUtxo={currentUtxo}
                 sendFeeRate={sendFeeRate}
+                testnet={testnet}
                 setSendFeeRate={setSendFeeRate}
                 setShowBeginSendModal={setShowBeginSendModal}
                 setShowConfirmSendModal={setShowConfirmSendModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <ConfirmationModal
+                testnet={testnet}
                 setShowConfirmSendModal={setShowConfirmSendModal}
                 showConfirmSendModal={showConfirmSendModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
@@ -196,6 +197,7 @@ export default function NostrWallet() {
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SentModal
+                testnet={testnet}
                 showSentModal={showSentModal}
                 setShowSentModal={setShowSentModal}
                 sentTxid={sentTxid}

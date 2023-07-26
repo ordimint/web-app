@@ -17,9 +17,10 @@ import OrdimintWalletInfo from '../../components/modals/OrdimintWalletInfo';
 import GenerateWalletModal from '../../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../../components/modals/RestoreWalletModal';
 import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
-import { generateWallet, restoreWallet } from '../../components/WalletConfig/ordimintWalletFunctions';
+import { generateWallet, restoreWallet, getOrdimintAddress } from '../../components/WalletConfig/ordimintWalletFunctions';
 import Footer from '../../components/Footer';
 import { TestnetContext } from '../../contexts/TestnetContext';
+import TestnetSwitch from '../../components/TestnetSwitch';
 // const ECPair = ECPairFactory(ecc);
 // const bip39 = require('bip39');
 // const { BIP32Factory } = require('bip32')
@@ -69,8 +70,13 @@ const OrdimintWallet = () => {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!address) return
+
+            const addr = await getOrdimintAddress(ordimintPubkey, testnet)
+            setAddress(addr)
+
             const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
-            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+            const response = await axios.get(`${mempoolUrl}/address/${addr}/utxo`)
+
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
@@ -101,7 +107,8 @@ const OrdimintWallet = () => {
 
 
         fetchUtxosForAddress()
-    }, [ordimintPubkey, address]);
+
+    }, [ordimintPubkey, address, testnet]);
 
     const handleGenerateWallet = async (testnet) => {
         const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet(testnet);
@@ -140,6 +147,7 @@ const OrdimintWallet = () => {
             </Container>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+                <TestnetSwitch />
                 <h1 className='m-3'>Ordimint Wallet</h1>
                 {
                     address ?
@@ -178,6 +186,7 @@ const OrdimintWallet = () => {
                 {address &&
                     <div>
                         <UtxoInfo
+                            testnet={testnet}
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
                             setShowUtxoModal={setShowUtxoModal}
@@ -236,6 +245,7 @@ const OrdimintWallet = () => {
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SelectFeeRateModal
+                testnet={testnet}
                 showSelectFeeRateModal={showSelectFeeRateModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 currentUtxo={currentUtxo}
@@ -260,6 +270,7 @@ const OrdimintWallet = () => {
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SentModal
+                testnet={testnet}
                 showSentModal={showSentModal}
                 setShowSentModal={setShowSentModal}
                 sentTxid={sentTxid}

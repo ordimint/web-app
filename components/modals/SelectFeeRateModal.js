@@ -13,7 +13,8 @@ export default function SelectFeeRateModal({
   setSendFeeRate,
   setShowBeginSendModal,
   setShowConfirmSendModal,
-  inscriptionUtxosByUtxo
+  inscriptionUtxosByUtxo,
+  testnet,
 }) {
   return (
     <Modal show={showSelectFeeRateModal} onHide={() => setShowSelectFeeRateModal(false)} className="py-5">
@@ -22,7 +23,7 @@ export default function SelectFeeRateModal({
       </Modal.Header>
       <Modal.Body className="modal-body p-4">
         <div className='modal-preview-in-utxomodal'>
-          {currentUtxo && <UtxoImage utxo={currentUtxo} style={{ width: "60%" }} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+          {currentUtxo && <UtxoImage testnet={testnet} utxo={currentUtxo} style={{ width: "60%" }} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
         </div>
         <p>
           <b>Select a fee rate</b>

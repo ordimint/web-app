@@ -18,6 +18,7 @@ import { getLedgerPubkey, getAddressInfoLedger } from '../../components/WalletCo
 import axios from 'axios';
 import { Spinner } from 'react-bootstrap';
 import { TestnetContext } from '../../contexts/TestnetContext';
+import TestnetSwitch from '../../components/TestnetSwitch';
 
 
 const LedgerWallet = () => {
@@ -111,6 +112,7 @@ const LedgerWallet = () => {
 
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+                <TestnetSwitch />
                 <h1 className="text-center m-3">Ledger Wallet</h1>
                 {
                     ledgerPublicKey ?
@@ -192,6 +194,7 @@ const LedgerWallet = () => {
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SelectFeeRateModal
+                testnet={testnet}
                 showSelectFeeRateModal={showSelectFeeRateModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 currentUtxo={currentUtxo}
@@ -208,12 +211,14 @@ const LedgerWallet = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
+                testnet={testnet}
                 ledgerPublicKey={ledgerPublicKey}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SentModal
+                testnet={testnet}
                 showSentModal={showSentModal}
                 setShowSentModal={setShowSentModal}
                 sentTxid={sentTxid}

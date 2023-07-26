@@ -19,7 +19,13 @@ function toXOnly(key) {
 }
 
 export const getOrdimintAddress = async (pubkey, testnet) => {
-    const address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
+    var address = null;
+    try {
+        address = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(pubkey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin }).address;
+
+    } catch (err) {
+        console.log('Error getting address: ' + err.message);
+    }
     return address;
 }
 
