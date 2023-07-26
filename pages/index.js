@@ -374,6 +374,15 @@ function Home() {
         getOrdimintAddressAsync();
     }, [ordimintPubkey, testnet]);
 
+    useEffect(() => {
+        if (!nostrPublicKey) return;
+        async function getNostrAddressAsync() {
+            const address = await getAddressInfoNostr(nostrPublicKey, testnet).address;
+            setOnChainAddress(address);
+        }
+        getNostrAddressAsync();
+    }, [nostrPublicKey, testnet]);
+
 
 
 
@@ -486,11 +495,11 @@ function Home() {
                                                 <div className="success-alert-input input-button">
                                                     <p>Your receiver address:</p>
                                                     <OnchainInput
-                                                        onChainAddress={getAddressInfoNostr(nostrPublicKey, testnet).address}
+                                                        onChainAddress={onChainAddress}
                                                         setOnChainAddress={setOnChainAddress}
                                                     />
                                                     <WalletConnectModal
-                                                        address={getAddressInfoNostr(nostrPublicKey, testnet).address}
+                                                        address={onChainAddress}
                                                         show={showWalletConnectModal}
                                                         handleClose={() => setShowWalletConnectModal(false)}
                                                     />
