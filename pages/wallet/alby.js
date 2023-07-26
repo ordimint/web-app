@@ -46,6 +46,7 @@ export default function NostrWallet() {
             const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             const tempInscriptionsByUtxo = {}
+            console.log('response.data', response.data)
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo

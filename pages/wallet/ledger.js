@@ -41,6 +41,18 @@ const LedgerWallet = () => {
     const [address, setAddress] = useState(null)
 
     useEffect(() => {
+        async function fetchAddressForLedger() {
+            if (ledgerPublicKey) {
+                const newAddress = await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address;
+                setAddress(newAddress);
+            }
+        }
+
+        fetchAddressForLedger();
+    }, [testnet, ledgerPublicKey]);
+
+
+    useEffect(() => {
         async function fetchUtxosForLedger() {
             if (!ledgerPublicKey) {
                 console.log("Connect on load", ledgerPublicKey)
@@ -135,14 +147,6 @@ const LedgerWallet = () => {
                                     <span className="sr-only"></span>
                                 </Spinner>
                                 <p>Connecting....</p>
-                                {/* <Button
-                                    variant="primary"
-                                    size="lg"
-                                    className="mx-3 shadowed-orange-small"
-                                    onClick={async () => {
-                                        setLedgerPublicKey(await connectWallet())
-                                    }}><img src={ledgerLogo} height="35" alt="Alby Logo" />Connect wallet</Button> */}
-
                                 <br />
                             </div>
                         </>
@@ -156,6 +160,7 @@ const LedgerWallet = () => {
                             So don't worry, your Ordinals are safu.
                         </Alert>
                         <UtxoInfo
+                            testnet={testnet}
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
                             setShowUtxoModal={setShowUtxoModal}

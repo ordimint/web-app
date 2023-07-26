@@ -18,7 +18,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
     }
     getLedgerAddress()
 
-  }, [ledgerPublicKey])
+  }, [ledgerPublicKey, testnet])
 
   useEffect(() => {
     if (!showReceiveAddressModal || !ledgerPublicKey) return
@@ -28,7 +28,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
     }
     verifyAddress()
   }
-    , [showReceiveAddressModal])
+    , [showReceiveAddressModal, testnet])
 
   function getAddressForQRCode() {
     if (nostrPublicKey) {
