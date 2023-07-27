@@ -161,6 +161,7 @@ function Home() {
             setPrice(outputCostTestnet);
         }
         else {
+
             const outputCosts = {
                 file: outputCostPicture,
                 text: outputCostText,

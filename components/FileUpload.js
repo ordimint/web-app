@@ -51,7 +51,7 @@ const FileUpload = (props) => {
     const sizeLimit = testnet ? 4000000 : 700000;
 
     if (acceptedFiles[0].size > sizeLimit) {
-      console.log(acceptedFiles[0].size > sizeLimit)
+
       props.fileTooBig();
     } else {
       const fileType = acceptedFiles[0].name.split('.').pop();
@@ -66,7 +66,7 @@ const FileUpload = (props) => {
         props.setFileName(acceptedFiles[0].name);
       }
     }
-  }, [compressImage]);
+  }, [compressImage, testnet]);
 
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
