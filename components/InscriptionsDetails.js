@@ -1,4 +1,4 @@
-import { testnet } from 'bitcoinjs-lib/src/networks';
+
 import React, { useEffect, useContext } from 'react'
 import { useState } from 'react'
 import { TailSpin } from 'react-loading-icons';
