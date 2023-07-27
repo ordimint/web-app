@@ -52,7 +52,7 @@ const Header = (props) => {
                                 </Container>
                             </Offcanvas.Title>
                         </Offcanvas.Header>
-                        <Offcanvas.Body>
+                        <Offcanvas.Body id="mobile-menu">
                             <Nav variant="pills" className="container">
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/')} href="/">
@@ -77,21 +77,27 @@ const Header = (props) => {
                                     <Nav.Link className={isActive('/faq')} href="/faq">FAQ </Nav.Link>
                                 </Nav.Item>
                             </Nav>
+                            <hr></hr>
                             <Nav >
-                                {/* <Nav.Item >
+                                <Nav.Item >
                                     <a href="https://api.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >API</Button>
+                                        <Button >API (New)</Button>
                                     </a>
-                                </Nav.Item> */}
+                                </Nav.Item>
+                                <Nav.Item >
+                                    <a href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
+                                        <Button >Testnet Explorer</Button>
+                                    </a>
+                                </Nav.Item>
                                 <Nav.Item >
                                     <a href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >Explorer</Button>
+                                        <Button >Ordinal Explorer</Button>
                                     </a>
                                 </Nav.Item>
                             </Nav>
                         </Offcanvas.Body>
                     </Navbar.Offcanvas>
-                </Navbar>
+                </Navbar >
                 {/* <Row>
         <div id='logo'>
             <a href="/">
@@ -99,7 +105,7 @@ const Header = (props) => {
             </a>
             </div>
       </Row> */}
-            </Container>
+            </Container >
         </div >
     );
 };

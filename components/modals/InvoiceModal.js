@@ -117,6 +117,9 @@ function InvoiceModal(props) {
                             <p id="expirydate">
                                 Make sure to save your order ID
                             </p>
+                            <div>
+                                You can monitor your order status <a href="/check-order"> here.</a>{" "}
+                            </div>
                         </div>
                     ) : (
                         <p>

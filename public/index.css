@@ -798,3 +798,13 @@ span.input-group-text.required .required:after {
   align-items: center;
   text-align: center;
 }
+
+#mobile-menu div.container {
+  padding-right: 0;
+}
+.nav-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}

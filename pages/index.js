@@ -553,7 +553,7 @@ function Home() {
                                                 className="m-1"
                                                 onClick={async () => {
                                                     setNostrPublicKey(await connectWallet());
-                                                    setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address, testnet);
+                                                    setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
                                                     setShowWalletConnectModal(true);
                                                 }}
                                                 variant="success"
