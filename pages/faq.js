@@ -70,22 +70,6 @@ const FAQ = () => {
                                     <p>The main difference between a Bitcoin inscription and an NFT is that a Bitcoin inscription is specific to the Bitcoin blockchain and is created by inscribing content onto satoshis, so the data is stored on-chain. In contrast, while an NFT can be created on various blockchain platforms, they are most likely only linked to an external off-chain storage.</p>
                                 </Accordion.Body>
                             </Accordion.Item>
-                            {/* <Accordion.Item eventKey="0444">
-                                <Accordion.Header>What is the difference between a positive and negative Inscription number?</Accordion.Header>
-                                <Accordion.Body>
-                                    <p>
-                                        The original Ordinal theory says that Inscriptions can only be seen as they are on the first input of a transaction. This is the positive Ordinal number, the original one.
-
-                                    </p>
-                                    <p>But there are already also some Inscriptins on a input different from the first one. These Inscriptions are some kind of lost in the moment. Therefore the idea came up to give them negative Inscription numbers. This has two advantages:</p>
-                                    <ol>
-                                        <li>Old/original Inscription numbers are not affected.</li>
-                                        <li>Lost or unsean Inscriptins become visible and get a unique Inscription number.</li>
-                                    </ol>
-                                    <p>So Ordimint offers you now the option to chose between a positive(original) Inscription number or a negative one.</p>
-                                </Accordion.Body>
-                            </Accordion.Item> */}
-
 
                             <Accordion.Item eventKey="0111">
                                 <Accordion.Header>What file types can be inscribed?</Accordion.Header>
@@ -93,6 +77,18 @@ const FAQ = () => {
                                     <p>apng, flac, gif, html, jpg, mp3, pdf, png, svg, txt, wav, webm, webp</p>
                                 </Accordion.Body>
                             </Accordion.Item>
+                            <Accordion.Item eventKey="0444">
+                                <Accordion.Header>What is Mainnet and Testnet?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        <strong>Mainnet</strong> is the main Bitcoin network where actual transactions occur. It is the live, functioning Bitcoin blockchain where users transact with real Bitcoin.
+                                    </p>
+                                    <p>
+                                        <strong>Testnet</strong>, on the other hand, is a separate network that developers use for testing. Bitcoins on this network are not real and do not have any value. This network allows creators and artists to test new Inscriptions or Ordinals without the risk of losing real Bitcoin. This makes it a perfect tool for experimentation.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
                         </Accordion>
                     </Col>
                     <Col>

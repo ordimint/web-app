@@ -67,9 +67,9 @@ const Header = (props) => {
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/ordinal-collections')} href="/ordinal-collections">Collections</Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item>
+                                {/* <Nav.Item>
                                     <Nav.Link className={isActive('/market')} href="/market">Market</Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/search')} href="/search">Search </Nav.Link>
                                 </Nav.Item>

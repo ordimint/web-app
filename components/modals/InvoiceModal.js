@@ -118,7 +118,7 @@ function InvoiceModal(props) {
                                 Make sure to save your order ID
                             </p>
                             <div>
-                                You can monitor your order status <a href="/check-order"> here.</a>{" "}
+                                You can monitor your order status <a href="/check-order" target="_blank" rel="noopener noreferrer"> here.</a>{" "}
                             </div>
                         </div>
                     ) : (
