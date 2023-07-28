@@ -613,6 +613,10 @@ function Home() {
                             updatePaymentrequest();
                             setSpinner(true);
                             isPaid = false;
+                            window.gtag('event', 'click', {
+                                'event_category': 'Create Order',
+                                'event_label': 'Get Invoice',
+                            });
                         }}
                         variant="success"
                         size="lg"
@@ -622,7 +626,7 @@ function Home() {
                     </Button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
-                        <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
+                        <p>You get ~3.000 Sats back when you receive the Ordinal.</p>
                     </div>
                     <Footer />
                 </div>
