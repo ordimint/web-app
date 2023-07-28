@@ -39,12 +39,14 @@ export default function NostrWallet() {
     const [showSentModal, setShowSentModal] = useState(false)
     const [sentTxid, setSentTxid] = useState(null)
 
+
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!nostrPublicKey) return
-            const address = getAddressInfoNostr(nostrPublicKey, testnet).address
+            const addr = await getAddressInfoNostr(nostrPublicKey, testnet).address
+
             const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
-            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+            const response = await axios.get(`${mempoolUrl}/address/${addr}/utxo`)
             const tempInscriptionsByUtxo = {}
             console.log('response.data', response.data)
             setOwnedUtxos(response.data)
