@@ -5,8 +5,19 @@ import imageCompression from 'browser-image-compression';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 
 
-const acceptedFileTypes =
-  'image/apng, image/gif, image/jpeg, image/jpg, image/png, image/svg+xml, image/webp, .html, .txt, audio/flac, audio/mpeg, audio/wav, video/webm, application/pdf';
+const acceptedFileTypes = {
+  'image/*': ['.apng', '.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp', '.avif'],
+  'text/*': ['.html', '.txt', '.css', '.js', '.md'],
+  'audio/*': ['.flac', '.mpeg', '.wav'],
+  'video/*': ['.webm', '.mp4'],
+  'application/pdf': ['.pdf'],
+  'application/json': ['.json'],
+  'application/pgp-signature': ['.pgp'],
+  'application/yaml': ['.yaml'],
+  'model/gltf-binary': ['.gltf'],
+  'model/stl': ['.stl']
+};
+
 
 const FileUpload = (props) => {
 
@@ -42,10 +53,10 @@ const FileUpload = (props) => {
     const file = acceptedFiles[0];
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (!acceptedFileTypes.includes(fileExtension)) {
-      alert('Unsupported file type. Please upload a supported file.');
-      return;
-    }
+    // if (!acceptedFileTypes.includes(fileExtension)) {
+    //   alert('Unsupported file type. Please upload a supported file.');
+    //   return;
+    // }
 
 
     const sizeLimit = 700000;
