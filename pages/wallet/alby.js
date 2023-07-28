@@ -58,12 +58,21 @@ export default function NostrWallet() {
                 try {
                     const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
                     const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
-                    const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
-                    const [txid, vout] = inscriptionId.split('i')
-                    currentUtxo = { txid, vout }
+                    const match = res.data.match(/<a href=\/inscription\/(.*?)>/);
+                    const inscriptionId = match ? match[1] : null;
+
+                    if (inscriptionId) {
+                        const [txid, vout] = inscriptionId.split('i')
+                        currentUtxo = { txid, vout }
+                    } else {
+                        console.log('Match not found');
+                        // handle the case when match is not found
+                    }
+
                 } catch (err) {
                     console.log(`Error from explorer.ordimint.com: ${err}`)
                 }
+
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
                 const newInscriptionsByUtxo = {}
                 Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)

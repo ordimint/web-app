@@ -11,7 +11,7 @@ const InscriptionsDetails = (props) => {
 
     useEffect(() => {
         getInscriptionData(props.utxo)
-    }, [testnet])
+    }, [testnet, props.utxo])
 
     async function getInscriptionData(utxo) {
         if (testnet) return

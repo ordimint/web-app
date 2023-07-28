@@ -15,7 +15,7 @@ const TextInput = (props) => {
                 }
                 autoFocus={true}
                 className="m-3"
-                id="exampleFormControlTextarea1"
+                id="exampleFormControlTextarea2"
                 rows="12" />
         </div>
     )

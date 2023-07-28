@@ -34,6 +34,7 @@ const Header = (props) => {
                                 src="/media/logo.png"
                                 width={130}
                                 height={50}
+                                priority={false}
                                 className="d-inline-block align-top align-start"
                                 alt="Ordimint Brand Logo"
                             />

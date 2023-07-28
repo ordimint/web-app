@@ -19,7 +19,7 @@ export default function UtxoModal({
       <Modal.Header closeButton className="p-4">
         <Modal.Title>{shortenStr(currentUtxo && `${currentUtxo.txid}:${currentUtxo.vout}`)}:{currentUtxo && currentUtxo.vout}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="modal-body p-4" style={{ border: "0px;" }}>
+      <Modal.Body className="modal-body p-4" style={{ border: "0px" }}>
         <div className="modal-preview-in-utxomodal">
           {currentUtxo && <UtxoImage utxo={currentUtxo} testnet={testnet} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
         </div>
