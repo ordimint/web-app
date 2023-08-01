@@ -40,20 +40,23 @@ const Header = (props) => {
                         </div>
                     </div>
 
-                    <Link href="/">
-                        <Navbar.Brand>
+                    <Link href="/" style={{ zIndex: 5 }}  >
+                        <Navbar.Brand  >
                             <Image
                                 src="/media/logo.png"
                                 width={130}
                                 height={50}
-                                style={{ zIndex: 5 }}
+
                                 priority={false}
                                 className="d-inline-block align-top align-start "
                                 alt="Ordimint Brand Logo"
                             />
                         </Navbar.Brand>
                     </Link>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{ zIndex: 5 }} />
+
                     <Navbar.Offcanvas
                         id="responsive-navbar-nav"
                         aria-labelledby="offcanvasNavbarLabel-expand-nav"
@@ -95,9 +98,6 @@ const Header = (props) => {
 
                                         Market
                                     </a>
-
-
-
                                 </Nav.Item> */}
                                 <Nav.Item>
 
