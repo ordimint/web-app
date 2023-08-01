@@ -32,6 +32,7 @@ export default function ConfirmationModal({
   privateKey,
   testnet,
   ordimintPubkey,
+  unisatPublicKey,
 }) {
   function toXOnly(key) {
     if (key.length === 33) {
@@ -49,6 +50,7 @@ export default function ConfirmationModal({
 
     if (nostrPublicKey) {
       inputAddressInfo = getAddressInfoNostr(nostrPublicKey, testnet)
+      console.log("inputAddressInfo nostr", inputAddressInfo)
     }
 
     if (ledgerPublicKey) {
@@ -61,6 +63,10 @@ export default function ConfirmationModal({
     if (ordimintPubkey) {
       inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(ordimintPubkey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
       console.log("Adress Info Ordimint Address info", inputAddressInfo)
+    }
+    if (unisatPublicKey) {
+      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(unisatPublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+      console.log("Adress Info Unisat Address info", inputAddressInfo)
     }
 
     const psbt = new bitcoin.Psbt({ network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
@@ -77,9 +83,13 @@ export default function ConfirmationModal({
     }
 
     if (ordimintPubkey) {
-
       publicKey = Buffer.from(ordimintPubkey, 'hex');
       console.log("Public Key Ordimint:", publicKey);
+    }
+
+    if (unisatPublicKey) {
+      publicKey = Buffer.from(unisatPublicKey, 'hex');
+      console.log("Public Key Unisat:", publicKey);
     }
 
     const inputParams = {
@@ -120,14 +130,10 @@ export default function ConfirmationModal({
       psbt.updateInput(0, {
         tapKeySig: serializeTaprootSignature(Buffer.from(sig, 'hex'))
       })
-
-
-
       psbt.finalizeAllInputs()
       const tx = psbt.extractTransaction()
       hex = tx.toBuffer().toString('hex')
       fullTx = bitcoin.Transaction.fromHex(hex)
-
       const decodedTx = bitcoin.Transaction.fromHex(hex);
       console.log("Decoded transaction:", decodedTx);
       console.log(hex)
@@ -144,6 +150,42 @@ export default function ConfirmationModal({
       hex = await signLedger(psbt, txData)
       fullTx = bitcoin.Transaction.fromHex(hex)
     }
+
+    if (unisatPublicKey) {
+
+      const psbtForUnisat = psbt.toHex()
+
+      try {
+
+        const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat, { autoFinalized: true });
+        console.log("Signed PSBT Hex:", signedPsbtHex);
+
+        psbt.updateInput(0, {
+          tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
+        })
+
+        psbt.finalizeAllInputs();
+        // const tx = signedPsbt.extractTransaction();
+        // hex = signedPsbtHex.toBuffer().toString('hex');
+        // fullTx = bitcoin.Transaction.fromHex(signedPsbtHex);
+        // Create a PSBT object from the hex string
+        // const signedPsbt = bitcoin.Psbt.fromHex(signedPsbtHex);
+
+        // Extract the transaction from the PSBT
+        // const tx = signedPsbt.extractTransaction();
+
+        // Get the raw hex string of the transaction
+        // const hex = tx.toHex();
+
+        // Log the hex string
+        // console.log(hex);
+
+        console.log(hex);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
 
 
 

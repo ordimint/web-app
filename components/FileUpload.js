@@ -144,7 +144,7 @@ const FileUpload = (props) => {
             <div className="form-check">
               <input className="form-check-input" type="checkbox"
                 label="Compress image"
-                custom
+
                 checked={compressImage}
                 onChange={handleCompressionChange} />
               <label className="form-check-label" htmlFor="checkbox1">

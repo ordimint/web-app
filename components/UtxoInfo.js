@@ -49,7 +49,7 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setCurrentUtxo, setSh
             <Row id="auction-ordinal-row">
               {paginate(ownedUtxos, itemsPerPage, currentPage).map((it) => {
                 return (
-                  <Col sm={2} lg={4} key={it.txid} style={{ marginBottom: '20px' }}>
+                  <Col sm={2} md={4} lg={4} key={it.txid} style={{ marginBottom: '20px' }}>
                     <Card className="hover-pointer gallery-item wallet-card"
                       onClick={() => {
                         setCurrentUtxo(it)
