@@ -388,7 +388,7 @@ function Home() {
 
 
     return (
-        <div className="App" >
+        <div className="App " >
             <Head>
                 <meta name="description" content="Ordimint offers an easy-to-use Wallet and Inscription service for Bitcoin Ordinals, enabling seamless Ordinal management and minting of unique Bitcoin inscriptions." />
                 <title>Ordimint - Inscribe</title>
@@ -416,6 +416,7 @@ function Home() {
                                     onSelect={(k) => setTabKey(k)}
                                     justify
                                     fill
+                                    style={{ border: "none" }}
                                 >
 
                                     <Tab eventKey="file" title="File">
@@ -550,8 +551,8 @@ function Home() {
                                             setOnChainAddress={setOnChainAddress}
                                         />
                                         <div id="wallet-buttons">
-                                            <Button
-                                                className="m-1"
+                                            <button
+                                                className="m-1 use_button"
                                                 onClick={async () => {
                                                     setNostrPublicKey(await connectWallet());
                                                     setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
@@ -561,27 +562,28 @@ function Home() {
                                                 size="md"
                                             >
                                                 <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
-                                            </Button>
+                                            </button>
 
-                                            <Button
-                                                className="m-1"
+                                            <button
+                                                className="m-1 use_button"
                                                 onClick={async () => {
                                                     setLedgerPublicKey(await getLedgerPubkey(false));
                                                     setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
                                                 }}
-                                                variant="success"
+                                                variant="success "
                                                 size="md"
                                             >
                                                 <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
-                                            </Button>
+                                            </button>
                                         </div>
                                         <div>
-                                            <Button onClick={renderSelectWalletModal}
+                                            <button onClick={renderSelectWalletModal}
                                                 variant="success"
                                                 size="md"
+                                                className='use_button'
                                             >
                                                 <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
-                                            </Button>
+                                            </button>
                                         </div>
                                     </div>
                                 )
@@ -604,7 +606,8 @@ function Home() {
                     <Price
                         price={price}
                     />
-                    <Button
+                    <button
+                        className='pay_button'
                         onClick={() => {
                             getInvoice(price);
                             renderAlert(false);
@@ -620,15 +623,14 @@ function Home() {
                         }}
                         variant="success"
                         size="lg"
-                    // disabled
                     >
                         Pay with Lightning
-                    </Button>
+                    </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
                         <p>You get ~3.000 Sats back when you receive the Ordinal.</p>
                     </div>
-                    <Footer />
+
                 </div>
             </Container >
             <AlertModal

@@ -29,7 +29,7 @@ const CollectionThumbnail = (props) => {
 
 
     return (
-        <div>
+        <div >
             {isText ? (
                 <Figure>
 

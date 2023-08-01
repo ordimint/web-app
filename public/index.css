@@ -216,13 +216,28 @@ h2.accordion-header button {
   width: 100%;
 }
 
+#order-id-inputs input {
+  background-color: #101111;
+
+  color: #ffffff;
+  border: 2px solid #6a6b6b;
+}
+
 #order-id-input {
   padding: 10% 0 3% 0;
+  background-color: #1c1d1d;
+  border-radius: 10px;
+  color: #ffffff;
+  border: 2px solid #6a6b6b;
 }
 
 @media screen and (min-width: 420px) {
   #onchain-input input {
     min-width: 350px;
+    background-color: #1c1d1d;
+    border-radius: 10px;
+    color: #ffffff;
+    border: 2px solid #6a6b6b;
     max-width: 400px;
   }
 }
@@ -318,8 +333,10 @@ div.bitcoin-address a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid #dee2e6;
+  border: 2px solid #6a6b6b;
+  background-color: #1e1f20;
   border-radius: 12px;
+  z-index: 5;
   padding: 15px;
 }
 
@@ -355,6 +372,7 @@ div.preview-image-container img {
 @media screen and (max-width: 420px) {
   #tab-container {
     width: 350px;
+    z-index: 5;
   }
 }
 @media screen and (max-width: 768px) {
@@ -371,10 +389,24 @@ div.preview-image-container img {
 }
 
 #tab-container .nav-link {
-  color: white;
+  color: #ffff;
+  background: #313033;
+  z-index: 5;
+
+  padding: 6px 10px;
+  border-radius: 10px;
 }
 #tab-container .nav-link.active {
-  color: black;
+  color: #ffff;
+  background: #f69102;
+  padding: 6px 10px;
+  border-radius: 10px;
+  z-index: 5;
+  border: solid 2px #f5b051;
+}
+
+.form-check-input {
+  color: #f69102;
 }
 
 #text-input-container {
@@ -392,6 +424,10 @@ div.preview-image-container img {
 
 #text-input-container textarea {
   width: 100%;
+  background-color: #1c1d1d;
+  color: #fff;
+  border: 2px solid #6a6b6b;
+  border-radius: 10px;
 }
 
 #file-upload-selector {
@@ -462,6 +498,13 @@ div.wallet-card {
   margin: 30px;
 }
 
+#domain-input-field input {
+  background-color: #1c1d1d;
+  border-radius: 10px 0 0 10px;
+  color: #ffffff;
+  border: 2px solid #6a6b6b;
+}
+
 .available {
   color: forestgreen;
 }
@@ -499,6 +542,16 @@ div.wallet-card {
   width: 100%;
 }
 
+.news-input-group input {
+  background-color: #1c1d1d;
+  color: #fff;
+  border: 2px solid #6a6b6b;
+}
+.news-input-group textarea {
+  background-color: #1c1d1d;
+  color: #fff;
+  border: 2px solid #6a6b6b;
+}
 span.input-group-text.required .required:after {
   content: "*";
   color: red;
@@ -530,8 +583,12 @@ span.input-group-text.required .required:after {
 }
 #tab-container {
   height: 100%;
+  z-index: 5;
+  opacity: 0.8;
+
   text-align: center;
-  border: 1px solid #dee2e6;
+  border: 2px solid #6a6b6b;
+  background-color: #1e1f20;
   border-radius: 12px;
   padding: 15px;
 }
@@ -565,6 +622,9 @@ span.input-group-text.required .required:after {
 #wallet-connect-cards .card {
   width: 300px;
   height: 280px;
+  background-color: #1e1f20;
+  border: 2px solid #676767;
+  border-radius: 10px;
 }
 
 #wallet-buttons {
@@ -594,12 +654,22 @@ span.input-group-text.required .required:after {
   margin-top: 20px;
   display: flex;
   flex-direction: row;
+
   justify-content: center;
   align-items: center;
   align-content: center;
   flex-wrap: wrap;
 }
+.pagination .page-item .page-link {
+  color: #fff;
+  background-color: #1e1f20;
+}
 
+.pagination .page-item.active .page-link {
+  background-color: #f69102;
+  border-color: #f69102;
+  color: #ffff;
+}
 /* CollectionsCatalog.css */
 .collections-catalog {
   padding: 1rem;
@@ -612,6 +682,9 @@ span.input-group-text.required .required:after {
 .search-input {
   max-width: 300px;
 }
+.search-input input {
+  background-color: #0f1010;
+}
 
 .collection-link {
   text-decoration: none;
@@ -619,10 +692,10 @@ span.input-group-text.required .required:after {
 }
 
 .collection-card {
-  border: 1px solid #ccc;
   border-radius: 5px;
   padding: 1rem;
-  background-color: white;
+  background-color: #1e1f20;
+  border: 2px solid #676767;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -638,6 +711,8 @@ span.input-group-text.required .required:after {
 #info-text-home-bottom {
   text-align: center;
   display: flex;
+  color: #888889;
+  margin-bottom: 100px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -663,16 +738,31 @@ span.input-group-text.required .required:after {
   border: none;
 }
 .toggle-button-custom label {
-  --bs-btn-color: white;
-  --bs-btn-bg: black;
-  --bs-btn-border-color: white;
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #242526;
+  --bs-btn-border: solid 2px;
+  --bs-btn-border-color: none;
+  --bs-btn-active-bg: #f69102;
+  --bs-btn-active-color: #fff;
+}
+.toggle-button-custom2 label {
+  background-color: #30291d;
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #242526;
+  --bs-btn-border: solid 1px;
+  --bs-btn-border-color: #f69102;
+  --bs-btn-active-border-color: #f69102;
+  --bs-btn-active-bg: #f69102;
+  --bs-btn-active-color: #fff;
 }
 
 #inscription-number-selection {
   width: 100%;
 
-  border: 1px solid #dee2e6;
+  border: 2px solid #6a6b6b;
+  background-color: #1e1f20;
   border-radius: 12px;
+  z-index: 5;
   padding: 15px;
   margin: 0px 0px 10px 0px;
   text-align: center;
@@ -709,9 +799,11 @@ span.input-group-text.required .required:after {
   max-width: 450px;
   padding: 15px;
   margin-top: 10px;
-  border: 1px solid #dee2e6;
+  border: 2px solid #6a6b6b;
+  background-color: #1e1f20;
   border-radius: 12px;
   text-align: center;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -782,6 +874,7 @@ span.input-group-text.required .required:after {
 
 #create-offer-content {
   border: 1px solid #dee2e6;
+
   border-radius: 12px;
 }
 
@@ -803,6 +896,13 @@ span.input-group-text.required .required:after {
 #mobile-menu div.container {
   padding-right: 0;
 }
+
+.app_bg {
+  background: rgba(17, 18, 19, 1);
+  min-height: 100vh;
+  overflow: hidden;
+  z-index: auto;
+}
 .nav-row {
   display: flex;
   flex-direction: row;
@@ -810,12 +910,157 @@ span.input-group-text.required .required:after {
   justify-content: space-between;
 }
 
+.active_nav {
+  border-radius: 10px;
+  background: #5b545c;
+  padding: 10px 15px;
+  color: #ffff;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 800;
+}
+.active_nav:hover {
+  color: #ffff;
+  font-size: 16px;
+}
+
+.inactive_nav {
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 10px 15px;
+  color: #ffff;
+  text-decoration: none;
+  font-weight: 800;
+}
+.inactive_nav:hover {
+  color: #ffff;
+}
+
+.nav_button {
+  color: #ffffff;
+  background: #242526;
+  text-decoration: none;
+  border: 2px solid #6a6b6b;
+  font-size: 16px;
+  padding: 10px 15px;
+
+  border-radius: 10px;
+}
+
+.nav_button:hover {
+  color: #ffffff;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: red;
+  border-color: red;
+}
+
+.glow {
+  border-radius: 560px;
+  opacity: 0.6000000238418579;
+  background: #500e49;
+  filter: blur(280px);
+}
 @media (min-width: 768px) {
   .navbar-nav {
     align-items: center;
   }
 }
-=======
+
+
+.use_button {
+  background: #303133;
+  padding: 7px 14px;
+  color: #ffffff;
+  border-radius: 10px;
+
+  border: none;
+}
+
+.col_click {
+  z-index: 20;
+}
+.pay_button {
+  background: #f69102;
+  padding: 9px 15px;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.active_link:hover {
+  color: #f69102;
+}
+.custom-radio[type="radio"] {
+  /* Set the desired background color for the unchecked state */
+  background-color: #ffff; /* Replace with your desired color */
+
+  /* Additional styling to customize the appearance of the radio button */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%; /* Make it round to create a circular radio button */
+  margin-right: 8px;
+}
+
+/* You may want to style the radio button differently when it's checked */
+.custom-radio[type="radio"]:checked {
+  background-color: #f69102; /* Replace with your desired color for the checked state */
+}
+
+.form-check-label {
+  margin-right: 15px;
+  font-size: 14px;
+}
+.connect_button {
+  background: #f69102;
+  padding: 9px 12px;
+  color: #ffffff;
+  border: none;
+  width: 180px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.form-check-input[type="checkbox"] {
+  background-color: #fff;
+}
+
+/* You may want to style the checkbox differently when it's checked */
+.form-check-input[type="checkbox"]:checked {
+  background-color: #f69102;
+}
+
+.custom_border {
+  border: 2px solid red;
+}
+
+.link_text {
+  color: #888889;
+  text-decoration: none;
+}
+
+.link_text:hover {
+  color: #f69102;
+  z-index: 5;
+}
+
+.list_group {
+  color: #fff !important;
+  background-color: #000 !important;
+}
+#myAccordion {
+  --bs-accordion-color: #fff;
+  --bs-accordion-header-color: #fff;
+  --bs-accordion-bg: #000;
+  --bs-accordion-btn-color: #fff;
+  --bs-accordion-btn-active-color: #000;
+}
+.accordion-button:not(.collapsed) {
+  color: #000;
+}
+
 #mobile-menu div.container {
   padding-right: 0;
 }

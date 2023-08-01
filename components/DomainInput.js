@@ -29,7 +29,7 @@ const DomainInput = (props) => {
                     <InputGroup.Text id="basic-addon2">.sats</InputGroup.Text>
                 </InputGroup>
 
-                <p><a href="https://docs.sats.id/sats-names/about" target="_blank" rel="noopener noreferrer" >Learn more about Sats Names</a></p>
+                <p><a href="https://docs.sats.id/sats-names/about" className='active_link' target="_blank" rel="noopener noreferrer" >Learn more about Sats Names</a></p>
             </div>
         </div>
     )
