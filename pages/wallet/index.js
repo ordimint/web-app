@@ -4,10 +4,10 @@ import { Card, Button } from 'react-bootstrap';
 import LedgerWallet from './ledger';
 import { useState, useEffect } from 'react'
 import Footer from '../../components/Footer'
-// import OrdimintWallet from '../components/OrdimintWallet';
+
 import Head from 'next/head';
 import Link from 'next/link';
-import TestnetSwicht from '../../components/TestnetSwitch';
+
 
 const WalletPage = () => {
 
@@ -87,6 +87,26 @@ const WalletPage = () => {
                                     onClick={() => {
                                         setSelectedWallet(true)
                                         setWallet("ledger")
+
+                                    }
+                                    }
+
+                                >Connect</Button>
+                            </Link>
+                        </Card.Body>
+                    </Card>
+                    <Card className='m-2'>
+                        <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
+                        <Card.Body>
+                            <Card.Title>Unisat</Card.Title>
+                            <Card.Text>
+                                Connect with your Unisat browser wallet.
+                            </Card.Text>
+                            <Link href="/wallet/unisat">
+                                <Button variant="primary"
+                                    onClick={() => {
+                                        setSelectedWallet(true)
+                                        setWallet("unisat")
 
                                     }
                                     }
