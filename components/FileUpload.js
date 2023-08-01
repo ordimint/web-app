@@ -135,7 +135,7 @@ const FileUpload = (props) => {
               <p>
 
                 {' '}
-                Drag and drop a file here, or click to select a file you want to inscribe.</p>
+                Drag and drop a file here, or click to <br /> select a file you want to inscribe.</p>
             </>
           )}
         </div>
