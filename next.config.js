@@ -31,6 +31,6 @@ module.exports = withTM({
             },
         ]
     }, images: {
-        domains: ['explorer.ordimint.com'],
+        domains: ['explorer.ordimint.com', 'testnet.ordimint.com'],
     },
 });

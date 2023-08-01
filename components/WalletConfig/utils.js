@@ -1,8 +1,7 @@
 import * as bitcoin from 'bitcoinjs-lib'
 import * as ecc from 'tiny-secp256k1'
 
-
-import { TESTNET, ASSUMED_TX_BYTES } from './constance'
+import { ASSUMED_TX_BYTES } from './constance'
 
 bitcoin.initEccLib(ecc)
 
@@ -10,12 +9,14 @@ export const outputValue = (currentUtxo, sendFeeRate) => {
   return currentUtxo.value - sendFeeRate * ASSUMED_TX_BYTES
 }
 
-export const ordinalsUrl = (utxo) => {
-  return `https://explorer.ordimint.com/output/${utxo.txid}:${utxo.vout}`
+export const ordinalsUrl = (utxo, testnet) => {
+  const baseUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+  return `${baseUrl}/output/${utxo.txid}:${utxo.vout}`;
 }
 
-export const ordinalsImageUrl = (utxo) => {
-  return `https://explorer.ordimint.com/content/${utxo.txid}i${utxo.vout}`
+export const ordinalsImageUrl = (utxo, testnet) => {
+  const baseUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+  return `${baseUrl}/content/${utxo.txid}i${utxo.vout}`;
 }
 
 export const cloudfrontUrl = (utxo) => {
@@ -27,11 +28,9 @@ export const shortenStr = (str) => {
   return str.substring(0, 8) + "..." + str.substring(str.length - 8, str.length)
 }
 
-export const getAddressInfoNostr = (nostrPublicKey) => {
-  // console.log(`Nostr pub: ${nostrPublicKey}`)
+export const getAddressInfoNostr = (nostrPublicKey, testnet) => {
   const pubkeyBuffer = Buffer.from(nostrPublicKey, 'hex')
-  // console.log(`pubkeyBuffer: ${pubkeyBuffer}`)
-  const addrInfo = bitcoin.payments.p2tr({ pubkey: pubkeyBuffer, network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+  const addrInfo = bitcoin.payments.p2tr({ pubkey: pubkeyBuffer, network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
   return addrInfo
 }
 

@@ -1,11 +1,10 @@
 import React from 'react'
 import { useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
-import AuctionCountdown from '../../components/AuctionCountdown'
 import { io } from "socket.io-client";
 import AuctionModal from '../../components/modals/AuctionModal'
 import AuctionContainer from '../../components/AuctionContainer';
-
+import TestnetSwitch from '../../components/TestnetSwitch';
 
 var socket = io.connect(process.env.REACT_APP_socket_port_auctions);
 var clientPaymentHash;
@@ -24,37 +23,16 @@ const AuctionsPage = () => {
     const [price, setPrice] = useState(2);
 
 
-    socket.off("connect").on("connect", () => {
-        /////Checks for already paid invoice if browser switche tab on mobile
-
-    });
-
-    const getAuction = (price) => {
-        socket.emit("getAuction", price);
-
-    }
-    //////Updates the QR-Code
-    const updatePaymentrequest = () => {
-        socket.on("lnbitsAuction", (invoiceData) => {
-            setPaymentrequest(invoiceData.payment_request);
-            clientPaymentHash = invoiceData.payment_hash;
-
-        });
-    };
-
-
     return (
         <div className='main-middle'>
             <h1 className=" py-3">Marketplace</h1>
-            {/* <AuctionCountdown /> */}
+            <TestnetSwitch />
             <Container fluid>
                 <Row className='m-2'>
                     <Col>
                         <Button
                             onClick={() => {
-                                getAuction(price);
                                 showAuctionModal();
-                                updatePaymentrequest();
                                 isPaid = false;
                             }}
                             price={price}

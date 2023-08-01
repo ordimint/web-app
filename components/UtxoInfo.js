@@ -3,7 +3,8 @@ import { TailSpin } from 'react-loading-icons'
 import { Row, Col, Card, Container, Button } from 'react-bootstrap';
 import UtxoImage from './UtxoImage';
 import InscriptionsDetails from './InscriptionsDetails';
-export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, setCurrentUtxo, inscriptionUtxosByUtxo }) {
+
+export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, setCurrentUtxo, inscriptionUtxosByUtxo, testnet }) {
   if (!utxosReady) return (<>
     <p>Wallet loading...</p>
     <br /><br />
@@ -48,13 +49,20 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setShowUtxoModal, set
                             :
                             <>
 
-                              <UtxoImage utxo={it} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />
+                              <UtxoImage
+                                utxo={it}
+                                inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
+                                testnet={testnet}
+                              />
 
                             </>
                         }
 
                       </Card.Body>
-                      <InscriptionsDetails utxo={it} />
+                      <InscriptionsDetails
+                        testnet={testnet}
+                        utxo={it}
+                      />
                       <div className='wallet-card-button'>
                         <Button >Details</Button>
                       </div>

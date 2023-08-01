@@ -2,11 +2,10 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import UtxoImage from '../UtxoImage';
-import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/esm/Container';
 import { serializeTaprootSignature } from "bitcoinjs-lib/src/psbt/bip371.js";
 import { outputValue, getAddressInfoNostr } from '../WalletConfig/utils';
-import { TESTNET } from '../WalletConfig/constance';
+
 import * as bitcoin from 'bitcoinjs-lib'
 import * as ecc from 'tiny-secp256k1'
 import { getAddressInfoLedger, signLedger } from '../WalletConfig/connectLedger';
@@ -31,6 +30,7 @@ export default function ConfirmationModal({
   destinationBtcAddress,
   inscriptionUtxosByUtxo,
   privateKey,
+  testnet,
   ordimintPubkey,
 }) {
   function toXOnly(key) {
@@ -48,22 +48,22 @@ export default function ConfirmationModal({
     var inputAddressInfo, publicKey, sig, txHex, fullTx, hex;
 
     if (nostrPublicKey) {
-      inputAddressInfo = getAddressInfoNostr(nostrPublicKey)
+      inputAddressInfo = getAddressInfoNostr(nostrPublicKey, testnet)
     }
 
     if (ledgerPublicKey) {
-      inputAddressInfo = await getAddressInfoLedger(ledgerPublicKey, false)
-      txHex = await axios.get(`https://mempool.space/api/tx/${currentUtxo.txid}/hex`)
+      inputAddressInfo = await getAddressInfoLedger(ledgerPublicKey, false, testnet)
+      txHex = await axios.get(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx/${currentUtxo.txid}/hex`);
       // console.log("inputAddressInfo redeem output", inputAddressInfo)
       // console.log("txHex", txHex)
     }
 
     if (ordimintPubkey) {
-      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(ordimintPubkey, 'hex')) })
+      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(ordimintPubkey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
       console.log("Adress Info Ordimint Address info", inputAddressInfo)
     }
 
-    const psbt = new bitcoin.Psbt({ network: TESTNET ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+    const psbt = new bitcoin.Psbt({ network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
 
     if (nostrPublicKey) {
       publicKey = Buffer.from(await window.nostr.getPublicKey(), 'hex')
@@ -147,11 +147,11 @@ export default function ConfirmationModal({
 
 
 
-    const res = await axios.post(`https://mempool.space/api/tx`, hex).catch(err => {
-      console.error(err)
-      // alert(err)
-      return null
-    })
+    const res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
+      console.error(err);
+      return null;
+    });
+
     if (!res) return false
 
     setSentTxid(fullTx.getId())
@@ -177,7 +177,7 @@ export default function ConfirmationModal({
         <Container fluid>
           <div className='send-confirmation'>
             <div className='modal-preview-in-utxomodal'>
-              {currentUtxo && <UtxoImage utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+              {currentUtxo && <UtxoImage utxo={currentUtxo} testnet={testnet} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
             </div>
             <b>Sending:</b>
             <div className='bitcoin-address'>

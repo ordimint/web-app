@@ -16,10 +16,11 @@ import axios from 'axios';
 import OrdimintWalletInfo from '../../components/modals/OrdimintWalletInfo';
 import GenerateWalletModal from '../../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../../components/modals/RestoreWalletModal';
-import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
-import { generateWallet, restoreWallet } from '../../components/WalletConfig/ordimintWalletFunctions';
+import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import { generateWallet, restoreWallet, getOrdimintAddress } from '../../components/WalletConfig/ordimintWalletFunctions';
 import Footer from '../../components/Footer';
-
+import { TestnetContext } from '../../contexts/TestnetContext';
+import TestnetSwitch from '../../components/TestnetSwitch';
 // const ECPair = ECPairFactory(ecc);
 // const bip39 = require('bip39');
 // const { BIP32Factory } = require('bip32')
@@ -31,6 +32,7 @@ import Footer from '../../components/Footer';
 
 
 const OrdimintWallet = () => {
+    const { testnet } = React.useContext(TestnetContext);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     const [privateKey, setPrivateKey] = useState(null);
     const [address, setAddress] = useState(null);
@@ -68,7 +70,13 @@ const OrdimintWallet = () => {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!address) return
-            const response = await axios.get(`https://mempool.space/api/address/${address}/utxo`)
+
+            const addr = await getOrdimintAddress(ordimintPubkey, testnet)
+            setAddress(addr)
+
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const response = await axios.get(`${mempoolUrl}/address/${addr}/utxo`)
+
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
@@ -79,7 +87,8 @@ const OrdimintWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
@@ -96,11 +105,13 @@ const OrdimintWallet = () => {
             setUtxosReady(true)
         }
 
-        fetchUtxosForAddress()
-    }, [ordimintPubkey, address]);
 
-    const handleGenerateWallet = async () => {
-        const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet();
+        fetchUtxosForAddress()
+
+    }, [ordimintPubkey, address, testnet]);
+
+    const handleGenerateWallet = async (testnet) => {
+        const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet(testnet);
         setPrivateKey(newPrivateKey);
         setAddress(newAddress);
         setSeedPhrase(mnemonic);
@@ -108,9 +119,9 @@ const OrdimintWallet = () => {
         handleGenerateWalletModalShow();
     };
 
-    const handleRestoreWallet = async (event) => {
+    const handleRestoreWallet = async (event, testnet) => {
         try {
-            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event);
+            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event, testnet);
             setAddress(restoredAddress);
             setPrivateKey(restoredPrivateKey);
             setOrdimintPubkey(restoredPubkey);
@@ -136,6 +147,7 @@ const OrdimintWallet = () => {
             </Container>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+                <TestnetSwitch />
                 <h1 className='m-3'>Ordimint Wallet</h1>
                 {
                     address ?
@@ -156,7 +168,7 @@ const OrdimintWallet = () => {
 
                                 </Alert>
                                 <div className="d-flex justify-content-evenly">
-                                    <Button variant="primary" onClick={handleGenerateWallet}>Generate Wallet</Button>
+                                    <Button variant="primary" onClick={() => handleGenerateWallet(testnet)}>Generate Wallet</Button>
 
                                     <Button variant="secondary" onClick={handleRestoreWalletModalShow}>Restore Wallet</Button>
                                 </div>
@@ -174,6 +186,7 @@ const OrdimintWallet = () => {
                 {address &&
                     <div>
                         <UtxoInfo
+                            testnet={testnet}
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
                             setShowUtxoModal={setShowUtxoModal}
@@ -189,7 +202,7 @@ const OrdimintWallet = () => {
             <RestoreWalletModal
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
-                restoreWallet={(e) => handleRestoreWallet(e)}
+                restoreWallet={(e) => handleRestoreWallet(e, testnet)}
             // setOrdimintPubkey={setOrdimintPubkey}
             // setAddress={setAddress}
             // setPrivateKey={setPrivateKey}
@@ -204,6 +217,7 @@ const OrdimintWallet = () => {
             />
 
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 ordimintAddress={address}
@@ -214,6 +228,7 @@ const OrdimintWallet = () => {
                 setShowUtxoModal={setShowUtxoModal}
                 showUtxoModal={showUtxoModal}
                 currentUtxo={currentUtxo}
+                testnet={testnet}
                 SENDS_ENABLED={SENDS_ENABLED}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
@@ -225,11 +240,12 @@ const OrdimintWallet = () => {
                 setDestinationBtcAddress={setDestinationBtcAddress}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 isBtcInputAddressValid={isBtcInputAddressValid}
-                TESTNET={TESTNET}
+                testnet={testnet}
                 setShowUtxoModal={setShowUtxoModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SelectFeeRateModal
+                testnet={testnet}
                 showSelectFeeRateModal={showSelectFeeRateModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 currentUtxo={currentUtxo}
@@ -246,6 +262,7 @@ const OrdimintWallet = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
+                testnet={testnet}
                 ordimintPubkey={ordimintPubkey}
                 privateKey={privateKey}
                 destinationBtcAddress={destinationBtcAddress}
@@ -253,6 +270,7 @@ const OrdimintWallet = () => {
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SentModal
+                testnet={testnet}
                 showSentModal={showSentModal}
                 setShowSentModal={setShowSentModal}
                 sentTxid={sentTxid}

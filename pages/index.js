@@ -1,9 +1,9 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useContext } from 'react';
 import { io } from "socket.io-client";
 import FileUpload from '../components/FileUpload';
 import OnchainInput from '../components/OnchainInput';
 import InvoiceModal from '../components/modals/InvoiceModal';
-import { validate } from 'bitcoin-address-validation';
+import { validate, Network } from 'bitcoin-address-validation'
 import Footer from '../components/Footer';
 import Image from 'next/image';
 import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
@@ -27,8 +27,10 @@ import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
-import InscriptionNumberSwitch from '../components/InscriptionNumberSwitch';
+import TestnetSwitch from '../components/TestnetSwitch';
 import BRCPreviewModal from '../components/modals/BRCPreviewModal';
+import { TestnetContext } from '../contexts/TestnetContext';
+
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -40,7 +42,7 @@ const outputCostText = process.env.REACT_APP_output_cost_text;
 const outputCostDomain = process.env.REACT_APP_output_cost_domain;
 const outputCostNews = process.env.REACT_APP_output_cost_news;
 const outputCostBRC = process.env.REACT_APP_output_cost_brc;
-
+const outputCostTestnet = process.env.REACT_APP_output_cost_testnet;
 const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
@@ -112,7 +114,7 @@ function Home() {
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     /////Inscription number + or -
-    const [positiveInscriptionNumber, setPositiveInscriptionNumber] = useState(true);
+    const { testnet } = useContext(TestnetContext);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
 
@@ -125,7 +127,7 @@ function Home() {
 
     const handleGenerateWallet = async () => {
         try {
-            const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet();
+            const { newPrivateKey, newAddress, mnemonic, newOrdimintPubkey } = await generateWallet(testnet);
             setPrivateKey(newPrivateKey);
             setOrdimintPubkey(newOrdimintPubkey);
             setOnChainAddress(newAddress);
@@ -139,9 +141,9 @@ function Home() {
 
     };
 
-    const handleRestoreWallet = async (event) => {
+    const handleRestoreWallet = async (event, testnet) => {
         try {
-            const { restoredAddress, restoredPubkey } = await restoreWallet(event);
+            const { restoredAddress, restoredPubkey } = await restoreWallet(event, testnet);
             setOrdimintPubkey(restoredPubkey);
             setOnChainAddress(restoredAddress);
             await handleRestoreWalletModalClose();
@@ -155,20 +157,26 @@ function Home() {
 
 
     useEffect(() => {
-        const outputCosts = {
-            file: outputCostPicture,
-            text: outputCostText,
-            news: outputCostNews,
-            domain: outputCostDomain,
-            brc: outputCostBRC,
-        };
+        if (testnet === true) {
+            setPrice(outputCostTestnet);
+        }
+        else {
 
-        const newPrice = outputCosts[tabKey]
-            ? Math.trunc(((fileSize / 4) + 150) * fee * securityBuffer) + parseInt(outputCosts[tabKey])
-            : 30000;
+            const outputCosts = {
+                file: outputCostPicture,
+                text: outputCostText,
+                news: outputCostNews,
+                domain: outputCostDomain,
+                brc: outputCostBRC,
+            };
 
-        setPrice(newPrice);
-    }, [fileSize, fee, tabKey]);
+            const newPrice = outputCosts[tabKey]
+                ? Math.trunc(((fileSize / 4) + 150) * fee * securityBuffer) + parseInt(outputCosts[tabKey])
+                : 30000;
+
+            setPrice(newPrice);
+        }
+    }, [fileSize, fee, tabKey, testnet]);
 
     ///////Successfull payment alert
     const renderAlert = (show) => {
@@ -209,10 +217,10 @@ function Home() {
 
     //Get the invoice
     const getInvoice = (price) => {
-        if (validate(onChainAddress) === false) {
+        if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
             showAlertModal({
                 show: true,
-                text: "Please provide a valid BTC address",
+                text: `Please provide a valid ${testnet ? 'Testnet' : ''} BTC address`,
                 type: "danger",
             });
         } else if (file === null && tabKey === 'file') {
@@ -272,17 +280,17 @@ function Home() {
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, textInput, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, domainString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -301,7 +309,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, newsString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee);
             }
             if (tabKey === 'brc') {
                 var brcString = "";
@@ -316,7 +324,7 @@ function Home() {
                     brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, positiveInscriptionNumber, brcString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee);
 
             }
 
@@ -341,22 +349,41 @@ function Home() {
     useEffect(() => {
         if (!ledgerPublicKey) return
         async function getLedgerAddress() {
-            await setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address)
+            await setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address)
         }
         getLedgerAddress()
 
-    }, [ledgerPublicKey])
+    }, [ledgerPublicKey, testnet])
 
     useEffect(() => {
         if (!ledgerPublicKey) return
         async function verifyAddress() {
             setShowWalletConnectModal(true)
-            await getAddressInfoLedger(ledgerPublicKey, true)
+            await getAddressInfoLedger(ledgerPublicKey, true, testnet)
 
         }
         verifyAddress()
 
     }, [onChainAddress, ledgerPublicKey])
+
+    useEffect(() => {
+        if (!ordimintPubkey) return;
+        async function getOrdimintAddressAsync() {
+            const address = await getOrdimintAddress(ordimintPubkey, testnet);
+            setOnChainAddress(address);
+        }
+        getOrdimintAddressAsync();
+    }, [ordimintPubkey, testnet]);
+
+    useEffect(() => {
+        if (!nostrPublicKey) return;
+        async function getNostrAddressAsync() {
+            const address = await getAddressInfoNostr(nostrPublicKey, testnet).address;
+            setOnChainAddress(address);
+        }
+        getNostrAddressAsync();
+    }, [nostrPublicKey, testnet]);
+
 
 
 
@@ -392,16 +419,7 @@ function Home() {
                                 >
 
                                     <Tab eventKey="file" title="File">
-                                        {/* <FileUpload
-                                            file={file}
-                                            setFile={setFile}
-                                            setFileSize={setFileSize}
-                                            setFileType={setFileType}
-                                            fileTooBig={fileTooBig}
-                                            fileSize={fileSize}
-                                            setFileName={setFileName}
-                                            fileName={fileName}
-                                        /> */}
+
                                         <FileUpload
                                             file={file}
                                             fileType={fileType}
@@ -410,6 +428,7 @@ function Home() {
                                             setFileType={setFileType}
                                             setFileName={setFileName}
                                             setFileSize={setFileSize}
+                                            testnet={testnet}
                                             fileTooBig={fileTooBig}
                                         />
 
@@ -461,13 +480,13 @@ function Home() {
                             </div>
                         </Col>
                         <Col id="right-side-container">
-                            {/* <div id="inscription-number-selection">
-                                <p>Do you want a positive or negative <br /> Inscription Number?</p>
-                                <InscriptionNumberSwitch
-                                    onChange={(value) => setPositiveInscriptionNumber(value)}
+                            <div id="inscription-number-selection">
+                                <p>Do you want to inscribe on <br /> Mainnet or Testnet?<br /><a href="/faq"> (Ready our FAQ)</a ></p>
+                                <TestnetSwitch
+
                                 />
 
-                            </div> */}
+                            </div>
 
                             {
                                 (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
@@ -477,11 +496,11 @@ function Home() {
                                                 <div className="success-alert-input input-button">
                                                     <p>Your receiver address:</p>
                                                     <OnchainInput
-                                                        onChainAddress={getAddressInfoNostr(nostrPublicKey).address}
+                                                        onChainAddress={onChainAddress}
                                                         setOnChainAddress={setOnChainAddress}
                                                     />
                                                     <WalletConnectModal
-                                                        address={getAddressInfoNostr(nostrPublicKey).address}
+                                                        address={onChainAddress}
                                                         show={showWalletConnectModal}
                                                         handleClose={() => setShowWalletConnectModal(false)}
                                                     />
@@ -535,7 +554,7 @@ function Home() {
                                                 className="m-1"
                                                 onClick={async () => {
                                                     setNostrPublicKey(await connectWallet());
-                                                    setOnChainAddress(await getAddressInfoNostr(await connectWallet()).address);
+                                                    setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
                                                     setShowWalletConnectModal(true);
                                                 }}
                                                 variant="success"
@@ -548,7 +567,7 @@ function Home() {
                                                 className="m-1"
                                                 onClick={async () => {
                                                     setLedgerPublicKey(await getLedgerPubkey(false));
-                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address);
+                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
                                                 }}
                                                 variant="success"
                                                 size="md"
@@ -594,6 +613,10 @@ function Home() {
                             updatePaymentrequest();
                             setSpinner(true);
                             isPaid = false;
+                            window.gtag('event', 'click', {
+                                'event_category': 'Create Order',
+                                'event_label': 'Get Invoice',
+                            });
                         }}
                         variant="success"
                         size="lg"
@@ -603,7 +626,7 @@ function Home() {
                     </Button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
-                        <p>You get ~10.000 Sats back when you receive the Ordinal.</p>
+                        <p>You get ~3.000 Sats back when you receive the Ordinal.</p>
                     </div>
                     <Footer />
                 </div>
@@ -627,6 +650,7 @@ function Home() {
 
             />
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 nostrPublicKey={nostrPublicKey}
@@ -648,7 +672,7 @@ function Home() {
             <SelectWalletModal
                 show={showSelectWalletModal}
                 handleClose={closeSelectWalletModal}
-                handleGenerateWallet={handleGenerateWallet}
+                handleGenerateWallet={() => handleGenerateWallet(testnet)}
                 handleRestoreWallet={() => {
                     closeSelectWalletModal();
                     handleRestoreWalletModalShow()
@@ -664,9 +688,10 @@ function Home() {
             />
 
             <RestoreWalletModal
+                testnet={testnet}
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
-                restoreWallet={(e) => handleRestoreWallet(e)}
+                restoreWallet={(e) => handleRestoreWallet(e, testnet)}
             // setOrdimintPubkey={setOrdimintPubkey}
             // setAddress={setAddress}
             // setPrivateKey={setPrivateKey}

@@ -7,10 +7,13 @@ import Footer from '../../components/Footer'
 // import OrdimintWallet from '../components/OrdimintWallet';
 import Head from 'next/head';
 import Link from 'next/link';
+import TestnetSwicht from '../../components/TestnetSwitch';
+
 const WalletPage = () => {
 
     const [selectedWallet, setSelectedWallet] = useState(false)
     const [wallet, setWallet] = useState("")
+
     return (
 
         <div className='main-middle' >

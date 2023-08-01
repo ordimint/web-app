@@ -5,6 +5,7 @@ import { SSRProvider } from 'react-bootstrap';
 import Header from '../components/Header.js';
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { TestnetProvider } from '../contexts/TestnetContext.js'
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
@@ -30,7 +31,9 @@ export default function MyApp({ Component, pageProps }) {
         <div>
             <Header />
             <SSRProvider>
-                <Component {...pageProps} />
+                <TestnetProvider>
+                    <Component {...pageProps} />
+                </TestnetProvider>
             </SSRProvider>
         </div>
     )

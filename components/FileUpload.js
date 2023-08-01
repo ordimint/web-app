@@ -1,13 +1,26 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { Form, Image } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 
-const acceptedFileTypes =
-  'image/apng, image/gif, image/jpeg, image/jpg, image/png, image/svg+xml, image/webp, .html, .txt, audio/flac, audio/mpeg, audio/wav, video/webm, application/pdf';
+
+const acceptedFileTypes = {
+  'image/*': ['.apng', '.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp', '.avif'],
+  'text/*': ['.html', '.txt', '.css', '.js', '.md'],
+  'audio/*': ['.flac', '.mpeg', '.wav'],
+  'video/*': ['.webm', '.mp4'],
+  'application/pdf': ['.pdf'],
+  'application/json': ['.json'],
+  'application/pgp-signature': ['.pgp'],
+  'application/yaml': ['.yaml'],
+  'model/gltf-binary': ['.gltf'],
+  'model/stl': ['.stl']
+};
+
 
 const FileUpload = (props) => {
+
   const [compressImage, setCompressImage] = useState(true);
   const [originalFile, setOriginalFile] = useState(null);
   const [compressedImageURL, setCompressedImageURL] = useState(null);
@@ -40,12 +53,15 @@ const FileUpload = (props) => {
     const file = acceptedFiles[0];
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (!acceptedFileTypes.includes(fileExtension)) {
-      alert('Unsupported file type. Please upload a supported file.');
-      return;
-    }
+    // if (!acceptedFileTypes.includes(fileExtension)) {
+    //   alert('Unsupported file type. Please upload a supported file.');
+    //   return;
+    // }
 
-    if (acceptedFiles[0].size > 700000) {
+
+    const sizeLimit = 700000;
+
+    if (acceptedFiles[0].size > sizeLimit) {
       props.fileTooBig();
     } else {
       const fileType = acceptedFiles[0].name.split('.').pop();
@@ -61,6 +77,7 @@ const FileUpload = (props) => {
       }
     }
   }, [compressImage]);
+
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -138,54 +155,3 @@ const FileUpload = (props) => {
 };
 
 export default FileUpload;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-// import { useState } from 'react';
-// import { Form, Container, Image } from 'react-bootstrap';
-// const acceptedFileTypes = ".apng, .flac, .gif, .html, .jpg, .mp3, .pdf, .png, .svg, .txt, .wav, .webm, .webp"
-
-// const FileUpload = (props) => {
-//   function handleChange(e) {
-//     if (e.target.files[0].size > 700000) {
-//       props.fileTooBig();
-//     } else {
-//       props.setFileSize(e.target.files[0].size);
-//       props.setFileType(e.target.files[0].name.split('.').pop());
-//       props.setFile(URL.createObjectURL(e.target.files[0]));
-//     }
-//   }
-
-//   return (
-//     <>
-//       <div className='preview-image-container mt-2'>
-//         <Image
-//           fluid="true"
-//           thumbnail="true"
-//           alt="This preview shows up if you want to inscribe a txt,pdf,html,webm,webp,mp3,wav,flac file."
-//           src={props.file}
-//         />
-//         <Form.Group controlId="formFile" className="mt-2 mb-2" id="file-upload-selector">
-//           <Form.Control type="file" onChange={handleChange} accept={acceptedFileTypes} />
-//         </Form.Group>
-//       </div>
-
-//     </>
-
-//   )
-// };
-// export default FileUpload;

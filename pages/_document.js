@@ -18,8 +18,8 @@ class MyDocument extends Document {
                     <link rel="apple-touch-icon" href="/favicon.ico" />
                     <link rel="manifest" href="/manifest.json" />
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-                    <script src='/jquery-3.6.0.min.js'></script>
-                    <script src='/bootstrap.bundle.min.js'></script>
+                    {/* <script src='/jquery-3.6.0.min.js'></script>
+                    <script src='/bootstrap.bundle.min.js'></script> */}
 
                     {GA_ID && (
                         <>

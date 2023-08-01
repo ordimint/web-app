@@ -4,7 +4,7 @@ import { parseTextInscription } from '../../../public/functions/ordinalFunctions
 import { Figure, Button } from 'react-bootstrap'
 import { useState } from 'react'
 
-export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }) {
+export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo, testnet }) {
 
     const [isText, setIsText] = useState(false)
     const [text, setText] = useState("")
@@ -15,11 +15,11 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
             case "ons":
                 return (
                     <>
-                        <h4>News</h4>
+                        <p>News</p>
                         <p><strong>Title:</strong> {jsonData.title}</p>
-                        <p><strong>URL:</strong> <a href={jsonData.url}>{jsonData.url}</a></p>
+                        {/* <p><strong>URL:</strong> <a href={jsonData.url}>{jsonData.url}</a></p>
                         <p><strong>Author:</strong> {jsonData.author}</p>
-                        <p><strong>Body:</strong> {jsonData.body.length > 20 ? jsonData.body.substring(0, 20) + '...' : jsonData.body}</p>
+                        <p><strong>Body:</strong> {jsonData.body.length > 20 ? jsonData.body.substring(0, 20) + '...' : jsonData.body}</p> */}
 
                     </>
                 );
@@ -27,7 +27,7 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
             case "sns":
                 return (
                     <>
-                        <h4>.sats Domain</h4>
+                        <p>.sats Domain</p>
                         <h5>{jsonData.name}</h5>
                     </>
                 );
@@ -37,7 +37,7 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
                     return (
 
                         <>
-                            <h4>BRC-20 {jsonData.op}</h4>
+                            <p>BRC-20 {jsonData.op}</p>
                             <p><strong>Ticker:</strong> {jsonData.tick}</p>
                             <p><strong>Amount:</strong> {jsonData.amt}</p>
                         </>
@@ -47,7 +47,7 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
                     return (
 
                         <>
-                            <h4>BRC-20 {jsonData.op}</h4>
+                            <p>BRC-20 {jsonData.op}</p>
                             <p><strong>Ticker:</strong> {jsonData.tick}</p>
                             <p><strong>Amount:</strong> {jsonData.amt}</p>
                         </>
@@ -58,7 +58,7 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
                     return (
 
                         <>
-                            <h4>BRC-20 {jsonData.op}</h4>
+                            <p>BRC-20 {jsonData.op}</p>
                             <p><strong>Ticker:</strong> {jsonData.tick}</p>
                             <p><strong>Amount:</strong> {jsonData.amt}</p>
                         </>
@@ -72,9 +72,9 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
     }
 
 
-    async function setContentType(utxo) {
+    async function setContentType(utxo, testnet) {
 
-        const contentURL = await ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`])
+        const contentURL = await ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet)
         const response = await fetch(contentURL)
         const contentType = response.headers.get('content-type')
         if (contentType.includes("text")) {
@@ -92,23 +92,23 @@ export default function UtxoImageAuction({ utxo, style, inscriptionUtxosByUtxo }
     }
 
     useEffect(() => {
-        setContentType(utxo)
+        setContentType(utxo, testnet)
     }, [utxo])
 
 
     return (
         <>
             {
-                isText ? (<p className='m-2' >
+                isText ? (<div className='m-2' >
                     {text}
-                </p>) :
+                </div>) :
                     (
                         <Figure>
                             <Figure.Image
                                 className='m-2'
-                                width={150}
+                                width={100}
                                 thumbnail
-                                src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`]) : cloudfrontUrl(utxo)}
+                                src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet) : cloudfrontUrl(utxo)}
                             />
                             <Figure.Caption>
 

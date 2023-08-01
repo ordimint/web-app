@@ -13,14 +13,16 @@ import SentModal from '../../components/modals/SentModal';
 import BeginSendModal from '../../components/modals/BeginSendModal';
 import UtxoModal from '../../components/modals/UtxoModal';
 import UtxoInfo from '../../components/UtxoInfo';
-import { TESTNET, DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 import { getLedgerPubkey, getAddressInfoLedger } from '../../components/WalletConfig/connectLedger';
 import axios from 'axios';
 import { Spinner } from 'react-bootstrap';
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import { TestnetContext } from '../../contexts/TestnetContext';
+import TestnetSwitch from '../../components/TestnetSwitch';
 
 
 const LedgerWallet = () => {
+    const { testnet } = React.useContext(TestnetContext);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
@@ -39,6 +41,18 @@ const LedgerWallet = () => {
     const [address, setAddress] = useState(null)
 
     useEffect(() => {
+        async function fetchAddressForLedger() {
+            if (ledgerPublicKey) {
+                const newAddress = await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address;
+                setAddress(newAddress);
+            }
+        }
+
+        fetchAddressForLedger();
+    }, [testnet, ledgerPublicKey]);
+
+
+    useEffect(() => {
         async function fetchUtxosForLedger() {
             if (!ledgerPublicKey) {
                 console.log("Connect on load", ledgerPublicKey)
@@ -46,11 +60,12 @@ const LedgerWallet = () => {
                 return
             }
             if (!address) {
-                await setAddress(await (await getAddressInfoLedger(ledgerPublicKey, false)).address)
+                await setAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address)
                 return
             }
             console.log('address', address)
-            const response = await axios.get(`https://mempool.space/api/address/${address}/utxo`)
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             console.log('response', response)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
@@ -62,7 +77,8 @@ const LedgerWallet = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
@@ -78,6 +94,7 @@ const LedgerWallet = () => {
             setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
             setUtxosReady(true)
         }
+
         fetchUtxosForLedger()
 
 
@@ -107,6 +124,7 @@ const LedgerWallet = () => {
 
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+                <TestnetSwitch />
                 <h1 className="text-center m-3">Ledger Wallet</h1>
                 {
                     ledgerPublicKey ?
@@ -129,14 +147,6 @@ const LedgerWallet = () => {
                                     <span className="sr-only"></span>
                                 </Spinner>
                                 <p>Connecting....</p>
-                                {/* <Button
-                                    variant="primary"
-                                    size="lg"
-                                    className="mx-3 shadowed-orange-small"
-                                    onClick={async () => {
-                                        setLedgerPublicKey(await connectWallet())
-                                    }}><img src={ledgerLogo} height="35" alt="Alby Logo" />Connect wallet</Button> */}
-
                                 <br />
                             </div>
                         </>
@@ -150,6 +160,7 @@ const LedgerWallet = () => {
                             So don't worry, your Ordinals are safu.
                         </Alert>
                         <UtxoInfo
+                            testnet={testnet}
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
                             setShowUtxoModal={setShowUtxoModal}
@@ -161,6 +172,7 @@ const LedgerWallet = () => {
 
 
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 ledgerPublicKey={ledgerPublicKey}
@@ -171,6 +183,7 @@ const LedgerWallet = () => {
                 showUtxoModal={showUtxoModal}
                 currentUtxo={currentUtxo}
                 SENDS_ENABLED={SENDS_ENABLED}
+                testnet={testnet}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <BeginSendModal
@@ -181,11 +194,12 @@ const LedgerWallet = () => {
                 setDestinationBtcAddress={setDestinationBtcAddress}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 isBtcInputAddressValid={isBtcInputAddressValid}
-                TESTNET={TESTNET}
+                testnet={testnet}
                 setShowUtxoModal={setShowUtxoModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SelectFeeRateModal
+                testnet={testnet}
                 showSelectFeeRateModal={showSelectFeeRateModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 currentUtxo={currentUtxo}
@@ -202,12 +216,14 @@ const LedgerWallet = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
+                testnet={testnet}
                 ledgerPublicKey={ledgerPublicKey}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SentModal
+                testnet={testnet}
                 showSentModal={showSentModal}
                 setShowSentModal={setShowSentModal}
                 sentTxid={sentTxid}

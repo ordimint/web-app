@@ -16,7 +16,7 @@ export default function BeginSendModal({
   setShowSelectFeeRateModal,
   isBtcInputAddressValid,
   inscriptionUtxosByUtxo,
-  TESTNET,
+  testnet,
   setShowUtxoModal
 }) {
   return (
@@ -26,7 +26,7 @@ export default function BeginSendModal({
       </Modal.Header>
       <Modal.Body className="modal-body p-4">
         <div className='modal-preview-in-utxomodal'>
-          {currentUtxo && <UtxoImage utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
+          {currentUtxo && <UtxoImage testnet={testnet} utxo={currentUtxo} inscriptionUtxosByUtxo={inscriptionUtxosByUtxo} />}
         </div>
         <h6>Where would you like to send this to?</h6>
         <InputGroup className="mb-3">
@@ -36,7 +36,7 @@ export default function BeginSendModal({
               setIsBtcInputAddressValid(true)
               return
             }
-            if (!validate(newaddr, TESTNET ? Network.testnet : Network.mainnet)) {
+            if (!validate(newaddr, testnet ? Network.testnet : Network.mainnet)) {
               setIsBtcInputAddressValid(false)
               return
             }
@@ -51,7 +51,7 @@ export default function BeginSendModal({
             autoFocus
           />
           <Form.Control.Feedback type="invalid">
-            <br />That is not a valid {TESTNET ? 'testnet' : 'mainnet'} BTC address
+            <br />That is not a valid {testnet ? 'testnet' : 'mainnet'} BTC address
           </Form.Control.Feedback>
         </InputGroup>
       </Modal.Body>

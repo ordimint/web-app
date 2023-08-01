@@ -34,6 +34,7 @@ const Header = (props) => {
                                 src="/media/logo.png"
                                 width={130}
                                 height={50}
+                                priority={false}
                                 className="d-inline-block align-top align-start"
                                 alt="Ordimint Brand Logo"
                             />
@@ -67,9 +68,9 @@ const Header = (props) => {
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/ordinal-collections')} href="/ordinal-collections">Collections</Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item>
+                                {/* <Nav.Item>
                                     <Nav.Link className={isActive('/market')} href="/market">Market</Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                                 <Nav.Item>
                                     <Nav.Link className={isActive('/search')} href="/search">Search </Nav.Link>
                                 </Nav.Item>
@@ -77,6 +78,7 @@ const Header = (props) => {
                                     <Nav.Link className={isActive('/faq')} href="/faq">FAQ </Nav.Link>
                                 </Nav.Item>
                             </Nav>
+                            <hr></hr>
                             <Nav >
                                 <Nav.Item >
                                     <a href="https://api.ordimint.com" target="_blank" rel="noreferrer">
@@ -84,14 +86,19 @@ const Header = (props) => {
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item >
+                                    <a href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
+                                        <Button >Testnet Explorer</Button>
+                                    </a>
+                                </Nav.Item> 
+                                <Nav.Item >
                                     <a href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >Explorer</Button>
+                                        <Button >Ordinal Explorer</Button>
                                     </a>
                                 </Nav.Item>
                             </Nav>
                         </Offcanvas.Body>
                     </Navbar.Offcanvas>
-                </Navbar>
+                </Navbar >
                 {/* <Row>
         <div id='logo'>
             <a href="/">
@@ -99,7 +106,7 @@ const Header = (props) => {
             </a>
             </div>
       </Row> */}
-            </Container>
+            </Container >
         </div >
     );
 };

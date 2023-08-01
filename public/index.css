@@ -791,6 +791,32 @@ span.input-group-text.required .required:after {
   align-items: center;
 }
 
+
+#offer-invoice-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 #mobile-menu div.container {
   padding-right: 0;
 }
+.nav-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav {
+    align-items: center;
+  }
+}
+=======
+#mobile-menu div.container {
+  padding-right: 0;
+}
+

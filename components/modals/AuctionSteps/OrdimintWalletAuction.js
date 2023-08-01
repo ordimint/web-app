@@ -6,10 +6,11 @@ import { Container, Button } from 'react-bootstrap';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import UtxoInfoAuction from './UtxoInfoAuction.js';
 import ReceiveAddressModal from '../ReceiveAddressModal';
+import { TestnetContext } from '../../../contexts/TestnetContext.js';
 
 
 const OrdimintWalletAuction = () => {
-
+    const { testnet } = React.useContext(TestnetContext);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     const [privateKey, setPrivateKey] = useState(null);
     const [address, setAddress] = useState(null);
@@ -23,7 +24,8 @@ const OrdimintWalletAuction = () => {
     useEffect(() => {
         async function fetchUtxosForAddress() {
             if (!address) return
-            const response = await axios.get(`https://mempool.space/api/address/${address}/utxo`)
+            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
@@ -34,7 +36,8 @@ const OrdimintWalletAuction = () => {
 
                 console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
                 try {
-                    const res = await axios.get(`https://explorer.ordimint.com/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
                     const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
@@ -51,12 +54,13 @@ const OrdimintWalletAuction = () => {
             setUtxosReady(true)
         }
 
+
         fetchUtxosForAddress()
     }, [ordimintPubkey, address]);
 
-    const handleRestoreWallet = async (event) => {
+    const handleRestoreWallet = async (event, testnet) => {
         try {
-            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event);
+            const { restoredAddress, restoredPubkey, restoredPrivateKey } = await restoreWallet(event, testnet);
             setAddress(restoredAddress);
             setPrivateKey(restoredPrivateKey);
             setOrdimintPubkey(restoredPubkey);
@@ -106,6 +110,7 @@ const OrdimintWalletAuction = () => {
                         <UtxoInfoAuction
                             utxosReady={utxosReady}
                             ownedUtxos={ownedUtxos}
+                            testnet={testnet}
                             // setShowUtxoModal={setShowUtxoModal}
                             setCurrentUtxo={props.setCurrentUtxo}
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
@@ -113,6 +118,7 @@ const OrdimintWalletAuction = () => {
                     </div>}
             </Container>
             <ReceiveAddressModal
+                testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
                 ordimintAddress={address}
