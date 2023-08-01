@@ -46,7 +46,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
 
   return (
     <Modal show={showReceiveAddressModal} onHide={() => setShowReceiveAddressModal(false)} className="py-5">
-      <Modal.Header closeButton className="p-4">
+      <Modal.Header closeButton className="p-4 ">
         <Modal.Title>Receive Address</Modal.Title>
       </Modal.Header>
       <Modal.Body className="px-5 py-3 text-center">
@@ -61,7 +61,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
           (you can safely receive ordinal inscriptions and regular bitcoin to this address)
         </p>
         <br />
-        <Button variant="primary" onClick={() => {
+        <button className='connect_button' variant="primary" onClick={() => {
           if (nostrPublicKey) {
             navigator.clipboard.writeText(getAddressInfoNostr(nostrPublicKey, testnet).address)
           }
@@ -75,7 +75,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
             navigator.clipboard.writeText(unisatAddress)
           }
           setShowReceiveAddressModal(false)
-        }}>Copy Address</Button>
+        }}>Copy Address</button>
       </Modal.Body>
     </Modal>
   )

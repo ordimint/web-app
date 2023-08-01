@@ -107,16 +107,20 @@ const WalletPage = () => {
                             <Card.Text>
                                 Connect with your Unisat browser wallet.
                             </Card.Text>
-                            <Link href="/wallet/unisat">
-                                <Button variant="primary"
-                                    onClick={() => {
-                                        setSelectedWallet(true)
-                                        setWallet("unisat")
+                            <Link href="/wallet/unisat" className='d-flex justify-content-center text-decoration-none'>
 
-                                    }
-                                    }
 
-                                >Connect</Button>
+                                <button className='connect_button' onClick={() => {
+                                    setSelectedWallet(true)
+                                    setWallet("unisat")
+
+                                }
+                                }>
+                                    Connect
+
+
+                                </button>
+
                             </Link>
                         </Card.Body>
                     </Card>

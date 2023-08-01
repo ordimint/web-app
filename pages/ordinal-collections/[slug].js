@@ -81,7 +81,7 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Ordimint" />
       </Head>
-      <div style={{ zIndex: 5 }}>
+      <div style={{ position: "absolute", left: 50 }}>
         <Container>
           <Breadcrumb>
             <Breadcrumb.Item href="/ordinal-collections">

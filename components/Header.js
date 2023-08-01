@@ -128,17 +128,17 @@ const Header = (props) => {
 
                             <hr></hr>
                             <Nav >
-                                <Nav.Item >
-                                    <a className="nav_button" href="https://api.ordimint.com" target="_blank" rel="noreferrer">
+                                <Nav.Item className="mb-4" >
+                                    <a className="nav_button " href="https://api.ordimint.com" target="_blank" rel="noreferrer">
                                         API(New)
                                     </a>
                                 </Nav.Item>
-                                <Nav.Item >
+                                <Nav.Item className="mb-4" >
                                     <a className="nav_button" href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
                                         TestnetExplorer
                                     </a>
-                                </Nav.Item> 
-                                <Nav.Item >
+                                </Nav.Item>
+                                <Nav.Item className="mb-4">
                                     <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <span>OrdinalExplorer</span>
                                     </a>
