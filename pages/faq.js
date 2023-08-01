@@ -162,7 +162,7 @@ const FAQ = () => {
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
-                            <Accordion.Item eventKey="0">
+                            <Accordion.Item eventKey="000001">
                                 <Accordion.Header>What are BRC-20 tokens?</Accordion.Header>
                                 <Accordion.Body>
                                     <p>
