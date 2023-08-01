@@ -6,6 +6,7 @@ import Header from '../components/Header.js';
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { TestnetProvider } from '../contexts/TestnetContext.js'
+import Footer from '../components/Footer';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
@@ -28,13 +29,16 @@ export default function MyApp({ Component, pageProps }) {
     }, [router.events])
 
     return (
-        <div>
+        <div className='app_bg'>
             <Header />
             <SSRProvider>
                 <TestnetProvider>
-                    <Component {...pageProps} />
+                    <div style={{ minHeight: "100vh", }}>
+                        <Component {...pageProps} />
+                    </div>
                 </TestnetProvider>
             </SSRProvider>
+            <Footer />
         </div>
     )
 }

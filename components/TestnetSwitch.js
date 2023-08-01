@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ToggleButtonGroup, ToggleButton, Container } from 'react-bootstrap';
 import { TestnetContext } from '../contexts/TestnetContext';
 
 const TestnetSwitch = () => {
     const { setTestnet } = useContext(TestnetContext);
+    const [isTestnet, setIsTestnet] = useState(false);
 
     const handleSelectionChange = (value) => {
+        setIsTestnet(value)
         setTestnet(value);
+
     };
 
     return (

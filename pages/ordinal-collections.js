@@ -61,7 +61,7 @@ const CollectionsCatalog = () => {
 
             <Container fluid>
                 <h1 className="text-center py-3">Collections</h1>
-                <Form>
+                <Form id='onchain-input'>
                     <Form.Control
                         type="search"
                         placeholder="Search collections"
@@ -83,7 +83,7 @@ const CollectionsCatalog = () => {
                 </Row>
                 <Row>
                     <Col className="pagination">
-                        <Pagination>
+                        <Pagination style={{ background: "#1e1f20" }}>
                             <Pagination.First onClick={() => paginate(1)} />
                             <Pagination.Prev
                                 onClick={() => paginate(currentPage - 1)}
@@ -123,7 +123,7 @@ const CollectionsCatalog = () => {
 
                 </Row>
             </Container>
-            <Footer />
+
         </div>
     );
 };

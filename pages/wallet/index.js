@@ -45,9 +45,14 @@ const WalletPage = () => {
                             <Card.Text>
                                 Create a new Ordimint wallet or restore an existing one.
                             </Card.Text>
-                            <Link href="/wallet/ordimint">
-                                <Button variant="primary"
-                                >Use Ordimint Wallet</Button></Link>
+                            <Link href="/wallet/ordimint" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'>
+                                    Use Ordimint Wallet
+
+
+                                </button>
+                            </Link>
+
                         </Card.Body>
                     </Card>
 
@@ -62,15 +67,12 @@ const WalletPage = () => {
                                 </a>{" "}
                                 browser extension.
                             </Card.Text>
-                            <Link href="/wallet/alby">
-                                <Button variant="primary"
-                                // onClick={() => {
-                                //     setSelectedWallet(true)
-                                //     setWallet("alby")
-                                // }
-                                // }
+                            <Link href="/wallet/alby" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'>
+                                    Connect
 
-                                >Connect</Button>
+
+                                </button>
                             </Link>
                         </Card.Body>
                     </Card>
@@ -82,16 +84,19 @@ const WalletPage = () => {
                             <Card.Text>
                                 Connect your Ledger hardware wallet via USB.
                             </Card.Text>
-                            <Link href="/wallet/ledger">
-                                <Button variant="primary"
-                                    onClick={() => {
-                                        setSelectedWallet(true)
-                                        setWallet("ledger")
+                            <Link href="/wallet/ledger" className='d-flex justify-content-center text-decoration-none'>
 
-                                    }
-                                    }
+                                <button className='connect_button' onClick={() => {
+                                    setSelectedWallet(true)
+                                    setWallet("ledger")
 
-                                >Connect</Button>
+                                }
+                                }>
+                                    Connect
+
+
+                                </button>
+
                             </Link>
                         </Card.Body>
                     </Card>
@@ -99,7 +104,7 @@ const WalletPage = () => {
 
                 </div>
             </div>
-            <Footer />
+
         </div>
     )
 }

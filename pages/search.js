@@ -68,7 +68,7 @@ const Search = () => {
                 <meta name="keywords" content="Bitcoin, .sats names, inscriptions, Ordinals" /> {/* Add this line */}
             </Head>
             <div className="main-middle">
-                <h4>Search for an inscription</h4>
+                <h4 className='pb-4'>Search for an inscription</h4>
                 <div id="tab-container">
                     <Tabs
                         transition={false}
@@ -79,7 +79,7 @@ const Search = () => {
                     >
 
                         <Tab eventKey="all" title="All" disabled>
-                            <InputGroup className="m-4" id='domain-input-field'>
+                            <InputGroup className="m-4" id='domain-input-field' >
                                 <Form.Control
                                     placeholder="your domain name"
                                     value={searchInput}
@@ -123,16 +123,16 @@ const Search = () => {
                                     }
                                     value={searchInput}
                                 />
-                                <InputGroup.Text id="basic-addon2">.sats</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon2" style={{ background: "#1E1F20", color: "#FFF", border: "2px solid #6a6b6b" }}>.sats</InputGroup.Text>
 
                             </InputGroup>
-                            <Button type="submit" variant="primary" onClick={
+                            <button type="submit" className='connect_button' onClick={
                                 () => {
                                     checkSatsName(searchInput)
                                     setSearchRequest(true)
                                 }
 
-                            }>Search</Button>
+                            }>Search</button>
                             {searchRequest &&
                                 <>
                                     <h4 className='m-3'>

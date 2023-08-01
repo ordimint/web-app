@@ -10,7 +10,7 @@ const OrdinalThumbnail = (props) => {
     const hideDetailModal = () => showDetailModal(false);
 
     return (
-        <div>
+        <div >
             {props.isText ? (
                 <Figure>
 
