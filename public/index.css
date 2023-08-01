@@ -580,10 +580,10 @@ span.input-group-text.required .required:after {
   border-radius: 0;
 }
 
-.wallet-logo.card-img-top {
+/* .wallet-logo.card-img-top {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
-}
+} */
 
 #tab-container .nav-link {
   white-space: nowrap;
@@ -631,7 +631,7 @@ span.input-group-text.required .required:after {
   height: 280px;
   background-color: #1e1f20;
   border: 2px solid #676767;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 #wallet-buttons {
