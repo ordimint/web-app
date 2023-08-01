@@ -53,7 +53,9 @@ const Header = (props) => {
                             />
                         </Navbar.Brand>
                     </Link>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <div style={{ zIndex: 5 }}>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    </div>
                     <Navbar.Offcanvas
                         id="responsive-navbar-nav"
                         aria-labelledby="offcanvasNavbarLabel-expand-nav"
