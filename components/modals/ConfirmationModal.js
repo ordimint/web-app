@@ -157,12 +157,18 @@ export default function ConfirmationModal({
 
       try {
 
-        const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat, { autoFinalized: true });
+        const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat, { autoFinalized: false });
         console.log("Signed PSBT Hex:", signedPsbtHex);
+        const signedPsbt = bitcoin.Psbt.fromHex(signedPsbtHex);
+        console.log("Signed PSBT:", signedPsbt);
+        const signature = signedPsbt.data.inputs[0].partialSig[0].signature;
+        console.log("Signature:", signature);
+        psbt.updateInput(0, { tapKeySig: signature });
 
-        psbt.updateInput(0, {
-          tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
-        })
+
+        // psbt.updateInput(0, {
+        //   tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
+        // })
 
         psbt.finalizeAllInputs();
         // const tx = signedPsbt.extractTransaction();
