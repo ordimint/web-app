@@ -88,6 +88,9 @@ const unisat = () => {
         getBasicInfo();
     };
 
+
+
+
     useEffect(() => {
         console.log("unisatInstalled:", unisatInstalled);
         console.log("connected:", connected);
@@ -161,7 +164,7 @@ const unisat = () => {
 
         fetchUtxosForAddress()
 
-    }, [publicKey, address]);
+    }, [publicKey, address, testnet]);
 
 
 
@@ -199,18 +202,10 @@ const unisat = () => {
                         <>
                             <div>
                                 <Alert variant="light">
-                                    Connect your wallet via the <a href="https://getalby.com/" target="_blank"
-                                        rel="noopener noreferrer"><img src={UnisatLogo} height="20" alt="Alby Logo" /> getAlby</a> browser extension.
-                                    You are in full control of your privat keys.
+                                    It seems like your Unisat wallet is not installed.
                                 </Alert>
                                 <br />
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    className="mx-3 shadowed-orange-small"
-                                    onClick={async () => {
-                                        setNostrPublicKey(await connectWallet())
-                                    }}><Image src={UnisatLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet</Button>
+
 
                             </div>
                         </>
