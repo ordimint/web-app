@@ -185,30 +185,32 @@ function InvoiceModal(props) {
                     {props.isConfigModal ? (
                         <></>
                     ) : (
-                        <Button
+                        <button
                             variant="success"
+                            className="connect_button"
                             onClick={() => setOpen(!openCollapse)}
                             aria-controls="example-collapse-text"
                             aria-expanded={!openCollapse}
                         >
                             {!openCollapse ? "Show Invoice" : "Hide Invoice"}
-                        </Button>
+                        </button>
                     )}
 
                     {/*Render Copy Invoice or Download button  */}
                     {props.isConfigModal ? (
                         <></>
                     ) : (
-                        <Button
+                        <button
                             variant="success"
                             ref={target}
+                            className="secondary_button"
                             onClick={() => {
                                 navigator.clipboard.writeText(props.value);
                                 renderTooltip(!showTooltip);
                             }}
                         >
                             Copy Invoice
-                        </Button>
+                        </button>
                     )}
                     {props.isConfigModal ? (
                         <Button variant="secondary" onClick={props.handleClose}>

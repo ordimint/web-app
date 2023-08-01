@@ -357,7 +357,7 @@ div.bitcoin-address a {
 }
 
 div.preview-image-container {
-  width: 400px;
+  max-width: 400px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -365,6 +365,9 @@ div.preview-image-container {
   align-items: center;
 }
 
+.dropzone {
+  width: 400px;
+}
 div.preview-image-container img {
   /* max-height: 300px; */
   background-color: black;
@@ -373,6 +376,9 @@ div.preview-image-container img {
   #tab-container {
     width: 350px;
     z-index: 5;
+  }
+  .dropzone {
+    max-width: 300px;
   }
 }
 @media screen and (max-width: 768px) {
@@ -712,7 +718,7 @@ span.input-group-text.required .required:after {
   text-align: center;
   display: flex;
   color: #888889;
-  margin-bottom: 100px;
+  margin-bottom: 0px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -785,9 +791,9 @@ span.input-group-text.required .required:after {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: stretch;
+  /* align-items: stretch;
   align-content: stretch;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
 }
 
 #right-side-container {
@@ -796,9 +802,9 @@ span.input-group-text.required .required:after {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: stretch;
+  /* align-items: stretch;
   align-content: stretch;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
 }
 
 #fee-select-container {
@@ -818,7 +824,7 @@ span.input-group-text.required .required:after {
   flex-wrap: wrap;
 }
 
-.dropzone {
+.preview-image-container {
   display: flex;
   flex-direction: column;
   align-items: center;

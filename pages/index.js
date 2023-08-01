@@ -405,8 +405,8 @@ function Home() {
             </Head>
 
             <Container>
-                <div className='main-middle'>
-                    <Row>
+                <div className=''>
+                    <Row style={{ display: "flex", justifyContent: "center" }}>
                         <Col id='left-side-container'>
                             <div id="tab-container">
                                 <p>What do you want to inscribe:</p>

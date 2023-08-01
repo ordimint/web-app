@@ -33,7 +33,7 @@ const Footer = () => {
 
 
                 </div>
-                <div className="d-flex gap-4 pb-4">
+                <div className="d-flex gap-4 pb-4 d-flex justify-content-center">
                     <div className="small text-muted">Ordimint. ©2023. All rights reserved</div>
                 </div>
             </div>

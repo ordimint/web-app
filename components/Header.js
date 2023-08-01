@@ -4,8 +4,6 @@ import Link from "next/link";
 import Image from 'next/image';
 
 
-
-
 const Header = (props) => {
 
     const router = useRouter();
@@ -18,7 +16,7 @@ const Header = (props) => {
     };
 
     return (
-        <div className="relative">
+        <div className="">
             <Container fluid>
                 <Navbar
                     collapseOnSelect
