@@ -791,6 +791,7 @@ span.input-group-text.required .required:after {
   align-items: center;
 }
 
+
 #offer-invoice-modal {
   display: flex;
   flex-direction: column;
@@ -814,3 +815,8 @@ span.input-group-text.required .required:after {
     align-items: center;
   }
 }
+=======
+#mobile-menu div.container {
+  padding-right: 0;
+}
+

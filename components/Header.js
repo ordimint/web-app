@@ -89,7 +89,7 @@ const Header = (props) => {
                                     <a href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
                                         <Button >Testnet Explorer</Button>
                                     </a>
-                                </Nav.Item>
+                                </Nav.Item> 
                                 <Nav.Item >
                                     <a href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <Button >Ordinal Explorer</Button>
