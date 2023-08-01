@@ -91,10 +91,10 @@ const GenerateWalletModal = ({
                 </p>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleDownloadPrivateKey}>
+                <button className="connect_button" variant="secondary" onClick={handleDownloadPrivateKey}>
                     Download Backup File
-                </Button>
-                <Button variant="primary" onClick={handleCloseAndDownload}>
+                </button>
+                <Button variant="secondary" onClick={handleCloseAndDownload}>
                     Close
                 </Button>
             </Modal.Footer>

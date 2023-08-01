@@ -17,9 +17,9 @@ const RestoreWalletModal = ({ showRestoreWalletModal, handleRestoreWalletModalCl
                         accept=".txt"
                         onChange={(event) => restoreWallet(event, testnet)}
                     />
-                    <Button variant="primary" size="lg" onClick={() => document.getElementById('restoreWalletFile').click()}>
+                    <button className='connect_button mt-4' variant="primary" size="lg" onClick={() => document.getElementById('restoreWalletFile').click()}>
                         Choose Backup File
-                    </Button>
+                    </button>
                 </div>
             </Modal.Body>
             <Modal.Footer>
