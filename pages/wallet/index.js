@@ -99,7 +99,7 @@ const WalletPage = () => {
                             </Link>
                         </Card.Body>
                     </Card>
-                    <Card className='m-2'>
+                    {/* <Card className='m-2'>
                         <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
                         <Card.Body>
                             <Card.Title>Unisat</Card.Title>
@@ -107,10 +107,6 @@ const WalletPage = () => {
                                 Connect with your Unisat browser wallet.
                             </Card.Text>
                             <Link href="/wallet/unisat" className='d-flex justify-content-center text-decoration-none'>
-
-
-
-
                                 <button className='connect_button' onClick={() => {
                                     setSelectedWallet(true)
                                     setWallet("unisat")
@@ -120,7 +116,7 @@ const WalletPage = () => {
 
                             </Link>
                         </Card.Body>
-                    </Card>
+                    </Card> */}
 
 
                 </div>

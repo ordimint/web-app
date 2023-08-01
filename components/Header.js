@@ -62,7 +62,7 @@ const Header = (props) => {
                         <Offcanvas.Header closeButton closeVariant="white">
                             <Offcanvas.Title id="offcanvasNavbarLabel-expand-nav">
                                 <Container className="justify-content-center">
-                                    {/* <img src={logo} alt="LN ⚡ VPN" id="nav-menu-image"></img>  */}
+
                                 </Container>
                             </Offcanvas.Title>
                         </Offcanvas.Header>
@@ -76,27 +76,18 @@ const Header = (props) => {
                                 </Nav.Item>
                                 <Nav.Item>
                                     <a href="/check-order" className={isActive('/check-order')}>
-
                                         Check Order
                                     </a>
-
                                 </Nav.Item>
                                 <Nav.Item>
-
                                     <a href="/wallet" className={isActive('/wallet')}>
-
                                         Wallet
                                     </a>
-
                                 </Nav.Item>
                                 <Nav.Item>
-
                                     <a href="/ordinal-collections" className={isActive('/ordinal-collections')}>
-
                                         Collections
                                     </a>
-
-
                                 </Nav.Item>
                                 {/* <Nav.Item>
 
