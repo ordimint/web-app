@@ -10,7 +10,7 @@ import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
 import { useState } from "react";
 import AlbyLogo from '../public/media/alby_icon_yellow.svg';
 import LedgerLogo from '../public/media/ledger-logo-small.svg';
-import OrdimintLogo from '../public/media/ordimint-coin.png';
+import OrdimintLogo from '../public/media/ordimint-coin-white.png';
 import AlertModal from '../components/modals/AlterModal';
 import FeeRange from '../components/FeeRange';
 import Price from '../components/Price';

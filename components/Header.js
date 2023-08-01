@@ -21,7 +21,7 @@ const Header = (props) => {
                 <Navbar
                     collapseOnSelect
                     bg="dark"
-                    expand="md"
+                    expand="lg"
                     key="nav"
                     variant="dark"
                     className="mb-3 pt-4"
@@ -126,9 +126,11 @@ const Header = (props) => {
 
                             <hr></hr>
                             <Nav >
-                                <Nav.Item className="mb-4" >
-                                    <a className="nav_button " href="https://api.ordimint.com" target="_blank" rel="noreferrer">
-                                        API(New)
+
+                                <Nav.Item className="mb-4">
+                                    <a className="nav_button" href="https://api.ordimint.com" target="_blank" rel="noreferrer">
+                                        API
+
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item className="mb-4" >
@@ -137,6 +139,7 @@ const Header = (props) => {
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item className="mb-4">
+
                                     <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <span>OrdinalExplorer</span>
                                     </a>
