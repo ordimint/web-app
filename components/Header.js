@@ -137,7 +137,7 @@ const Header = (props) => {
                                     <a className="nav_button" href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
                                         TestnetExplorer
                                     </a>
-                                </Nav.Item>
+                                </Nav.Item> 
                                 <Nav.Item >
                                     <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <span>OrdinalExplorer</span>

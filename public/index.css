@@ -884,6 +884,7 @@ span.input-group-text.required .required:after {
   align-items: center;
 }
 
+
 #offer-invoice-modal {
   display: flex;
   flex-direction: column;
@@ -966,6 +967,7 @@ span.input-group-text.required .required:after {
     align-items: center;
   }
 }
+
 
 .use_button {
   background: #303133;
@@ -1058,3 +1060,8 @@ span.input-group-text.required .required:after {
 .accordion-button:not(.collapsed) {
   color: #000;
 }
+
+#mobile-menu div.container {
+  padding-right: 0;
+}
+

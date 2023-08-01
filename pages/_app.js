@@ -1,6 +1,7 @@
 import '../public/index.css'
 import '../public/font.css'
 import '../public/theme.css'
+import '../public/unisat.css'
 import { SSRProvider } from 'react-bootstrap';
 import Header from '../components/Header.js';
 import { useEffect } from 'react'
