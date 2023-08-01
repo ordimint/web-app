@@ -116,14 +116,7 @@ const WalletPage = () => {
                                     setWallet("unisat")
 
                                 }
-                                }>
-                                    Connect
-
-
-                                </button>
-
-
-                                >Connect</button>
+                                }>Connect</button>
 
                             </Link>
                         </Card.Body>
