@@ -126,13 +126,13 @@ const Header = (props) => {
                                 </Nav.Item>
                                 <Nav.Item className="mb-4" >
                                     <a className="nav_button" href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
-                                        TestnetExplorer
+                                        Testnet Explorer
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item className="mb-4">
 
                                     <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
-                                        <span>OrdinalExplorer</span>
+                                        <span>Ordinal Explorer</span>
                                     </a>
                                 </Nav.Item>
                             </Nav>

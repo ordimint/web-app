@@ -36,18 +36,18 @@ export const connectUnisat = async () => {
 
 
 export const getUnisatPubkey = async (unisat) => {
+
     const publicKey = await unisat.getPublicKey();
     console.log("publicKey", publicKey)
     return publicKey;
 };
 
-export const getAddressInfoUnisat = async (unisatPublicKey, testnet) => {
-    // console.log("unisatPublicKey", unisatPublicKey)
-    var addressInfo;
+export const getAddressInfoUnisat = async () => {
+    let unisat = window.unisat;
+    var address;
     try {
-        addressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(unisatPublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin });
-        // console.log(`addrInfo: ${addressInfo.address}`)
-        return addressInfo;
+        address = await unisat.getAccounts();
+        return address[0];
     } catch (err) {
         console.log('Error getting address Info: ' + err.message);
     }

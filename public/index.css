@@ -1090,3 +1090,7 @@ span.input-group-text.required .required:after {
 #mobile-menu div.container {
   padding-right: 0;
 }
+
+.nav-item a {
+  white-space: nowrap;
+}

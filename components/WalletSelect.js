@@ -21,7 +21,6 @@ function WalletSelect({
     getAddressInfoUnisat,
     testnet,
     getLedgerPubkey,
-    getUnisatPubkey,
     getAddressInfoLedger,
     renderSelectWalletModal,
     setNostrPublicKey,
@@ -104,10 +103,9 @@ function WalletSelect({
                     <button
                         className="m-1 use_button"
                         onClick={async () => {
-                            setUnisatPublicKey(await connectUnisat());
-                            const unisatConnection = await connectUnisat();
-                            const addressInfo = await getAddressInfoUnisat(unisatConnection, testnet);
-                            setOnChainAddress(addressInfo.address);
+                            setUnisatPublicKey(await connectUnisat())
+                            const address = await getAddressInfoUnisat();
+                            setOnChainAddress(address);
 
                         }}
                         variant="success"

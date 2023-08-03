@@ -93,7 +93,7 @@ const WalletPage = () => {
                             </Link>
                         </Card.Body>
                     </Card>
-                    {/* <Card className='m-2'>
+                    <Card className='m-2'>
                         <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
                         <Card.Body>
                             <Card.Title>Unisat</Card.Title>
@@ -109,7 +109,7 @@ const WalletPage = () => {
                             </Link>
                         </Card.Body>
                     </Card>
-                    
+                    {/*
                     <Card className='m-2'>
                         <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
                         <Card.Body>

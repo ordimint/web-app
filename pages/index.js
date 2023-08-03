@@ -110,12 +110,9 @@ function Home() {
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     /////Inscription number + or -
-    const { testnet } = useContext(TestnetContext);
+    const { testnet, setTestnet } = useContext(TestnetContext);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
-
-
-
 
 
 
@@ -388,12 +385,24 @@ function Home() {
 
     useEffect(() => {
         if (!unisatPublicKey) return;
-        async function getUnisatAddressAsync() {
-            const addressInfo = await getAddressInfoUnisat(unisatPublicKey, testnet);
-            setOnChainAddress(addressInfo.address);
+        async function switchNetwork() {
+            var unisat = window.unisat;
+            try {
+                await unisat.switchNetwork(testnet ? "testnet" : "livenet");
+            } catch (e) {
+                console.log(e);
+            }
         }
-        getUnisatAddressAsync();
-    }, [unisatPublicKey, testnet]);
+        async function getUnisatAddressAsync() {
+
+            const address = await unisat.getAccounts()
+            console.log(address[0]);
+            setOnChainAddress(address[0]);
+        }
+        switchNetwork().then(() => {
+            getUnisatAddressAsync();
+        });
+    }, [testnet]);
 
 
 
