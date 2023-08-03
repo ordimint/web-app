@@ -129,7 +129,7 @@ const LedgerWallet = () => {
                 <h1 className="text-center m-3">Ledger Wallet</h1>
                 {
                     ledgerPublicKey ?
-                        <div>
+                        <div style={{ zIndex: 5 }}>
                             <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small"
                                 onClick={async () =>
                                     setShowReceiveAddressModal(true)}>

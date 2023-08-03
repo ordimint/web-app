@@ -11,6 +11,7 @@ import * as ecc from 'tiny-secp256k1'
 import { getAddressInfoLedger, signLedger } from '../WalletConfig/connectLedger';
 
 import ECPairFactory from 'ecpair';
+import unisat from '../../pages/wallet/unisat';
 const secp256k1 = require('@noble/secp256k1');
 const axios = require('axios')
 const ECPair = ECPairFactory(ecc);
@@ -112,6 +113,10 @@ export default function ConfirmationModal({
     const sigHash = psbt.__CACHE.__TX.hashForWitnessV1(0, [inputAddressInfo.output], [currentUtxo.value], bitcoin.Transaction.SIGHASH_DEFAULT)
 
     if (nostrPublicKey) {
+      console.log("PSBT: Nostr", psbt);
+      console.log("SigHash:", sigHash);
+      const psbtHex = await psbt.toHex()
+      console.log("PSBT Hex:", psbtHex);
       sig = await window.nostr.signSchnorr(sigHash.toString('hex'))
       psbt.updateInput(0, {
         tapKeySig: serializeTaprootSignature(Buffer.from(sig, 'hex'))
@@ -125,6 +130,7 @@ export default function ConfirmationModal({
     }
 
     if (ordimintPubkey) {
+      console.log("PSBT: Ordimint", psbt);
       sig = await signSchnorrOrdimintWallet(sigHash.toString('hex'), privateKey)
       console.log("Ordimint signature:", sig);
       psbt.updateInput(0, {
@@ -152,39 +158,34 @@ export default function ConfirmationModal({
     }
 
     if (unisatPublicKey) {
-
-      const psbtForUnisat = psbt.toHex()
-
+      const psbtForUnisat = await psbt.toHex()
+      console.log("PSBT for Unisat in Hex:", psbtForUnisat);
+      console.log("PSBT for Unisat:", psbt);
       try {
 
-        const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat, { autoFinalized: false });
+        const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat);
         console.log("Signed PSBT Hex:", signedPsbtHex);
         const signedPsbt = bitcoin.Psbt.fromHex(signedPsbtHex);
         console.log("Signed PSBT:", signedPsbt);
-        const signature = signedPsbt.data.inputs[0].partialSig[0].signature;
-        console.log("Signature:", signature);
-        psbt.updateInput(0, { tapKeySig: signature });
+        psbt.finalizeAllInputs()
+        try {
+          let res = await window.unisat.pushPsbt(signedPsbtHex);
+          console.log(res)
+        } catch (e) {
+          console.log(e);
+        }
 
+        psbt.updateInput(0, {
+          tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
+        })
 
-        // psbt.updateInput(0, {
-        //   tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
-        // })
+        const tx = psbt.extractTransaction()
+        hex = tx.toBuffer().toString('hex')
+        fullTx = bitcoin.Transaction.fromHex(hex)
+        const decodedTx = bitcoin.Transaction.fromHex(hex);
+        console.log("Decoded transaction:", decodedTx);
+        console.log(hex)
 
-        psbt.finalizeAllInputs();
-        // const tx = signedPsbt.extractTransaction();
-        // hex = signedPsbtHex.toBuffer().toString('hex');
-        // fullTx = bitcoin.Transaction.fromHex(signedPsbtHex);
-        // Create a PSBT object from the hex string
-        // const signedPsbt = bitcoin.Psbt.fromHex(signedPsbtHex);
-
-        // Extract the transaction from the PSBT
-        // const tx = signedPsbt.extractTransaction();
-
-        // Get the raw hex string of the transaction
-        // const hex = tx.toHex();
-
-        // Log the hex string
-        // console.log(hex);
 
         console.log(hex);
       } catch (e) {
@@ -215,6 +216,8 @@ export default function ConfirmationModal({
     const signedHex = secp256k1.utils.bytesToHex(signature);
     return signedHex;
   }
+
+
 
   return (
     <Modal show={showConfirmSendModal} onHide={() => setShowConfirmSendModal(false)} className="py-5">

@@ -13,8 +13,8 @@ import UtxoModal from '../../components/modals/UtxoModal';
 import UtxoInfo from '../../components/UtxoInfo';
 import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
-
-
+import TestnetSwitch from '../../components/TestnetSwitch';
+import { getAddress, signTransaction } from 'sats-connect'
 
 
 const unisat = () => {
@@ -38,108 +38,34 @@ const unisat = () => {
     const [publicKey, setPublicKey] = useState("");
     const [address, setAddress] = useState("");
     const [testnet, setTestnet] = useState(false)
-    const [balance, setBalance] = useState({
-        confirmed: 0,
-        unconfirmed: 0,
-        total: 0,
-    });
-    const [network, setNetwork] = useState("livenet");
-
-    const getBasicInfo = async () => {
-        const unisat = window.unisat;
-        const [address] = await unisat.getAccounts();
-        setAddress(address);
-
-        const publicKey = await unisat.getPublicKey();
-        setPublicKey(publicKey);
-
-        const balance = await unisat.getBalance();
-        setBalance(balance);
-
-        const network = await unisat.getNetwork();
-        setNetwork(network);
-    };
-
-    const selfRef = useRef({
-        accounts: [],
-    });
-
-    const self = selfRef.current;
-    const handleAccountsChanged = (_accounts) => {
-        if (self.accounts[0] === _accounts[0]) {
-            // prevent from triggering twice
-            return;
-        }
-        self.accounts = _accounts;
-        if (_accounts.length > 0) {
-            setAccounts(_accounts);
-            setConnected(true);
-
-            setAddress(_accounts[0]);
-
-            getBasicInfo();
-        } else {
-            setConnected(false);
-        }
-    };
-
-    const handleNetworkChanged = (network) => {
-        setNetwork(network);
-        getBasicInfo();
-    };
-
-    useEffect(() => {
-        if (network === "livenet") {
-            setTestnet(false);
-        } else {
-            setTestnet(true);
-        }
-    }, [network]);
 
 
 
+    const getAddressOptions = {
+        payload: {
+            purposes: ['ordinals', 'payment'],
+            message: 'Address for receiving Ordinals and payments',
+            network: {
+                type: 'Mainnet'
+            },
+        },
+        onFinish: (response) => {
+            console.log(response)
+        },
+        onCancel: () => alert('Request canceled'),
+    }
 
-    useEffect(() => {
 
-        console.log("Is testnet:", testnet);
-        console.log("network:", network);
-        console.log("unisatInstalled:", unisatInstalled);
-        console.log("connected:", connected);
-
-        async function checkUnisat() {
-            let unisat = window.unisat;
-
-            for (let i = 1; i < 10 && !unisat; i += 1) {
-                await new Promise((resolve) => setTimeout(resolve, 10000 * i));
-                unisat = window.unisat;
-            }
-
-            if (unisat) {
-                setUnisatInstalled(true);
-            } else if (!unisat)
-                return;
-
-            unisat.getAccounts().then((accounts) => {
-                handleAccountsChanged(accounts);
-            });
-            console.log(unisat)
-            unisat.on("accountsChanged", handleAccountsChanged);
-            unisat.on("networkChanged", handleNetworkChanged);
-
-            return () => {
-                unisat.removeListener("accountsChanged", handleAccountsChanged);
-                unisat.removeListener("networkChanged", handleNetworkChanged);
-            };
-        }
-
-        checkUnisat().then();
-
-    }, [testnet]);
 
     useEffect(() => {
         async function fetchUtxosForAddress() {
+            console.log('address', address)
+            const addr = await getAddress(getAddressOptions);
             if (!address) return
-
+            console.log('address', address)
+            // const addr = await getAddress(getAddressOptions);
+            setAddress(addr)
+            console.log('addr', addr)
             const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
 
@@ -174,7 +100,7 @@ const unisat = () => {
 
         fetchUtxosForAddress()
 
-    }, [publicKey, network]);
+    }, []);
 
 
 
@@ -182,7 +108,7 @@ const unisat = () => {
     return (
         <div>
             <Head>
-                <title>Ordimint - Unisat Wallet</title>
+                <title>Ordimint - UXverse Wallet</title>
                 <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
@@ -197,8 +123,8 @@ const unisat = () => {
                 </Container>
             </div>
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
-                {/* <TestnetSwitch /> */}
-                <h2 className="text-center m-4">Unisat Wallet</h2>
+                <TestnetSwitch />
+                <h2 className="text-center m-4">Xverse Wallet</h2>
                 {
                     publicKey ?
                         <div style={{ zIndex: 5 }}>

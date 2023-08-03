@@ -13,6 +13,9 @@ body {
   text-align: center;
   font-family: Jost-Regular;
 }
+.App {
+  text-align: center;
+}
 
 /* #header-image {
   padding-top: 10px;

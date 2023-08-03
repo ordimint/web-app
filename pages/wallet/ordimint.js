@@ -153,7 +153,7 @@ const OrdimintWallet = () => {
                 <h1 className='m-3'>Ordimint Wallet</h1>
                 {
                     address ?
-                        <div>
+                        <div style={{ zIndex: 5 }}>
                             <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small"
                                 onClick={async () =>
                                     setShowReceiveAddressModal(true)}>

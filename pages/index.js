@@ -1,23 +1,17 @@
 import { React, useEffect, useContext } from 'react';
 import { io } from "socket.io-client";
 import FileUpload from '../components/FileUpload';
-import OnchainInput from '../components/OnchainInput';
 import InvoiceModal from '../components/modals/InvoiceModal';
 import { validate, Network } from 'bitcoin-address-validation'
-import Footer from '../components/Footer';
-import Image from 'next/image';
-import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
+import { Row, Container, Button, Tab, Tabs, Col, Alert } from "react-bootstrap";
 import { useState } from "react";
-import AlbyLogo from '../public/media/alby_icon_yellow.svg';
-import LedgerLogo from '../public/media/ledger-logo-small.svg';
-import OrdimintLogo from '../public/media/ordimint-coin-white.png';
 import AlertModal from '../components/modals/AlterModal';
 import FeeRange from '../components/FeeRange';
 import Price from '../components/Price';
 import ReceiveAddressModal from '../components/modals/ReceiveAddressModal';
-import WalletConnectModal from '../components/modals/WalletConnectModal';
 import { getAddressInfoNostr, connectWallet } from '../components/WalletConfig/utils';
 import { getLedgerPubkey, getAddressInfoLedger } from '../components/WalletConfig/connectLedger';
+import { getUnisatPubkey, getAddressInfoUnisat, connectUnisat } from '../components/WalletConfig/unisatWalletFunctions';
 import TextInput from '../components/TextInput';
 import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
@@ -30,6 +24,7 @@ import { generateWallet, restoreWallet, getOrdimintAddress } from '../components
 import TestnetSwitch from '../components/TestnetSwitch';
 import BRCPreviewModal from '../components/modals/BRCPreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
+import WalletSelect from '../components/WalletSelect';
 
 
 
@@ -49,6 +44,7 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 function Home() {
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
+    const [unisatPublicKey, setUnisatPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
     const [tabKey, setTabKey] = useState('file');
@@ -117,6 +113,12 @@ function Home() {
     const { testnet } = useContext(TestnetContext);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
+
+
+
+
+
+
 
     useEffect(() => {
         if (!showGenerateWalletModal && ordimintPubkey) {
@@ -384,6 +386,15 @@ function Home() {
         getNostrAddressAsync();
     }, [nostrPublicKey, testnet]);
 
+    useEffect(() => {
+        if (!unisatPublicKey) return;
+        async function getUnisatAddressAsync() {
+            const addressInfo = await getAddressInfoUnisat(unisatPublicKey, testnet);
+            setOnChainAddress(addressInfo.address);
+        }
+        getUnisatAddressAsync();
+    }, [unisatPublicKey, testnet]);
+
 
 
 
@@ -488,106 +499,29 @@ function Home() {
                                 />
 
                             </div>
+                            <WalletSelect
+                                nostrPublicKey={nostrPublicKey}
+                                ledgerPublicKey={ledgerPublicKey}
+                                ordimintPubkey={ordimintPubkey}
+                                onChainAddress={onChainAddress}
+                                setOnChainAddress={setOnChainAddress}
+                                showWalletConnectModal={showWalletConnectModal}
+                                setShowWalletConnectModal={setShowWalletConnectModal}
+                                connectWallet={connectWallet}
+                                getAddressInfoNostr={getAddressInfoNostr}
+                                testnet={testnet}
+                                getLedgerPubkey={getLedgerPubkey}
+                                getAddressInfoLedger={getAddressInfoLedger}
+                                renderSelectWalletModal={renderSelectWalletModal}
+                                setNostrPublicKey={setNostrPublicKey}
+                                setLedgerPublicKey={setLedgerPublicKey}
+                                unisatPublicKey={unisatPublicKey}
+                                setUnisatPublicKey={setUnisatPublicKey}
+                                getUnisatPubkey={getUnisatPubkey}
+                                getAddressInfoUnisat={getAddressInfoUnisat}
+                                connectUnisat={connectUnisat}
 
-                            {
-                                (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
-                                    <>
-                                        {nostrPublicKey ? (
-                                            <>
-                                                <div className="success-alert-input input-button">
-                                                    <p>Your receiver address:</p>
-                                                    <OnchainInput
-                                                        onChainAddress={onChainAddress}
-                                                        setOnChainAddress={setOnChainAddress}
-                                                    />
-                                                    <WalletConnectModal
-                                                        address={onChainAddress}
-                                                        show={showWalletConnectModal}
-                                                        handleClose={() => setShowWalletConnectModal(false)}
-                                                    />
-                                                </div>
-                                            </>
-                                        ) : ledgerPublicKey ? (
-                                            <>
-                                                <div className="success-alert-input input-button">
-                                                    <p>Your receiver address:</p>
-                                                    <OnchainInput
-                                                        onChainAddress={onChainAddress}
-                                                        setOnChainAddress={setOnChainAddress}
-                                                    />
-                                                    <WalletConnectModal
-                                                        address={onChainAddress}
-                                                        show={showWalletConnectModal}
-                                                        handleClose={() => setShowWalletConnectModal(false)}
-                                                    />
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div className="success-alert-input input-button">
-                                                    <p>Your receiver address:</p>
-                                                    <OnchainInput
-                                                        onChainAddress={onChainAddress}
-                                                        setOnChainAddress={setOnChainAddress}
-                                                    />
-                                                </div>
-                                                <WalletConnectModal
-                                                    address={onChainAddress}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    <div className="input-button">
-                                        <p>How do you want to receive your Ordinal?
-                                            <br />
-                                            Enter an on-chain address or use a wallet.
-                                        </p>
-                                        <OnchainInput
-                                            onChainAddress={onChainAddress}
-                                            setOnChainAddress={setOnChainAddress}
-                                        />
-                                        <div id="wallet-buttons">
-                                            <button
-                                                className="m-1 use_button"
-                                                onClick={async () => {
-                                                    setNostrPublicKey(await connectWallet());
-                                                    setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
-                                                    setShowWalletConnectModal(true);
-                                                }}
-                                                variant="success"
-                                                size="md"
-                                            >
-                                                <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
-                                            </button>
-
-                                            <button
-                                                className="m-1 use_button"
-                                                onClick={async () => {
-                                                    setLedgerPublicKey(await getLedgerPubkey(false));
-                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
-                                                }}
-                                                variant="success "
-                                                size="md"
-                                            >
-                                                <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <button onClick={renderSelectWalletModal}
-                                                variant="success"
-                                                size="md"
-                                                className='use_button'
-                                            >
-                                                <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            }
+                            />
                             <div id="fee-select-container">
                                 <p>How fast should your Ordinal be minted?</p>
                                 <FeeRange
@@ -596,7 +530,7 @@ function Home() {
                                     }}
                                     value={fee}
                                 />
-                                {/* <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p> */}
+
                             </div>
 
                         </Col>
@@ -694,9 +628,6 @@ function Home() {
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
                 restoreWallet={(e) => handleRestoreWallet(e, testnet)}
-            // setOrdimintPubkey={setOrdimintPubkey}
-            // setAddress={setAddress}
-            // setPrivateKey={setPrivateKey}
             />
 
             <ReceiveAddressModal

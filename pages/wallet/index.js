@@ -11,8 +11,7 @@ import Link from 'next/link';
 
 const WalletPage = () => {
 
-    const [selectedWallet, setSelectedWallet] = useState(false)
-    const [wallet, setWallet] = useState("")
+
 
     return (
 
@@ -48,8 +47,6 @@ const WalletPage = () => {
                             <Link href="/wallet/ordimint" className='d-flex justify-content-center text-decoration-none'>
                                 <button className='connect_button'>
                                     Use Ordimint Wallet
-
-
                                 </button>
                             </Link>
 
@@ -70,8 +67,6 @@ const WalletPage = () => {
                             <Link href="/wallet/alby" className='d-flex justify-content-center text-decoration-none'>
                                 <button className='connect_button'>
                                     Connect
-
-
                                 </button>
                             </Link>
                         </Card.Body>
@@ -87,8 +82,7 @@ const WalletPage = () => {
                             <Link href="/wallet/ledger" className='d-flex justify-content-center text-decoration-none'>
 
                                 <button className='connect_button' onClick={() => {
-                                    setSelectedWallet(true)
-                                    setWallet("ledger")
+
 
                                 }
                                 }>
@@ -108,11 +102,24 @@ const WalletPage = () => {
                             </Card.Text>
                             <Link href="/wallet/unisat" className='d-flex justify-content-center text-decoration-none'>
                                 <button className='connect_button' onClick={() => {
-                                    setSelectedWallet(true)
-                                    setWallet("unisat")
 
                                 }
                                 }>Connect</button>
+
+                            </Link>
+                        </Card.Body>
+                    </Card>
+                    
+                    <Card className='m-2'>
+                        <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
+                        <Card.Body>
+                            <Card.Title>Unisat</Card.Title>
+                            <Card.Text>
+                                Connect with your Xvers browser wallet.
+                            </Card.Text>
+                            <Link href="/wallet/xverse" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'
+                                >Connect</button>
 
                             </Link>
                         </Card.Body>

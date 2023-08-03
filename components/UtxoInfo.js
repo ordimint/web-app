@@ -72,6 +72,9 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setCurrentUtxo, setSh
                         utxo={it}
                         testnet={testnet}
                       />
+                      <div className='wallet-card-button'>
+                        <Button >Details</Button>
+                      </div>
                     </Card>
                     {/* </div> */}
                   </Col>
