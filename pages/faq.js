@@ -76,7 +76,7 @@ const FAQ = () => {
                             <Accordion.Item eventKey="0111">
                                 <Accordion.Header>What file types can be inscribed?</Accordion.Header>
                                 <Accordion.Body>
-                                    <p>apng, flac, gif, html, jpg, mp3, pdf, png, svg, txt, wav, webm, webp</p>
+                                    <p>apng, gif, jpeg, jpg, png, svg, webp, avif, html, txt, css, js, md, flac, mpeg, wav, webm, mp4, pdf, json, pgp, yaml, gltf, stl</p>
                                 </Accordion.Body>
                             </Accordion.Item>
                             <Accordion.Item eventKey="0444">
