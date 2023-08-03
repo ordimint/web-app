@@ -97,7 +97,7 @@ const CheckOrder = () => {
                     </Col>
                 </Row>
                 <button className='connect_button mt-4' type="submit"
-                    onClick={checkOrder}
+                    onClick={() => checkOrder()}
                 >
                     Check Order Status
                 </button>
