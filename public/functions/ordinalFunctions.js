@@ -1,4 +1,4 @@
-
+const axios = require('axios');
 
 async function getContentType(inscriptionID) {
     try {
@@ -14,6 +14,33 @@ async function getContentType(inscriptionID) {
         return error
     }
 }
+
+
+
+
+
+async function getInscriptionData(utxo) {
+
+    try {
+        const response = await axios.get(`https://ordapi.xyz/output/${utxo.txid}:${utxo.vout}`);
+        console.log(response)
+        const inscriptionPerOutput = response.data;
+        console.log(response.data)
+        if (!inscriptionPerOutput.inscriptions) {
+            console.error("Inscriptions not found in response:", inscriptionPerOutput);
+            return;
+        }
+
+        const response2 = await axios.get(`https://ordapi.xyz${inscriptionPerOutput.inscriptions}`);
+        return response2.data;
+    } catch (e) {
+        console.error("There was an error fetching the data:", e.message);
+        console.error(e);
+    }
+}
+
+
+
 
 async function getInscriptionNumber(inscriptionID) {
     let inscriptionNumber
@@ -79,4 +106,4 @@ function parseTextInscription(jsonStr) {
 
 
 
-export { getInscriptionNumber, getContentType, parseTextInscription }
+export { getInscriptionNumber, getInscriptionData, getContentType, parseTextInscription }

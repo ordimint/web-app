@@ -12,6 +12,7 @@ import { getAddressInfoLedger, signLedger } from '../WalletConfig/connectLedger'
 
 import ECPairFactory from 'ecpair';
 import unisat from '../../pages/wallet/unisat';
+import { getInscriptionData, getInscriptionID } from '../../public/functions/ordinalFunctions';
 const secp256k1 = require('@noble/secp256k1');
 const axios = require('axios')
 const ECPair = ECPairFactory(ecc);
@@ -44,6 +45,7 @@ export default function ConfirmationModal({
       throw new Error('Invalid public key length');
     }
   }
+
 
 
   async function sendUtxo() {
@@ -157,44 +159,54 @@ export default function ConfirmationModal({
       fullTx = bitcoin.Transaction.fromHex(hex)
     }
 
+    // if (unisatPublicKey) {
+    //   const psbtForUnisat = await psbt.toHex()
+    //   console.log("PSBT for Unisat in Hex:", psbtForUnisat);
+    //   console.log("PSBT for Unisat:", psbt);
+    //   try {
+
+    //     const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat);
+    //     console.log("Signed PSBT Hex:", signedPsbtHex);
+    //     const signedPsbt = bitcoin.Psbt.fromHex(signedPsbtHex);
+    //     console.log("Signed PSBT:", signedPsbt);
+    //     psbt.finalizeAllInputs()
+    //     try {
+    //       let res = await window.unisat.pushPsbt(signedPsbtHex);
+    //       console.log(res)
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+
+    //     psbt.updateInput(0, {
+    //       tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
+    //     })
+
+    //     const tx = psbt.extractTransaction()
+    //     hex = tx.toBuffer().toString('hex')
+    //     fullTx = bitcoin.Transaction.fromHex(hex)
+    //     const decodedTx = bitcoin.Transaction.fromHex(hex);
+    //     console.log("Decoded transaction:", decodedTx);
+    //     console.log(hex)
+
+
+    //     console.log(hex);
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
+
+
     if (unisatPublicKey) {
-      const psbtForUnisat = await psbt.toHex()
-      console.log("PSBT for Unisat in Hex:", psbtForUnisat);
-      console.log("PSBT for Unisat:", psbt);
       try {
-
-        const signedPsbtHex = await window.unisat.signPsbt(psbtForUnisat);
-        console.log("Signed PSBT Hex:", signedPsbtHex);
-        const signedPsbt = bitcoin.Psbt.fromHex(signedPsbtHex);
-        console.log("Signed PSBT:", signedPsbt);
-        psbt.finalizeAllInputs()
-        try {
-          let res = await window.unisat.pushPsbt(signedPsbtHex);
-          console.log(res)
-        } catch (e) {
-          console.log(e);
-        }
-
-        psbt.updateInput(0, {
-          tapKeySig: serializeTaprootSignature(Buffer.from(signedPsbtHex, 'hex'))
-        })
-
-        const tx = psbt.extractTransaction()
-        hex = tx.toBuffer().toString('hex')
-        fullTx = bitcoin.Transaction.fromHex(hex)
-        const decodedTx = bitcoin.Transaction.fromHex(hex);
-        console.log("Decoded transaction:", decodedTx);
-        console.log(hex)
-
-
-        console.log(hex);
+        console.log("UTXO", currentUtxo)
+        const inscriptionID = await getInscriptionData(currentUtxo)
+        console.log("Inscription ID:", inscriptionID.id);
+        const txid = await window.unisat.sendInscription(destinationBtcAddress, inscriptionID.id, { feeRate: sendFeeRate });
+        console.log("Transaction sent with ID", { txid })
       } catch (e) {
         console.log(e);
       }
     }
-
-
-
 
     const res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
       console.error(err);

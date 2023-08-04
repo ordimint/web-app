@@ -385,8 +385,9 @@ function Home() {
 
     useEffect(() => {
         if (!unisatPublicKey) return;
+        var unisat = window.unisat;
         async function switchNetwork() {
-            var unisat = window.unisat;
+
             try {
                 await unisat.switchNetwork(testnet ? "testnet" : "livenet");
             } catch (e) {

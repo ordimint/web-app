@@ -38,59 +38,64 @@ export default function NostrWallet() {
     const [sendFeeRate, setSendFeeRate] = useState(DEFAULT_FEE_RATE)
     const [showSentModal, setShowSentModal] = useState(false)
     const [sentTxid, setSentTxid] = useState(null)
+    const [address, setAddress] = useState(null)
 
+    async function fetchUtxosForAddress() {
+        if (!nostrPublicKey || !address) return
+        const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+        const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+        const tempInscriptionsByUtxo = {}
+        // console.log('response.data', response.data)
+        setOwnedUtxos(response.data)
+        for (const utxo of response.data) {
+            tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
+            // if (!utxo.status.confirmed) continue
+            let currentUtxo = utxo
+            // console.log('utxo', utxo)
 
-    useEffect(() => {
-        async function fetchUtxosForAddress() {
-            if (!nostrPublicKey) return
-            const addr = await getAddressInfoNostr(nostrPublicKey, testnet).address
+            // console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
+            try {
+                const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                const match = res.data.match(/<a href=\/inscription\/(.*?)>/);
+                const inscriptionId = match ? match[1] : null;
 
-            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
-            const response = await axios.get(`${mempoolUrl}/address/${addr}/utxo`)
-            const tempInscriptionsByUtxo = {}
-            console.log('response.data', response.data)
-            setOwnedUtxos(response.data)
-            for (const utxo of response.data) {
-                tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
-                // if (!utxo.status.confirmed) continue
-                let currentUtxo = utxo
-                // console.log('utxo', utxo)
-
-                // console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
-                try {
-                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
-                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
-                    const match = res.data.match(/<a href=\/inscription\/(.*?)>/);
-                    const inscriptionId = match ? match[1] : null;
-
-                    if (inscriptionId) {
-                        const [txid, vout] = inscriptionId.split('i')
-                        currentUtxo = { txid, vout }
-                    } else {
-                        console.log('Match not found');
-                        // handle the case when match is not found
-                    }
-
-                } catch (err) {
-                    console.log(`Error from explorer.ordimint.com: ${err}`)
+                if (inscriptionId) {
+                    const [txid, vout] = inscriptionId.split('i')
+                    currentUtxo = { txid, vout }
+                } else {
+                    console.log('Match not found');
+                    // handle the case when match is not found
                 }
 
-                tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
-                const newInscriptionsByUtxo = {}
-                Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)
-                setInscriptionUtxosByUtxo(newInscriptionsByUtxo)
-                setUtxosReady(true)
+            } catch (err) {
+                console.log(`Error fetching UTXO: ${err}`)
             }
-            setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
+
+            tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
+            const newInscriptionsByUtxo = {}
+            Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)
+            setInscriptionUtxosByUtxo(newInscriptionsByUtxo)
             setUtxosReady(true)
         }
+        setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
+        setUtxosReady(true)
+    }
 
-        connectOnLoad()
-        fetchUtxosForAddress()
+    useEffect(() => {
+        connectOnLoad().then(() => { });
     }, [nostrPublicKey, testnet]);
 
+    useEffect(() => {
+        fetchUtxosForAddress();
+    }, [address]);
+
+
     async function connectOnLoad() {
-        setNostrPublicKey(await connectWallet())
+        const pubKey = await connectWallet()
+        setNostrPublicKey(pubKey)
+        const addr = await getAddressInfoNostr(pubKey, testnet).address
+        setAddress(addr)
     }
 
 
@@ -112,8 +117,11 @@ export default function NostrWallet() {
             </div>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
+
+
                 <TestnetSwitch />
                 <h1 className="text-center m-3">Alby Wallet</h1>
+
                 {
                     nostrPublicKey ?
                         <div style={{ zIndex: 5 }}>

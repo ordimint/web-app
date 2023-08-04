@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Breadcrumb, Button, Alert, Image } from 'react-bootstrap';
 import Head from 'next/head';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import axios from 'axios';
 import { DEFAULT_FEE_RATE, SENDS_ENABLED } from '../../components/WalletConfig/constance';
 import UnisatLogo from '../../public/media/unisat-logo.svg';
@@ -12,12 +12,16 @@ import BeginSendModal from '../../components/modals/BeginSendModal';
 import UtxoModal from '../../components/modals/UtxoModal';
 import UtxoInfo from '../../components/UtxoInfo';
 import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
+import TestnetSwitch from '../../components/TestnetSwitch';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
+import { TestnetContext } from '../../contexts/TestnetContext';
+
 
 
 
 
 const unisat = () => {
+    const { testnet, setTestnet } = useContext(TestnetContext)
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
@@ -37,13 +41,12 @@ const unisat = () => {
     const [accounts, setAccounts] = useState([]);
     const [publicKey, setPublicKey] = useState("");
     const [address, setAddress] = useState("");
-    const [testnet, setTestnet] = useState(false)
     const [balance, setBalance] = useState({
         confirmed: 0,
         unconfirmed: 0,
         total: 0,
     });
-    const [network, setNetwork] = useState("livenet");
+    const [network, setNetwork] = useState("");
 
     const getBasicInfo = async () => {
         const unisat = window.unisat;
@@ -88,95 +91,121 @@ const unisat = () => {
         getBasicInfo();
     };
 
-    useEffect(() => {
+    async function getNetwork() {
+        var unisat = window.unisat;
+        const network = await unisat.getNetwork();
+        setNetwork(network);
         if (network === "livenet") {
             setTestnet(false);
         } else {
             setTestnet(true);
         }
-    }, [network]);
+        return testnet;
+    }
 
+    async function checkUnisat() {
+        var unisat = window.unisat;
 
-
-
-    useEffect(() => {
-
-        console.log("Is testnet:", testnet);
-        console.log("network:", network);
-        console.log("unisatInstalled:", unisatInstalled);
-        console.log("connected:", connected);
-
-        async function checkUnisat() {
-            let unisat = window.unisat;
-
-            for (let i = 1; i < 10 && !unisat; i += 1) {
-                await new Promise((resolve) => setTimeout(resolve, 10000 * i));
-                unisat = window.unisat;
-            }
-
-            if (unisat) {
-                setUnisatInstalled(true);
-            } else if (!unisat)
-                return;
-
-            unisat.getAccounts().then((accounts) => {
-                handleAccountsChanged(accounts);
-            });
-            console.log(unisat)
-            unisat.on("accountsChanged", handleAccountsChanged);
-            unisat.on("networkChanged", handleNetworkChanged);
-
-            return () => {
-                unisat.removeListener("accountsChanged", handleAccountsChanged);
-                unisat.removeListener("networkChanged", handleNetworkChanged);
-            };
+        for (let i = 1; i < 10 && !unisat; i += 1) {
+            await new Promise((resolve) => setTimeout(resolve, 10000 * i));
+            unisat = window.unisat;
         }
 
-        checkUnisat().then();
+        if (unisat) {
+            setUnisatInstalled(true);
+        } else if (!unisat)
+            return;
+
+        unisat.getAccounts().then((accounts) => {
+            handleAccountsChanged(accounts);
+        });
+
+
+        unisat.on("accountsChanged", handleAccountsChanged);
+        unisat.on("networkChanged", handleNetworkChanged);
+
+        return () => {
+            unisat.removeListener("accountsChanged", handleAccountsChanged);
+            unisat.removeListener("networkChanged", handleNetworkChanged);
+        };
+    }
+
+    async function switchNetwork() {
+        var unisat = window.unisat;
+        try {
+            await unisat.switchNetwork(testnet ? "testnet" : "livenet");
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async function getUnisatAddressAsync() {
+        var unisat = window.unisat;
+        const address = await unisat.getAccounts()
+        // console.log(address[0]);
+        setAddress(address[0]);
+    }
+
+    async function fetchUtxosForAddress() {
+        if (!address) return
+
+        const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+
+        const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+
+        const tempInscriptionsByUtxo = {}
+        setOwnedUtxos(response.data)
+        for (const utxo of response.data) {
+            tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
+            // if (!utxo.status.confirmed) continue
+            let currentUtxo = utxo
+            // console.log('utxo', utxo)
+
+            // console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
+            try {
+                const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
+                const [txid, vout] = inscriptionId.split('i')
+                currentUtxo = { txid, vout }
+            } catch (err) {
+                console.log(`Error from explorer.ordimint.com: ${err}`)
+            }
+            tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
+            const newInscriptionsByUtxo = {}
+            Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)
+            setInscriptionUtxosByUtxo(newInscriptionsByUtxo)
+            setUtxosReady(true)
+        }
+        setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
+        setUtxosReady(true)
+    }
+
+    ///////////////////Use Effects for handling the events asynchronusly/////////////////////
+
+    useEffect(() => {
+        if (!publicKey) return;
+        switchNetwork().then(() => {
+            getUnisatAddressAsync();
+        });
+
 
     }, [testnet]);
 
+
     useEffect(() => {
-        async function fetchUtxosForAddress() {
-            if (!address) return
 
-            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
-            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+        // console.log("Is testnet:", testnet);
+        // console.log("network:", network);
+        // console.log("unisatInstalled:", unisatInstalled);
+        // console.log("connected:", connected);
 
-            const tempInscriptionsByUtxo = {}
-            setOwnedUtxos(response.data)
-            for (const utxo of response.data) {
-                tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
-                // if (!utxo.status.confirmed) continue
-                let currentUtxo = utxo
-                console.log('utxo', utxo)
+        getNetwork().then(() => {
+            checkUnisat()
+            fetchUtxosForAddress()
+        })
 
-                console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
-                try {
-                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
-                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
-                    const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
-                    const [txid, vout] = inscriptionId.split('i')
-                    currentUtxo = { txid, vout }
-                } catch (err) {
-                    console.log(`Error from explorer.ordimint.com: ${err}`)
-                }
-                tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
-                const newInscriptionsByUtxo = {}
-                Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)
-                setInscriptionUtxosByUtxo(newInscriptionsByUtxo)
-                setUtxosReady(true)
-            }
-            setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
-            setUtxosReady(true)
-        }
-
-
-        fetchUtxosForAddress()
-
-    }, [publicKey, network]);
-
-
+    }, [publicKey, address]);
 
 
     return (
@@ -197,8 +226,9 @@ const unisat = () => {
                 </Container>
             </div>
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
-                {/* <TestnetSwitch /> */}
+                <TestnetSwitch />
                 <h2 className="text-center m-4">Unisat Wallet</h2>
+
                 {
                     publicKey ?
                         <div style={{ zIndex: 5 }}>
