@@ -105,7 +105,7 @@ const unisat = () => {
 
     async function checkUnisat() {
         var unisat = window.unisat;
-
+        await unisat.requestAccounts();
         for (let i = 1; i < 10 && !unisat; i += 1) {
             await new Promise((resolve) => setTimeout(resolve, 10000 * i));
             unisat = window.unisat;
