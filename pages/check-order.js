@@ -97,6 +97,7 @@ const CheckOrder = () => {
                     </Col>
                 </Row>
                 <button className='connect_button mt-4' type="submit"
+                    style={{ zIndex: 5 }}
                     onClick={() => checkOrder()}
                 >
                     Check Order Status
