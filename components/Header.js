@@ -4,43 +4,59 @@ import Link from "next/link";
 import Image from 'next/image';
 
 
-
-
 const Header = (props) => {
 
     const router = useRouter();
 
     const isActive = (href) => {
         if (href === "/") {
-            return router.pathname === href ? "active" : "";
+            return router.pathname === href ? "active_nav" : "inactive_nav";
         }
-        return router.pathname.startsWith(href) ? "active" : '';
+        return router.pathname.startsWith(href) ? "active_nav" : 'inactive_nav';
     };
 
     return (
-        <div>
+        <div className="">
             <Container fluid>
                 <Navbar
                     collapseOnSelect
                     bg="dark"
-                    expand="md"
+                    expand="lg"
                     key="nav"
                     variant="dark"
-                    className="mb-3"
+                    className="mb-3 pt-4"
+                    style={{ border: "none" }}
                 >
-                    <Link href="/">
-                        <Navbar.Brand>
+                    <div style={{
+                        position: "absolute", left: -10, borderRadius: "560px",
+                        opacity: "0.6000000238418579", filter: "blur(280px)",
+                    }}>
+                        <div style={{ height: "560px", width: '560px', background: "#500e49" }}>
+
+                            <div className="glow">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <Link href="/" style={{ zIndex: 5 }}  >
+                        <Navbar.Brand  >
                             <Image
                                 src="/media/logo.png"
                                 width={130}
                                 height={50}
+
                                 priority={false}
-                                className="d-inline-block align-top align-start"
+                                className="d-inline-block align-top align-start "
                                 alt="Ordimint Brand Logo"
                             />
                         </Navbar.Brand>
                     </Link>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{ zIndex: 5 }} />
+
                     <Navbar.Offcanvas
                         id="responsive-navbar-nav"
                         aria-labelledby="offcanvasNavbarLabel-expand-nav"
@@ -49,50 +65,74 @@ const Header = (props) => {
                         <Offcanvas.Header closeButton closeVariant="white">
                             <Offcanvas.Title id="offcanvasNavbarLabel-expand-nav">
                                 <Container className="justify-content-center">
-                                    {/* <img src={logo} alt="LN ⚡ VPN" id="nav-menu-image"></img>  */}
+
                                 </Container>
                             </Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body id="mobile-menu">
-                            <Nav variant="pills" className="container">
+                            <Nav variant="pills" className="container" style={{ zIndex: 5 }}>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/')} href="/">
-                                        Inscribe  </Nav.Link>
+                                    <a href="/" className={isActive('/')}>
+
+                                        Inscribe
+                                    </a>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/check-order')} href="/check-order">Check Order</Nav.Link>
+                                    <a href="/check-order" className={isActive('/check-order')}>
+                                        Check Order
+                                    </a>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/wallet')} href="/wallet">Wallet</Nav.Link>
+                                    <a href="/wallet" className={isActive('/wallet')}>
+                                        Wallet
+                                    </a>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/ordinal-collections')} href="/ordinal-collections">Collections</Nav.Link>
+                                    <a href="/ordinal-collections" className={isActive('/ordinal-collections')}>
+                                        Collections
+                                    </a>
                                 </Nav.Item>
                                 {/* <Nav.Item>
-                                    <Nav.Link className={isActive('/market')} href="/market">Market</Nav.Link>
+
+                                    <a href="/market" className={isActive('/market')}>
+
+                                        Market
+                                    </a>
                                 </Nav.Item> */}
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/search')} href="/search">Search </Nav.Link>
+
+                                    <a href="/search" className={isActive('/search')}>
+
+                                        Search
+                                    </a>
+
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link className={isActive('/faq')} href="/faq">FAQ </Nav.Link>
+                                    <a href="/faq" className={isActive('/faq')}>
+
+                                        FAQ
+                                    </a>
                                 </Nav.Item>
                             </Nav>
+
                             <hr></hr>
                             <Nav >
-                                <Nav.Item >
-                                    <a href="https://api.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >API (New)</Button>
+
+                                <Nav.Item className="mb-4">
+                                    <a className="nav_button" href="https://api.ordimint.com" target="_blank" rel="noreferrer">
+                                        API
+
                                     </a>
                                 </Nav.Item>
-                                <Nav.Item >
-                                    <a href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >Testnet Explorer</Button>
+                                <Nav.Item className="mb-4" >
+                                    <a className="nav_button" href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
+                                        Testnet Explorer
                                     </a>
-                                </Nav.Item> 
-                                <Nav.Item >
-                                    <a href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
-                                        <Button >Ordinal Explorer</Button>
+                                </Nav.Item>
+                                <Nav.Item className="mb-4">
+
+                                    <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
+                                        <span>Ordinal Explorer</span>
                                     </a>
                                 </Nav.Item>
                             </Nav>

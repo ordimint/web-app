@@ -131,22 +131,33 @@ const FileUpload = (props) => {
             <p>Drop the files here...</p>
           ) : (
             <>
-              <AiOutlineCloudUpload size={48} className="upload-icon" />
+              <AiOutlineCloudUpload size={48} className="upload-icon" color="#f69102" />
               <p>
 
                 {' '}
-                Drag and drop a file here, or click to select a file you want to inscribe.</p>
+                Drag and drop a file here, or click to <br /> select a file you want to inscribe.</p>
             </>
           )}
         </div>
         {isImage(props.fileType) && (
           <Form.Group controlId="compressImage" className="mt-2 mb-2">
-            <Form.Check
+            <div className="form-check">
+              <input className="form-check-input" type="checkbox"
+                label="Compress image"
+
+                checked={compressImage}
+                onChange={handleCompressionChange} />
+              <label className="form-check-label" htmlFor="checkbox1">
+                Compress image
+              </label>
+            </div>
+            {/* <Form.Check
               type="checkbox"
               label="Compress image"
+              custom
               checked={compressImage}
               onChange={handleCompressionChange}
-            />
+            /> */}
           </Form.Group>
         )}
       </div>

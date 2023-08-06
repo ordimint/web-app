@@ -18,15 +18,17 @@ const FAQ = () => {
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:image" content="https://ordimint.com/logo-dark.jpeg" />
             </Head>
-            <h1 className='mb-3'>FAQ</h1>
-            <Container>
+
+            <Container className='mt-4'>
                 <Row xs={1} sm={1} md={1} lg={2}>
-                    <Col>
-                        <h2 className='mt-3'>General</h2>
-                        <Accordion>
+                    <Col >
+
+                        <Accordion id="myAccordion" >
                             <Accordion.Item eventKey="0">
-                                <Accordion.Header>What is this?</Accordion.Header>
-                                <Accordion.Body>
+                                <Accordion.Header >
+                                    <span className='test'>What is this?</span>
+                                </Accordion.Header>
+                                <Accordion.Body >
                                     <p>Ordimint is a user-friendly Lightning app that enables users to create inscriptions on the Bitcoin blockchain. The app features a non-custodial wallet, which connects to your Nostr key through the <a href="https://getalby.com" target="_blank">Alby</a> browser extension. Additionally, it offers <a href="https://www.ledger.com" target="_blank">Ledger</a> hardware wallet integration and a non-custodial web wallet.</p>
                                     <p>Ordimint also hosts its own <a href="https://explorer.ordimint.com" target="_blank">Ordinal explorer</a> and utilizes a Lightning backend, powered by <a href="https://lnbits.com" target="_blank">Lnbits</a> and its dedicated node. To enhance the user experience, a collection page is available for browsing all existing Ordinal collections.</p>
                                 </Accordion.Body>
@@ -35,20 +37,20 @@ const FAQ = () => {
                             <Accordion.Item eventKey="011">
                                 <Accordion.Header>How does it work?</Accordion.Header>
                                 <Accordion.Body>
-                                    <ListGroup variant="flush" numbered>
-                                        <ListGroup.Item>
+                                    <ListGroup variant="flush" numbered >
+                                        <ListGroup.Item className='list_group'>
                                             You upload a file, text, chose your domain or a BRC-20 token which should be stored as an Inscription on the Bitcoin Blockchain.
                                             To avoid overloading the blockchain, the file size is limited to 0.7MB (700KB).
                                             The smaller the file, the more cost-effective the inscription. Simple, right?
                                         </ListGroup.Item>
-                                        <ListGroup.Item>
+                                        <ListGroup.Item className='list_group'>
                                             You provide a receiver's on-chain address or use one of the supported wallets to which the Inscription should be minted. To track the Inscription on the blockchain, the Ordinal theory is used.
                                             You can receive the Inscription on any wallet, but make sure not to spend this UTXO. Therefore we recommend to use one of our supported wallets.
                                         </ListGroup.Item>
-                                        <ListGroup.Item>
+                                        <ListGroup.Item className='list_group'>
                                             Pay with Lightning
                                         </ListGroup.Item>
-                                        <ListGroup.Item>
+                                        <ListGroup.Item className='list_group'>
                                             Check your order status. Please be patient! It will take some time to mint the Ordinal. It will be minted directly to your wallet without any intermediaries.
                                         </ListGroup.Item>
                                     </ListGroup>
@@ -74,7 +76,7 @@ const FAQ = () => {
                             <Accordion.Item eventKey="0111">
                                 <Accordion.Header>What file types can be inscribed?</Accordion.Header>
                                 <Accordion.Body>
-                                    <p>apng, flac, gif, html, jpg, mp3, pdf, png, svg, txt, wav, webm, webp</p>
+                                    <p>apng, gif, jpeg, jpg, png, svg, webp, avif, html, txt, css, js, md, flac, mpeg, wav, webm, mp4, pdf, json, pgp, yaml, gltf, stl</p>
                                 </Accordion.Body>
                             </Accordion.Item>
                             <Accordion.Item eventKey="0444">
@@ -88,12 +90,6 @@ const FAQ = () => {
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
-
-                        </Accordion>
-                    </Col>
-                    <Col>
-                        <h2 className='mt-3'>Wallets</h2>
-                        <Accordion>
                             <Accordion.Item eventKey="01111">
                                 <Accordion.Header>Can I send an Ordinal to any BTC address?</Accordion.Header>
                                 <Accordion.Body>
@@ -166,12 +162,7 @@ const FAQ = () => {
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
-                        </Accordion>
-                    </Col>
-                    <Col className='mt-3'>
-                        <h2>BRC-20</h2>
-                        <Accordion>
-                            <Accordion.Item eventKey="0">
+                            <Accordion.Item eventKey="000001">
                                 <Accordion.Header>What are BRC-20 tokens?</Accordion.Header>
                                 <Accordion.Body>
                                     <p>
@@ -222,10 +213,17 @@ const FAQ = () => {
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
+
                         </Accordion>
                     </Col>
+
+
+
+
+
+
                 </Row>
-                <Footer />
+
             </Container>
         </div >
     )

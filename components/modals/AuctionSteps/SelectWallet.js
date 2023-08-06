@@ -3,7 +3,7 @@ import { ButtonGroup, ToggleButton } from 'react-bootstrap';
 import Image from 'next/image';
 import AlbyLogo from '../../../public/media/alby_icon_yellow.svg';
 import LedgerLogo from '../../../public/media/ledger-logo-small.svg';
-import OrdimintLogo from '../../../public/media/ordimint-coin.png';
+import OrdimintLogo from '../../../public/media/ordimint-coin-white.png';
 
 const wallets = [
     { logo: OrdimintLogo, name: 'Ordimint', alt: 'Ordimint Logo' },

@@ -31,34 +31,27 @@ const BRC = (props) => {
       </div>
       <Form className="mt-2">
 
-        <div key={`inline-radio`} className="mb-3">
-          <Form.Check
-            inline
-            value="deploy"
-            label="Deploy"
-            name="group1"
-            type="radio"
-            onChange={(e) => { props.onChange(e.target.value) }}
-            checked={props.brcRadioButton === "deploy"}
-          />
-          <Form.Check
-            inline
-            label="Mint"
-            value="mint"
-            name="group1"
-            type="radio"
-            onChange={(e) => { props.onChange(e.target.value) }}
-            checked={props.brcRadioButton === "mint"}
-          />
-          <Form.Check
-            inline
-            label="Transfer"
-            value="transfer"
-            name="group1"
-            type="radio"
-            onChange={(e) => { props.onChange(e.target.value) }}
-            checked={props.brcRadioButton === "transfer"}
-          />
+        <div key={`inline-radio`} className="mb-3 " >
+
+          <input className="form-check-input custom-radio" type="radio" value="deploy" onChange={(e) => { props.onChange(e.target.value) }}
+            checked={props.brcRadioButton === "deploy"} />
+          <label className="form-check-label"  >
+            Deploy
+          </label>
+
+
+          <input className="form-check-input custom-radio" type="radio" value="mint" onChange={(e) => { props.onChange(e.target.value) }}
+            checked={props.brcRadioButton === "mint"} />
+          <label className="form-check-label"  >
+            Mint
+          </label>
+
+          <input className="form-check-input custom-radio" type="radio" value="transfer" onChange={(e) => { props.onChange(e.target.value) }}
+            checked={props.brcRadioButton === "transfer"} />
+          <label className="form-check-label"  >
+            Transfer
+          </label>
+
         </div>
 
       </Form>
@@ -132,7 +125,7 @@ const BRC = (props) => {
 
 
       }
-      <p><a href="https://domo-2.gitbook.io/brc-20-experiment/" target="_blank" rel="noopener noreferrer" >Read more about BRC-20 tokens here</a></p>
+      <p><a href="https://domo-2.gitbook.io/brc-20-experiment/" className='active_link' target="_blank" rel="noopener noreferrer" >Read more about BRC-20 tokens here</a></p>
     </div>
   )
 }

@@ -1,29 +1,23 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import { Breadcrumb } from 'react-bootstrap';
+import { Container, Breadcrumb, Button, Alert, Image } from 'react-bootstrap';
 import Head from 'next/head';
-import { BsBoxArrowInDownLeft } from "react-icons/bs"
-import Alert from 'react-bootstrap/Alert';
-import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
+import { useEffect, useRef, useState } from "react";
+import axios from 'axios';
+import { DEFAULT_FEE_RATE, SENDS_ENABLED } from '../../components/WalletConfig/constance';
+import UnisatLogo from '../../public/media/unisat-logo.svg';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import SelectFeeRateModal from '../../components/modals/SelectFeeRateModal';
 import SentModal from '../../components/modals/SentModal';
 import BeginSendModal from '../../components/modals/BeginSendModal';
 import UtxoModal from '../../components/modals/UtxoModal';
 import UtxoInfo from '../../components/UtxoInfo';
-import { DEFAULT_FEE_RATE, INSCRIPTION_SEARCH_DEPTH, SENDS_ENABLED } from '../../components/WalletConfig/constance';
-import { getLedgerPubkey, getAddressInfoLedger } from '../../components/WalletConfig/connectLedger';
-import axios from 'axios';
-import { Spinner } from 'react-bootstrap';
-import { TestnetContext } from '../../contexts/TestnetContext';
+import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
+import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import TestnetSwitch from '../../components/TestnetSwitch';
+import { getAddress, signTransaction } from 'sats-connect'
 
 
-const LedgerWallet = () => {
-    const { testnet } = React.useContext(TestnetContext);
-    const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
+const unisat = () => {
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
@@ -38,35 +32,43 @@ const LedgerWallet = () => {
     const [sendFeeRate, setSendFeeRate] = useState(DEFAULT_FEE_RATE)
     const [showSentModal, setShowSentModal] = useState(false)
     const [sentTxid, setSentTxid] = useState(null)
-    const [address, setAddress] = useState(null)
+    const [unisatInstalled, setUnisatInstalled] = useState(false);
+    const [connected, setConnected] = useState(false);
+    const [accounts, setAccounts] = useState([]);
+    const [publicKey, setPublicKey] = useState("");
+    const [address, setAddress] = useState("");
+    const [testnet, setTestnet] = useState(false)
+
+
+
+    const getAddressOptions = {
+        payload: {
+            purposes: ['ordinals', 'payment'],
+            message: 'Address for receiving Ordinals and payments',
+            network: {
+                type: 'Mainnet'
+            },
+        },
+        onFinish: (response) => {
+            console.log(response)
+        },
+        onCancel: () => alert('Request canceled'),
+    }
+
+
 
     useEffect(() => {
-        async function fetchAddressForLedger() {
-            if (ledgerPublicKey) {
-                const newAddress = await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address;
-                setAddress(newAddress);
-            }
-        }
-
-        fetchAddressForLedger();
-    }, [testnet, ledgerPublicKey]);
-
-
-    useEffect(() => {
-        async function fetchUtxosForLedger() {
-            if (!ledgerPublicKey) {
-                console.log("Connect on load", ledgerPublicKey)
-                await connectOnLoad()
-                return
-            }
-            if (!address) {
-                await setAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address)
-                return
-            }
+        async function fetchUtxosForAddress() {
             console.log('address', address)
+            const addr = await getAddress(getAddressOptions);
+            if (!address) return
+            console.log('address', address)
+            // const addr = await getAddress(getAddressOptions);
+            setAddress(addr)
+            console.log('addr', addr)
             const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
             const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
-            console.log('response', response)
+
             const tempInscriptionsByUtxo = {}
             setOwnedUtxos(response.data)
             for (const utxo of response.data) {
@@ -83,7 +85,7 @@ const LedgerWallet = () => {
                     const [txid, vout] = inscriptionId.split('i')
                     currentUtxo = { txid, vout }
                 } catch (err) {
-                    console.log(`Error from Ordinal Explorer`)
+                    console.log(`Error from explorer.ordimint.com: ${err}`)
                 }
                 tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
                 const newInscriptionsByUtxo = {}
@@ -95,71 +97,56 @@ const LedgerWallet = () => {
             setUtxosReady(true)
         }
 
-        fetchUtxosForLedger()
+
+        fetchUtxosForAddress()
+
+    }, []);
 
 
-    }, [ledgerPublicKey, address])
 
-
-    async function connectOnLoad() {
-
-        setLedgerPublicKey(await getLedgerPubkey(false))
-
-    }
 
     return (
         <div>
             <Head>
-                <title>Ordimint - Ledger Hardware Wallet Integration</title>
+                <title>Ordimint - UXverse Wallet</title>
                 <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
+
             <div style={{ position: "absolute", left: 50 }}>
+
                 <Container>
                     <Breadcrumb>
                         <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Ledger Wallet</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Unisat Wallet</Breadcrumb.Item>
                     </Breadcrumb>
                 </Container>
             </div>
-
-
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
                 <TestnetSwitch />
-                <h1 className="text-center m-3">Ledger Wallet</h1>
+                <h2 className="text-center m-4">Xverse Wallet</h2>
                 {
-                    ledgerPublicKey ?
+                    publicKey ?
                         <div style={{ zIndex: 5 }}>
-                            <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small"
-                                onClick={async () =>
-                                    setShowReceiveAddressModal(true)}>
-                                Receive<BsBoxArrowInDownLeft />
+                            <Button variant="primary" size="lg" className="mx-3 shadowed-orange-small" onClick={() => setShowReceiveAddressModal(true)}>
+                                Receive <BsBoxArrowInDownLeft />
                             </Button>
                         </div>
                         :
                         <>
                             <div>
                                 <Alert variant="light">
-                                    Connect your Ledger to your computer and open the Bitcoin app.<br></br>
-                                    You should use Chrome browser or Microsoft Edge.
+                                    It seems like your Unisat wallet is not installed.
                                 </Alert>
-                                <Spinner>
-
-                                    <span className="sr-only"></span>
-                                </Spinner>
-                                <p>Connecting....</p>
                                 <br />
+
+
                             </div>
                         </>
                 }
                 <br /><br />
-                {ledgerPublicKey &&
+                {publicKey &&
                     <div>
-                        <Alert variant="light">
-                            The transactions and Ordinals will not be visible in your Ledger Live app.
-                            This is to prevent interference with your existing accounts and to avoid accidentally sending funds to your Ordinal account or you send your Ordinal accidentally to another account.
-                            So don't worry, your Ordinals are safu.
-                        </Alert>
                         <UtxoInfo
                             testnet={testnet}
                             utxosReady={utxosReady}
@@ -168,7 +155,9 @@ const LedgerWallet = () => {
                             setCurrentUtxo={setCurrentUtxo}
                             inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
                         />
-                    </div>}
+                    </div>
+                }
+
             </Container>
 
 
@@ -176,7 +165,8 @@ const LedgerWallet = () => {
                 testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
-                ledgerPublicKey={ledgerPublicKey}
+                unisatAddress={address}
+
             />
             <UtxoModal
                 setShowBeginSendModal={setShowBeginSendModal}
@@ -200,25 +190,25 @@ const LedgerWallet = () => {
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <SelectFeeRateModal
-                testnet={testnet}
                 showSelectFeeRateModal={showSelectFeeRateModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 currentUtxo={currentUtxo}
                 sendFeeRate={sendFeeRate}
+                testnet={testnet}
                 setSendFeeRate={setSendFeeRate}
                 setShowBeginSendModal={setShowBeginSendModal}
                 setShowConfirmSendModal={setShowConfirmSendModal}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
             />
             <ConfirmationModal
+                testnet={testnet}
                 setShowConfirmSendModal={setShowConfirmSendModal}
                 showConfirmSendModal={showConfirmSendModal}
                 setShowSelectFeeRateModal={setShowSelectFeeRateModal}
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
-                testnet={testnet}
-                ledgerPublicKey={ledgerPublicKey}
+                unisatPublicKey={publicKey}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
@@ -231,8 +221,8 @@ const LedgerWallet = () => {
             />
 
 
-        </div>
+        </div >
     )
-}
 
-export default LedgerWallet
+}
+export default unisat

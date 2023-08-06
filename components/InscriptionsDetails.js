@@ -27,6 +27,7 @@ const InscriptionsDetails = (props) => {
         }
 
     }
+
     return (
         <>
             {

@@ -83,23 +83,25 @@ const CheckOrder = () => {
                 </div >) : (<></>)} */}
                 <Row>
                     <Col xs={12} lg={11}>
-                        <InputGroup id='order-id-input'>
-                            <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
+                        <InputGroup id='order-id-inputs'>
+                            <InputGroup.Text id="basic-addon1" style={{ border: "2px solid #6a6b6b", background: "#1c1d1d", color: "#fff" }}>Order ID</InputGroup.Text>
                             <Form.Control
                                 onChange={(e) => setOrderID(e.target.value)}
                                 placeholder="Insert Your Order ID"
                                 aria-label="Order ID"
+
                                 aria-describedby="basic-addon1"
                             />
                         </InputGroup>
 
                     </Col>
                 </Row>
-                <Button variant="success" type="submit"
-                    onClick={checkOrder}
+                <button className='connect_button mt-4' type="submit"
+                    style={{ zIndex: 5 }}
+                    onClick={() => checkOrder()}
                 >
                     Check Order Status
-                </Button>
+                </button>
 
             </div>
         </Container>

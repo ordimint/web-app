@@ -4,15 +4,14 @@ import { Card, Button } from 'react-bootstrap';
 import LedgerWallet from './ledger';
 import { useState, useEffect } from 'react'
 import Footer from '../../components/Footer'
-// import OrdimintWallet from '../components/OrdimintWallet';
+
 import Head from 'next/head';
 import Link from 'next/link';
-import TestnetSwicht from '../../components/TestnetSwitch';
+
 
 const WalletPage = () => {
 
-    const [selectedWallet, setSelectedWallet] = useState(false)
-    const [wallet, setWallet] = useState("")
+
 
     return (
 
@@ -45,9 +44,12 @@ const WalletPage = () => {
                             <Card.Text>
                                 Create a new Ordimint wallet or restore an existing one.
                             </Card.Text>
-                            <Link href="/wallet/ordimint">
-                                <Button variant="primary"
-                                >Use Ordimint Wallet</Button></Link>
+                            <Link href="/wallet/ordimint" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'>
+                                    Use Ordimint Wallet
+                                </button>
+                            </Link>
+
                         </Card.Body>
                     </Card>
 
@@ -62,15 +64,10 @@ const WalletPage = () => {
                                 </a>{" "}
                                 browser extension.
                             </Card.Text>
-                            <Link href="/wallet/alby">
-                                <Button variant="primary"
-                                // onClick={() => {
-                                //     setSelectedWallet(true)
-                                //     setWallet("alby")
-                                // }
-                                // }
-
-                                >Connect</Button>
+                            <Link href="/wallet/alby" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'>
+                                    Connect
+                                </button>
                             </Link>
                         </Card.Body>
                     </Card>
@@ -82,24 +79,56 @@ const WalletPage = () => {
                             <Card.Text>
                                 Connect your Ledger hardware wallet via USB.
                             </Card.Text>
-                            <Link href="/wallet/ledger">
-                                <Button variant="primary"
-                                    onClick={() => {
-                                        setSelectedWallet(true)
-                                        setWallet("ledger")
+                            <Link href="/wallet/ledger" className='d-flex justify-content-center text-decoration-none'>
 
-                                    }
-                                    }
+                                <button className='connect_button' onClick={() => {
 
-                                >Connect</Button>
+
+                                }
+                                }>
+                                    Connect
+
+                                </button>
+
                             </Link>
                         </Card.Body>
                     </Card>
+                    <Card className='m-2'>
+                        <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
+                        <Card.Body>
+                            <Card.Title>Unisat</Card.Title>
+                            <Card.Text>
+                                Connect with your Unisat browser wallet.
+                            </Card.Text>
+                            <Link href="/wallet/unisat" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button' onClick={() => {
+
+                                }
+                                }>Connect</button>
+
+                            </Link>
+                        </Card.Body>
+                    </Card>
+                    {/*
+                    <Card className='m-2'>
+                        <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
+                        <Card.Body>
+                            <Card.Title>Unisat</Card.Title>
+                            <Card.Text>
+                                Connect with your Xvers browser wallet.
+                            </Card.Text>
+                            <Link href="/wallet/xverse" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'
+                                >Connect</button>
+
+                            </Link>
+                        </Card.Body>
+                    </Card> */}
 
 
                 </div>
             </div>
-            <Footer />
+
         </div>
     )
 }

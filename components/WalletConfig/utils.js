@@ -34,7 +34,6 @@ export const getAddressInfoNostr = (nostrPublicKey, testnet) => {
   return addrInfo
 }
 
-
 export const connectWallet = async () => {
   if (window.nostr && window.nostr.enable) {
     await window.nostr.enable()

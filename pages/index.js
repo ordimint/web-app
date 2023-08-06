@@ -1,23 +1,17 @@
 import { React, useEffect, useContext } from 'react';
 import { io } from "socket.io-client";
 import FileUpload from '../components/FileUpload';
-import OnchainInput from '../components/OnchainInput';
 import InvoiceModal from '../components/modals/InvoiceModal';
 import { validate, Network } from 'bitcoin-address-validation'
-import Footer from '../components/Footer';
-import Image from 'next/image';
-import { Row, Container, Button, Tab, Tabs, Col } from "react-bootstrap";
+import { Row, Container, Button, Tab, Tabs, Col, Alert } from "react-bootstrap";
 import { useState } from "react";
-import AlbyLogo from '../public/media/alby_icon_yellow.svg';
-import LedgerLogo from '../public/media/ledger-logo-small.svg';
-import OrdimintLogo from '../public/media/ordimint-coin.png';
 import AlertModal from '../components/modals/AlterModal';
 import FeeRange from '../components/FeeRange';
 import Price from '../components/Price';
 import ReceiveAddressModal from '../components/modals/ReceiveAddressModal';
-import WalletConnectModal from '../components/modals/WalletConnectModal';
 import { getAddressInfoNostr, connectWallet } from '../components/WalletConfig/utils';
 import { getLedgerPubkey, getAddressInfoLedger } from '../components/WalletConfig/connectLedger';
+import { getUnisatPubkey, getAddressInfoUnisat, connectUnisat } from '../components/WalletConfig/unisatWalletFunctions';
 import TextInput from '../components/TextInput';
 import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
@@ -30,6 +24,7 @@ import { generateWallet, restoreWallet, getOrdimintAddress } from '../components
 import TestnetSwitch from '../components/TestnetSwitch';
 import BRCPreviewModal from '../components/modals/BRCPreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
+import WalletSelect from '../components/WalletSelect';
 
 
 
@@ -49,6 +44,7 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 function Home() {
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
+    const [unisatPublicKey, setUnisatPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
     const [tabKey, setTabKey] = useState('file');
@@ -114,9 +110,12 @@ function Home() {
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
     /////Inscription number + or -
-    const { testnet } = useContext(TestnetContext);
+    const { testnet, setTestnet } = useContext(TestnetContext);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
+
+
+
 
     useEffect(() => {
         if (!showGenerateWalletModal && ordimintPubkey) {
@@ -384,11 +383,33 @@ function Home() {
         getNostrAddressAsync();
     }, [nostrPublicKey, testnet]);
 
+    useEffect(() => {
+        if (!unisatPublicKey) return;
+        var unisat = window.unisat;
+        async function switchNetwork() {
+
+            try {
+                await unisat.switchNetwork(testnet ? "testnet" : "livenet");
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        async function getUnisatAddressAsync() {
+
+            const address = await unisat.getAccounts()
+            console.log(address[0]);
+            setOnChainAddress(address[0]);
+        }
+        switchNetwork().then(() => {
+            getUnisatAddressAsync();
+        });
+    }, [testnet]);
+
 
 
 
     return (
-        <div className="App" >
+        <div className="App " >
             <Head>
                 <meta name="description" content="Ordimint offers an easy-to-use Wallet and Inscription service for Bitcoin Ordinals, enabling seamless Ordinal management and minting of unique Bitcoin inscriptions." />
                 <title>Ordimint - Inscribe</title>
@@ -405,8 +426,8 @@ function Home() {
             </Head>
 
             <Container>
-                <div className='main-middle'>
-                    <Row>
+                <div className=''>
+                    <Row style={{ display: "flex", justifyContent: "center" }}>
                         <Col id='left-side-container'>
                             <div id="tab-container">
                                 <p>What do you want to inscribe:</p>
@@ -416,6 +437,7 @@ function Home() {
                                     onSelect={(k) => setTabKey(k)}
                                     justify
                                     fill
+                                    style={{ border: "none" }}
                                 >
 
                                     <Tab eventKey="file" title="File">
@@ -487,105 +509,29 @@ function Home() {
                                 />
 
                             </div>
+                            <WalletSelect
+                                nostrPublicKey={nostrPublicKey}
+                                ledgerPublicKey={ledgerPublicKey}
+                                ordimintPubkey={ordimintPubkey}
+                                onChainAddress={onChainAddress}
+                                setOnChainAddress={setOnChainAddress}
+                                showWalletConnectModal={showWalletConnectModal}
+                                setShowWalletConnectModal={setShowWalletConnectModal}
+                                connectWallet={connectWallet}
+                                getAddressInfoNostr={getAddressInfoNostr}
+                                testnet={testnet}
+                                getLedgerPubkey={getLedgerPubkey}
+                                getAddressInfoLedger={getAddressInfoLedger}
+                                renderSelectWalletModal={renderSelectWalletModal}
+                                setNostrPublicKey={setNostrPublicKey}
+                                setLedgerPublicKey={setLedgerPublicKey}
+                                unisatPublicKey={unisatPublicKey}
+                                setUnisatPublicKey={setUnisatPublicKey}
+                                getUnisatPubkey={getUnisatPubkey}
+                                getAddressInfoUnisat={getAddressInfoUnisat}
+                                connectUnisat={connectUnisat}
 
-                            {
-                                (nostrPublicKey || ledgerPublicKey || ordimintPubkey) ? (
-                                    <>
-                                        {nostrPublicKey ? (
-                                            <>
-                                                <div className="success-alert-input input-button">
-                                                    <p>Your receiver address:</p>
-                                                    <OnchainInput
-                                                        onChainAddress={onChainAddress}
-                                                        setOnChainAddress={setOnChainAddress}
-                                                    />
-                                                    <WalletConnectModal
-                                                        address={onChainAddress}
-                                                        show={showWalletConnectModal}
-                                                        handleClose={() => setShowWalletConnectModal(false)}
-                                                    />
-                                                </div>
-                                            </>
-                                        ) : ledgerPublicKey ? (
-                                            <>
-                                                <div className="success-alert-input input-button">
-                                                    <p>Your receiver address:</p>
-                                                    <OnchainInput
-                                                        onChainAddress={onChainAddress}
-                                                        setOnChainAddress={setOnChainAddress}
-                                                    />
-                                                    <WalletConnectModal
-                                                        address={onChainAddress}
-                                                        show={showWalletConnectModal}
-                                                        handleClose={() => setShowWalletConnectModal(false)}
-                                                    />
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div className="success-alert-input input-button">
-                                                    <p>Your receiver address:</p>
-                                                    <OnchainInput
-                                                        onChainAddress={onChainAddress}
-                                                        setOnChainAddress={setOnChainAddress}
-                                                    />
-                                                </div>
-                                                <WalletConnectModal
-                                                    address={onChainAddress}
-                                                    show={showWalletConnectModal}
-                                                    handleClose={() => setShowWalletConnectModal(false)}
-                                                />
-
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    <div className="input-button">
-                                        <p>How do you want to receive your Ordinal?
-                                            <br />
-                                            Enter an on-chain address or use a wallet.
-                                        </p>
-                                        <OnchainInput
-                                            onChainAddress={onChainAddress}
-                                            setOnChainAddress={setOnChainAddress}
-                                        />
-                                        <div id="wallet-buttons">
-                                            <Button
-                                                className="m-1"
-                                                onClick={async () => {
-                                                    setNostrPublicKey(await connectWallet());
-                                                    setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
-                                                    setShowWalletConnectModal(true);
-                                                }}
-                                                variant="success"
-                                                size="md"
-                                            >
-                                                <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /> use Alby Wallet
-                                            </Button>
-
-                                            <Button
-                                                className="m-1"
-                                                onClick={async () => {
-                                                    setLedgerPublicKey(await getLedgerPubkey(false));
-                                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
-                                                }}
-                                                variant="success"
-                                                size="md"
-                                            >
-                                                <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /> use Ledger HW
-                                            </Button>
-                                        </div>
-                                        <div>
-                                            <Button onClick={renderSelectWalletModal}
-                                                variant="success"
-                                                size="md"
-                                            >
-                                                <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )
-                            }
+                            />
                             <div id="fee-select-container">
                                 <p>How fast should your Ordinal be minted?</p>
                                 <FeeRange
@@ -594,7 +540,7 @@ function Home() {
                                     }}
                                     value={fee}
                                 />
-                                {/* <p>(High-speed minting is briefly on hold for smoother mempool clearance.)</p> */}
+
                             </div>
 
                         </Col>
@@ -604,7 +550,8 @@ function Home() {
                     <Price
                         price={price}
                     />
-                    <Button
+                    <button
+                        className='pay_button'
                         onClick={() => {
                             getInvoice(price);
                             renderAlert(false);
@@ -620,15 +567,14 @@ function Home() {
                         }}
                         variant="success"
                         size="lg"
-                    // disabled
                     >
                         Pay with Lightning
-                    </Button>
+                    </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
                         <p>You get ~3.000 Sats back when you receive the Ordinal.</p>
                     </div>
-                    <Footer />
+
                 </div>
             </Container >
             <AlertModal
@@ -692,9 +638,6 @@ function Home() {
                 showRestoreWalletModal={showRestoreWalletModal}
                 handleRestoreWalletModalClose={handleRestoreWalletModalClose}
                 restoreWallet={(e) => handleRestoreWallet(e, testnet)}
-            // setOrdimintPubkey={setOrdimintPubkey}
-            // setAddress={setAddress}
-            // setPrivateKey={setPrivateKey}
             />
 
             <ReceiveAddressModal
