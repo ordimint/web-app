@@ -1,10 +1,9 @@
 import React from 'react'
 import { Container, Breadcrumb, Button, Alert, Image } from 'react-bootstrap';
 import Head from 'next/head';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import axios from 'axios';
 import { DEFAULT_FEE_RATE, SENDS_ENABLED } from '../../components/WalletConfig/constance';
-import UnisatLogo from '../../public/media/unisat-logo.svg';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import SelectFeeRateModal from '../../components/modals/SelectFeeRateModal';
 import SentModal from '../../components/modals/SentModal';
@@ -14,10 +13,11 @@ import UtxoInfo from '../../components/UtxoInfo';
 import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import TestnetSwitch from '../../components/TestnetSwitch';
-import { getAddress, signTransaction } from 'sats-connect'
+import { TestnetContext } from '../../contexts/TestnetContext';
+import { getAddress } from 'sats-connect'
 
 
-const unisat = () => {
+const xverse = () => {
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
@@ -32,12 +32,9 @@ const unisat = () => {
     const [sendFeeRate, setSendFeeRate] = useState(DEFAULT_FEE_RATE)
     const [showSentModal, setShowSentModal] = useState(false)
     const [sentTxid, setSentTxid] = useState(null)
-    const [unisatInstalled, setUnisatInstalled] = useState(false);
-    const [connected, setConnected] = useState(false);
-    const [accounts, setAccounts] = useState([]);
     const [publicKey, setPublicKey] = useState("");
     const [address, setAddress] = useState("");
-    const [testnet, setTestnet] = useState(false)
+    const { testnet, setTestnet } = useContext(TestnetContext)
 
 
 
@@ -46,61 +43,71 @@ const unisat = () => {
             purposes: ['ordinals', 'payment'],
             message: 'Address for receiving Ordinals and payments',
             network: {
-                type: 'Mainnet'
+                type: testnet ? 'Testnet' : 'Mainnet',
             },
         },
         onFinish: (response) => {
             console.log(response)
+            setPublicKey(response.addresses[0].publicKey)
+            setAddress(response.addresses[0].address)
+            console.log('address', address)
+            console.log('publicKey', publicKey)
+
         },
         onCancel: () => alert('Request canceled'),
+    }
+
+    async function connect() {
+        const addr = await getAddress(getAddressOptions);
+
+    }
+
+    async function fetchUtxosForAddress() {
+        if (!address) return
+
+        const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
+        const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+        console.log('response', response)
+        const tempInscriptionsByUtxo = {}
+        setOwnedUtxos(response.data)
+        for (const utxo of response.data) {
+            tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
+            // if (!utxo.status.confirmed) continue
+            let currentUtxo = utxo
+            console.log('utxo', utxo)
+
+            console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
+            try {
+                const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
+                const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
+                const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
+                const [txid, vout] = inscriptionId.split('i')
+                currentUtxo = { txid, vout }
+            } catch (err) {
+                console.log(`Error from explorer.ordimint.com: ${err}`)
+            }
+            tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
+            const newInscriptionsByUtxo = {}
+            Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)
+            setInscriptionUtxosByUtxo(newInscriptionsByUtxo)
+            setUtxosReady(true)
+        }
+        setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
+        setUtxosReady(true)
     }
 
 
 
     useEffect(() => {
-        async function fetchUtxosForAddress() {
-            console.log('address', address)
-            const addr = await getAddress(getAddressOptions);
-            if (!address) return
-            console.log('address', address)
-            // const addr = await getAddress(getAddressOptions);
-            setAddress(addr)
-            console.log('addr', addr)
-            const mempoolUrl = testnet ? 'https://mempool.space/testnet/api' : 'https://mempool.space/api';
-            const response = await axios.get(`${mempoolUrl}/address/${address}/utxo`)
+        connect()
+    }, [testnet]);
 
-            const tempInscriptionsByUtxo = {}
-            setOwnedUtxos(response.data)
-            for (const utxo of response.data) {
-                tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = utxo
-                // if (!utxo.status.confirmed) continue
-                let currentUtxo = utxo
-                console.log('utxo', utxo)
-
-                console.log(`Checking utxo ${currentUtxo.txid}:${currentUtxo.vout}`)
-                try {
-                    const explorerUrl = testnet ? 'https://testnet.ordimint.com' : 'https://explorer.ordimint.com';
-                    const res = await axios.get(`${explorerUrl}/output/${currentUtxo.txid}:${currentUtxo.vout}`)
-                    const inscriptionId = res.data.match(/<a href=\/inscription\/(.*?)>/)?.[1]
-                    const [txid, vout] = inscriptionId.split('i')
-                    currentUtxo = { txid, vout }
-                } catch (err) {
-                    console.log(`Error from explorer.ordimint.com: ${err}`)
-                }
-                tempInscriptionsByUtxo[`${utxo.txid}:${utxo.vout}`] = currentUtxo
-                const newInscriptionsByUtxo = {}
-                Object.assign(newInscriptionsByUtxo, tempInscriptionsByUtxo)
-                setInscriptionUtxosByUtxo(newInscriptionsByUtxo)
-                setUtxosReady(true)
-            }
-            setInscriptionUtxosByUtxo(tempInscriptionsByUtxo)
-            setUtxosReady(true)
-        }
-
-
+    useEffect(() => {
         fetchUtxosForAddress()
+        console.log('Updated address:', address);
+        console.log('Updated publicKey:', publicKey);
+    }, [address])
 
-    }, []);
 
 
 
@@ -108,7 +115,7 @@ const unisat = () => {
     return (
         <div>
             <Head>
-                <title>Ordimint - UXverse Wallet</title>
+                <title>Ordimint - Xverse Wallet</title>
                 <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
@@ -118,7 +125,7 @@ const unisat = () => {
                 <Container>
                     <Breadcrumb>
                         <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Unisat Wallet</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Xverse Wallet</Breadcrumb.Item>
                     </Breadcrumb>
                 </Container>
             </div>
@@ -165,7 +172,7 @@ const unisat = () => {
                 testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
-                unisatAddress={address}
+                address={address}
 
             />
             <UtxoModal
@@ -208,7 +215,8 @@ const unisat = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
-                unisatPublicKey={publicKey}
+                xversePublicKey={publicKey}
+                address={address}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}
@@ -225,4 +233,4 @@ const unisat = () => {
     )
 
 }
-export default unisat
+export default xverse

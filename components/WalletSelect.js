@@ -5,6 +5,7 @@ import WalletConnectModal from './modals/WalletConnectModal';
 import AlbyLogo from '../public/media/alby-logo.svg'
 import LedgerLogo from '../public/media/ledger-logo-small.svg';
 import OrdimintLogo from '../public/media/ordimint-coin-white.png';
+import XverseLogo from '../public/media/xverse-logo.png';
 import UnisatLogo from '../public/media/unisat-logo.svg';
 
 function WalletSelect({
@@ -12,6 +13,7 @@ function WalletSelect({
     ledgerPublicKey,
     ordimintPubkey,
     unisatPublicKey,
+    xversePublicKey,
     onChainAddress,
     setOnChainAddress,
     showWalletConnectModal,
@@ -19,6 +21,7 @@ function WalletSelect({
     connectWallet,
     getAddressInfoNostr,
     getAddressInfoUnisat,
+    getAddressInfoXverse,
     testnet,
     getLedgerPubkey,
     getAddressInfoLedger,
@@ -26,15 +29,14 @@ function WalletSelect({
     setNostrPublicKey,
     setLedgerPublicKey,
     setUnisatPublicKey,
+    setXversePublicKey,
     connectUnisat,
-
+    connectXverse,
 }) {
-
-
     return (
-        (nostrPublicKey || ledgerPublicKey || ordimintPubkey || unisatPublicKey) ? (
+        (nostrPublicKey || ledgerPublicKey || ordimintPubkey || unisatPublicKey || xversePublicKey) ? (
             <>
-                {nostrPublicKey || ledgerPublicKey || unisatPublicKey ? (
+                {(nostrPublicKey || ledgerPublicKey || unisatPublicKey || xversePublicKey) ? (
                     <div className="success-alert-input input-button">
                         <p>Your receiver address:</p>
                         <OnchainInput
@@ -113,7 +115,20 @@ function WalletSelect({
                     >
                         <Image src={UnisatLogo} height="20" width="20" alt="Unisat Logo" /> use Unisat Wallet
                     </button>
+                    <button
+                        className="m-1 use_button"
+                        onClick={async () => {
+                            setXversePublicKey(await connectXverse(testnet));
+                            const address = await getAddressInfoXverse();
+                            setOnChainAddress(address);
+                        }}
+                        variant="success"
+                        size="md"
+                    >
+                        <Image src={XverseLogo} height="20" width="20" alt="Xverse Logo" /> use Xverse Wallet
+                    </button>
                 </div>
+
                 <div>
                     <button onClick={renderSelectWalletModal}
                         variant="success"

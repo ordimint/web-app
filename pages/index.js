@@ -12,6 +12,7 @@ import ReceiveAddressModal from '../components/modals/ReceiveAddressModal';
 import { getAddressInfoNostr, connectWallet } from '../components/WalletConfig/utils';
 import { getLedgerPubkey, getAddressInfoLedger } from '../components/WalletConfig/connectLedger';
 import { getUnisatPubkey, getAddressInfoUnisat, connectUnisat } from '../components/WalletConfig/unisatWalletFunctions';
+import { getXversePubkey, getAddressInfoXverse, connectXverse } from '../components/WalletConfig/xverseWalletFunctions';
 import TextInput from '../components/TextInput';
 import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
@@ -45,6 +46,7 @@ function Home() {
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [unisatPublicKey, setUnisatPublicKey] = useState(null);
+    const [xversePublicKey, setXversePublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
     const [tabKey, setTabKey] = useState('file');
@@ -513,6 +515,7 @@ function Home() {
                                 nostrPublicKey={nostrPublicKey}
                                 ledgerPublicKey={ledgerPublicKey}
                                 ordimintPubkey={ordimintPubkey}
+                                xversePublicKey={xversePublicKey}
                                 onChainAddress={onChainAddress}
                                 setOnChainAddress={setOnChainAddress}
                                 showWalletConnectModal={showWalletConnectModal}
@@ -521,15 +524,19 @@ function Home() {
                                 getAddressInfoNostr={getAddressInfoNostr}
                                 testnet={testnet}
                                 getLedgerPubkey={getLedgerPubkey}
+                                getXversePubkey={getXversePubkey}
                                 getAddressInfoLedger={getAddressInfoLedger}
+                                getAddressInfoXverse={getAddressInfoXverse}
                                 renderSelectWalletModal={renderSelectWalletModal}
                                 setNostrPublicKey={setNostrPublicKey}
                                 setLedgerPublicKey={setLedgerPublicKey}
                                 unisatPublicKey={unisatPublicKey}
                                 setUnisatPublicKey={setUnisatPublicKey}
+                                setXversePublicKey={setXversePublicKey}
                                 getUnisatPubkey={getUnisatPubkey}
                                 getAddressInfoUnisat={getAddressInfoUnisat}
                                 connectUnisat={connectUnisat}
+                                connectXverse={connectXverse}
 
                             />
                             <div id="fee-select-container">

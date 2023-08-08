@@ -76,7 +76,7 @@ function InvoiceModal(props) {
 
                 <Modal.Body>
                     <Alert show={props.showPaymentAlert} variant="success">
-                        Payment successfull!
+                        Payment successful!
                     </Alert>
                     {props.showSpinner ? (
                         <Spinner animation="border" />

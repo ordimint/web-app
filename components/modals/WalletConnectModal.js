@@ -8,8 +8,6 @@ import { useState, useRef } from "react";
 
 const WalletConnectModal = (props) => {
 
-
-
     const [showTooltipID, setShowTooltipID] = useState(false);
     const targetID = useRef(null);
 

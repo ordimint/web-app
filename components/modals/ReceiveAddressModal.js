@@ -6,7 +6,7 @@ import { getAddressInfoLedger } from '../WalletConfig/connectLedger';
 import { QRCodeCanvas, } from "qrcode.react";
 
 export default function ReceiveAddressModal({ showReceiveAddressModal,
-  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey, ordimintAddress, unisatAddress, testnet }) {
+  setShowReceiveAddressModal, nostrPublicKey, ledgerPublicKey, ordimintAddress, address, testnet }) {
 
   const [ledgerAddress, setLedgerAddress] = useState(null)
 
@@ -38,8 +38,8 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
     } else if (ordimintAddress) {
       return ordimintAddress;
     }
-    else if (unisatAddress) {
-      return unisatAddress;
+    else if (address) {
+      return address;
     }
     return '';
   }
@@ -71,8 +71,8 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
           if (ordimintAddress) {
             navigator.clipboard.writeText(ordimintAddress)
           }
-          if (unisatAddress) {
-            navigator.clipboard.writeText(unisatAddress)
+          if (address) {
+            navigator.clipboard.writeText(address)
           }
           setShowReceiveAddressModal(false)
         }}>Copy Address</button>

@@ -109,13 +109,13 @@ const WalletPage = () => {
                             </Link>
                         </Card.Body>
                     </Card>
-                    {/*
+
                     <Card className='m-2'>
-                        <Card.Img className='wallet-logo' variant="top" src="/media/unisat-logo.svg" />
+                        <Card.Img className='wallet-logo' variant="top" src="/media/xverse-logo.png" />
                         <Card.Body>
-                            <Card.Title>Unisat</Card.Title>
+                            <Card.Title>Xverse</Card.Title>
                             <Card.Text>
-                                Connect with your Xvers browser wallet.
+                                Connect with your Xverse browser wallet.
                             </Card.Text>
                             <Link href="/wallet/xverse" className='d-flex justify-content-center text-decoration-none'>
                                 <button className='connect_button'
@@ -123,7 +123,7 @@ const WalletPage = () => {
 
                             </Link>
                         </Card.Body>
-                    </Card> */}
+                    </Card>
 
 
                 </div>

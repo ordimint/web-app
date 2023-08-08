@@ -5,13 +5,12 @@ import UtxoImage from '../UtxoImage';
 import Container from 'react-bootstrap/esm/Container';
 import { serializeTaprootSignature } from "bitcoinjs-lib/src/psbt/bip371.js";
 import { outputValue, getAddressInfoNostr } from '../WalletConfig/utils';
-
+import { signTransaction } from 'sats-connect';
 import * as bitcoin from 'bitcoinjs-lib'
 import * as ecc from 'tiny-secp256k1'
 import { getAddressInfoLedger, signLedger } from '../WalletConfig/connectLedger';
-
 import ECPairFactory from 'ecpair';
-import unisat from '../../pages/wallet/unisat';
+
 import { getInscriptionData, getInscriptionID } from '../../public/functions/ordinalFunctions';
 const secp256k1 = require('@noble/secp256k1');
 const axios = require('axios')
@@ -35,6 +34,8 @@ export default function ConfirmationModal({
   testnet,
   ordimintPubkey,
   unisatPublicKey,
+  xversePublicKey,
+  address,
 }) {
   function toXOnly(key) {
     if (key.length === 33) {
@@ -59,8 +60,6 @@ export default function ConfirmationModal({
     if (ledgerPublicKey) {
       inputAddressInfo = await getAddressInfoLedger(ledgerPublicKey, false, testnet)
       txHex = await axios.get(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx/${currentUtxo.txid}/hex`);
-      // console.log("inputAddressInfo redeem output", inputAddressInfo)
-      // console.log("txHex", txHex)
     }
 
     if (ordimintPubkey) {
@@ -68,7 +67,12 @@ export default function ConfirmationModal({
       console.log("Adress Info Ordimint Address info", inputAddressInfo)
     }
     if (unisatPublicKey) {
-      inputAddressInfo = await bitcoin.payments.p2tr({ pubkey: toXOnly(Buffer.from(unisatPublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+      inputAddressInfo = await bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(unisatPublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+      console.log("Adress Info Unisat Address info", inputAddressInfo)
+    }
+
+    if (xversePublicKey) {
+      inputAddressInfo = await bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(xversePublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
       console.log("Adress Info Unisat Address info", inputAddressInfo)
     }
 
@@ -95,6 +99,11 @@ export default function ConfirmationModal({
       console.log("Public Key Unisat:", publicKey);
     }
 
+    if (xversePublicKey) {
+      publicKey = Buffer.from(xversePublicKey, 'hex');
+      console.log("Public Key Xverse:", publicKey);
+    }
+
     const inputParams = {
       hash: currentUtxo.txid,
       index: currentUtxo.vout,
@@ -102,7 +111,8 @@ export default function ConfirmationModal({
         value: currentUtxo.value,
         script: inputAddressInfo.output
       },
-      tapInternalKey: toXOnly(publicKey)
+      tapInternalKey: toXOnly(publicKey),
+      // sighashType: bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY,
     };
 
     psbt.addInput(inputParams)
@@ -208,11 +218,40 @@ export default function ConfirmationModal({
       }
     }
 
-    const res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
-      console.error(err);
-      return null;
-    });
+    if (xversePublicKey) {
 
+      const psbtB64 = psbt.toBase64()
+      const signPsbtOptions = {
+        payload: {
+          network: {
+            type: testnet ? 'Testnet' : 'Mainnet',
+          },
+          message: 'Sign Transaction',
+          psbtBase64: psbtB64,
+          broadcast: true,
+          inputsToSign: [{
+            address: inputAddressInfo.address,
+            signingIndexes: [0],
+          }],
+        },
+        onFinish: (response) => {
+
+
+          setSentTxid(response.txId)
+        },
+        onCancel: () => alert('Canceled'),
+      }
+
+      await signTransaction(signPsbtOptions);
+      return true
+    }
+
+    if (!unisatPublicKey && !xversePublicKey) {
+      const res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
+        console.error(err);
+        return null;
+      });
+    }
     if (!res) return false
 
     setSentTxid(fullTx.getId())

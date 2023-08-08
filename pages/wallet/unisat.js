@@ -269,7 +269,7 @@ const unisat = () => {
                 testnet={testnet}
                 showReceiveAddressModal={showReceiveAddressModal}
                 setShowReceiveAddressModal={setShowReceiveAddressModal}
-                unisatAddress={address}
+                address={address}
 
             />
             <UtxoModal
@@ -313,6 +313,7 @@ const unisat = () => {
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
                 unisatPublicKey={publicKey}
+                address={address}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
                 inscriptionUtxosByUtxo={inscriptionUtxosByUtxo}

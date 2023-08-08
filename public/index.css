@@ -462,7 +462,7 @@ div.preview-image-container img {
 }
 
 div.wallet-card {
-  /* margin: 5px; */
+  margin: 5px;
   height: 100%;
   min-height: 300px;
   min-width: 200px;
@@ -586,6 +586,7 @@ span.input-group-text.required .required:after {
 .wallet-logo.card-img-top {
   min-height: 120px;
   padding: 10px;
+  object-fit: contain;
 }
 
 #tab-container .nav-link {
@@ -631,7 +632,7 @@ span.input-group-text.required .required:after {
 
 #wallet-connect-cards .card {
   width: 300px;
-  height: 280px;
+
   background-color: #1e1f20;
   border: 2px solid #676767;
 }
