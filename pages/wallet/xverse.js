@@ -40,7 +40,7 @@ const xverse = () => {
 
     const getAddressOptions = {
         payload: {
-            purposes: ['ordinals', 'payment'],
+            purposes: ['ordinals'],
             message: 'Address for receiving Ordinals and payments',
             network: {
                 type: testnet ? 'Testnet' : 'Mainnet',
@@ -143,7 +143,7 @@ const xverse = () => {
                         <>
                             <div>
                                 <Alert variant="light">
-                                    It seems like your Unisat wallet is not installed.
+                                    It seems like your Xverse wallet is not installed.
                                 </Alert>
                                 <br />
 
