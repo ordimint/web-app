@@ -79,7 +79,7 @@ const PreviewModal = (props) => {
                         <Modal.Title>TAP Inscription Preview</Modal.Title>
                     }
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='preview-modal-body'>
                     <pre>{brcString}</pre>
                     <Modal.Footer>
                         <div className='preview-modal-buttons'>

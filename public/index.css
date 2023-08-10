@@ -1133,3 +1133,7 @@ span.input-group-text.required .required:after {
     50% - 5px
   ); /* This makes sure both buttons are equal width considering the 10px gap */
 }
+
+.preview-modal-body {
+    overflow-x: auto;  /* Enables horizontal scrolling */
+}
