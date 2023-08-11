@@ -174,7 +174,7 @@ function Home() {
                 news: outputCostNews,
                 domain: outputCostDomain,
                 brc: outputCostBRC,
-                tap: outputCostTAP,
+                tap: outputCostTAP
             };
 
             const newPrice = outputCosts[tabKey]
