@@ -90,12 +90,24 @@ function parseTextInscription(jsonStr) {
             };
 
         case "brc-20":
-            return {
-                pFlag: "brc-20",
-                op: jsonObj.op,
-                tick: jsonObj.tick,
-                amt: jsonObj.amt
-            };
+            switch (jsonObj.op) {
+                case "deploy":
+                    return {
+                        pFlag: "brc-20",
+                        op: jsonObj.op,
+                        tick: jsonObj.tick,
+                        max: jsonObj.max,
+                        lim: jsonObj.lim
+                    };
+                // ... handle other brc-20 ops if they exist
+                default:
+                    return {
+                        pFlag: "brc-20",
+                        op: jsonObj.op,
+                        tick: jsonObj.tick,
+                        amt: jsonObj.amt
+                    };
+            }
         case "tap":
             switch (jsonObj.op) {
                 case "token-send":

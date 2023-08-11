@@ -1147,3 +1147,7 @@ span.input-group-text.required .required:after {
 .token-preview-string {
   width: 100%;
 }
+
+.auction-ordinal-row {
+  gap: 40px;
+}

@@ -39,7 +39,7 @@ function getAddressOptionsFunc(testnet) {
 }
 
 export async function connectXverse(testnet) {
-    await getAddress(getAddressOptionsFunc(testnet)); // I assume `getAddress` is a function you've defined or imported from somewhere
+    await getAddress(getAddressOptionsFunc(testnet));
 }
 
 export const getXversePubkey = async () => {
