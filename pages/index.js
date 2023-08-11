@@ -221,6 +221,25 @@ function Home() {
         socket.emit("checkInvoice", clientPaymentHash);
     };
 
+    function getSymbolCount(str) {
+        let count = 0;
+        let surrogatePairCount = 0;
+
+        for (let i = 0; i < str.length; i++) {
+            // Check if it's a high surrogate
+            if (0xD800 <= str.charCodeAt(i) && str.charCodeAt(i) <= 0xDBFF) {
+                // Check if it's followed by a low surrogate
+                if (0xDC00 <= str.charCodeAt(i + 1) && str.charCodeAt(i + 1) <= 0xDFFF) {
+                    surrogatePairCount++;
+                    i++;  // Skip the next char as it's a part of this surrogate pair
+                }
+            }
+        }
+
+        count = str.length - surrogatePairCount;
+        return count;
+    }
+
 
     //Get the invoice and perform validity checks
     const getInvoice = (price) => {
@@ -262,6 +281,13 @@ function Home() {
             showAlertModal({
                 show: true,
                 text: "4 letter token ticker are reserved for BRC",
+                type: "danger",
+            });
+        }
+        else if (tabKey === 'tap' && (tokenTicker.length !== 3 && (tokenTicker.length < 5 || tokenTicker.length > 32))) {
+            showAlertModal({
+                show: true,
+                text: "Token ticker must be 3 symbols or between 5 to 32 symbols.",
                 type: "danger",
             });
         }
