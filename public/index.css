@@ -1149,8 +1149,12 @@ span.input-group-text.required .required:after {
 }
 
 #auction-ordinal-row {
-    gap: 25px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  gap: 15px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* display: flex;
+  flex-direction: row;
+  justify-content: center; 
+  align-items: center;  */
 }
