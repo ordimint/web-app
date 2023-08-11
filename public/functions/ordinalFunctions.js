@@ -96,6 +96,28 @@ function parseTextInscription(jsonStr) {
                 tick: jsonObj.tick,
                 amt: jsonObj.amt
             };
+        case "tap":
+            switch (jsonObj.op) {
+                case "token-send":
+                    return {
+                        pFlag: "tap",
+                        op: jsonObj.op,
+                        items: jsonObj.items
+                    };
+                case "token-deploy":
+                case "token-mint":
+                case "token-transfer":
+                    return {
+                        pFlag: "tap",
+                        op: jsonObj.op,
+                        tick: jsonObj.tick,
+                        amt: jsonObj.amt || null,  // only present in some operations
+                        max: jsonObj.max || null,  // only present in token-deploy
+                        lim: jsonObj.lim || null   // only present in token-deploy
+                    };
+                default:
+                    return jsonStr;  // or some default object for unrecognized operations
+            }
 
         default:
             // If p flag is not recognized, return the original string

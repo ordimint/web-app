@@ -10,7 +10,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
   const [text, setText] = useState("")
 
   function renderJsonData(jsonData) {
-    // Handle different p flags
+
     switch (jsonData.pFlag) {
       case "ons":
         return (
@@ -67,6 +67,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
         }
 
       case "tap":
+        console.log(jsonData)
         if (jsonData.op === "token-send") {
           return (
             <>
@@ -85,7 +86,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
             return (
 
               <>
-                <p>TAP Token {jsonData.op}</p>
+                <p>TAP {jsonData.op}</p>
                 <p><strong>Ticker:</strong> {jsonData.tick}</p>
                 <p><strong>Amount:</strong> {jsonData.amt}</p>
               </>
@@ -95,7 +96,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
             return (
 
               <>
-                <p>TAP Token {jsonData.op}</p>
+                <p>TAP {jsonData.op}</p>
                 <p><strong>Ticker:</strong> {jsonData.tick}</p>
                 <p><strong>Amount:</strong> {jsonData.amt}</p>
               </>
@@ -106,9 +107,10 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
             return (
 
               <>
-                <p>TAP Token {jsonData.op}</p>
+                <p>TAP {jsonData.op}</p>
                 <p><strong>Ticker:</strong> {jsonData.tick}</p>
-                <p><strong>Amount:</strong> {jsonData.amt}</p>
+                {jsonData.max && <p><strong>Max:</strong> {jsonData.max}</p>}
+                {jsonData.lim && <p><strong>Limit:</strong> {jsonData.lim}</p>}
               </>
 
             );
