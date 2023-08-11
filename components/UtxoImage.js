@@ -66,6 +66,55 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
           );
         }
 
+      case "tap":
+        if (jsonData.op === "token-send") {
+          return (
+            <>
+              <p>TAP Token {jsonData.op}</p>
+              {jsonData.items.map((item, index) => (
+                <div key={index}>
+                  <p><strong>Ticker:</strong> {item.tick}</p>
+                  <p><strong>Amount:</strong> {item.amt}</p>
+                  <p><strong>Address:</strong> {item.address}</p>
+                </div>
+              ))}
+            </>
+          );
+        } else
+          if (jsonData.op === "token-mint") {
+            return (
+
+              <>
+                <p>TAP Token {jsonData.op}</p>
+                <p><strong>Ticker:</strong> {jsonData.tick}</p>
+                <p><strong>Amount:</strong> {jsonData.amt}</p>
+              </>
+
+            );
+          } else if (jsonData.op === "token-transfer") {
+            return (
+
+              <>
+                <p>TAP Token {jsonData.op}</p>
+                <p><strong>Ticker:</strong> {jsonData.tick}</p>
+                <p><strong>Amount:</strong> {jsonData.amt}</p>
+              </>
+
+            );
+          }
+          else if (jsonData.op === "token-deploy") {
+            return (
+
+              <>
+                <p>TAP Token {jsonData.op}</p>
+                <p><strong>Ticker:</strong> {jsonData.tick}</p>
+                <p><strong>Amount:</strong> {jsonData.amt}</p>
+              </>
+
+            );
+          }
+
+
       default:
         return <p>Unknown operation.</p>;
     }

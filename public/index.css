@@ -1117,6 +1117,13 @@ span.input-group-text.required .required:after {
   background-color: #1c1d1d;
   color: #fff;
   border: 2px solid #6a6b6b;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.tap-group-repeat .input-group-text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .preview-modal-buttons {
@@ -1135,5 +1142,8 @@ span.input-group-text.required .required:after {
 }
 
 .preview-modal-body {
-    overflow-x: auto;  /* Enables horizontal scrolling */
+  overflow-x: auto; /* Enables horizontal scrolling */
+}
+.token-preview-string {
+  width: 100%;
 }

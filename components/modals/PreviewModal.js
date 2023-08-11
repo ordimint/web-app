@@ -71,7 +71,7 @@ const PreviewModal = (props) => {
 
     return (
         <>
-            <Modal show={props.show} onHide={props.handleClose} centered>
+            <Modal size="lg" show={props.show} onHide={props.handleClose} centered>
                 <Modal.Header closeButton>
                     {(props.tokenStandard === "brc") ?
                         <Modal.Title>BRC-20 Inscription Preview</Modal.Title>
@@ -80,7 +80,7 @@ const PreviewModal = (props) => {
                     }
                 </Modal.Header>
                 <Modal.Body className='preview-modal-body'>
-                    <pre>{brcString}</pre>
+                    <pre className='token-preview-string'>{brcString}</pre>
                     <Modal.Footer>
                         <div className='preview-modal-buttons'>
                             <Button variant="secondary" onClick={props.handleClose}>

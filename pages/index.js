@@ -258,6 +258,13 @@ function Home() {
                 type: "danger",
             });
         }
+        else if (tokenTicker.length === 4 && tabKey === 'tap') {
+            showAlertModal({
+                show: true,
+                text: "4 letter token ticker are reserved for BRC",
+                type: "danger",
+            });
+        }
 
         else {
             if (tabKey === 'brc' || tabKey === 'tap') {
