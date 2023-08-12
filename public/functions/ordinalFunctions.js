@@ -90,12 +90,46 @@ function parseTextInscription(jsonStr) {
             };
 
         case "brc-20":
-            return {
-                pFlag: "brc-20",
-                op: jsonObj.op,
-                tick: jsonObj.tick,
-                amt: jsonObj.amt
-            };
+            switch (jsonObj.op) {
+                case "deploy":
+                    return {
+                        pFlag: "brc-20",
+                        op: jsonObj.op,
+                        tick: jsonObj.tick,
+                        max: jsonObj.max,
+                        lim: jsonObj.lim
+                    };
+                // ... handle other brc-20 ops if they exist
+                default:
+                    return {
+                        pFlag: "brc-20",
+                        op: jsonObj.op,
+                        tick: jsonObj.tick,
+                        amt: jsonObj.amt
+                    };
+            }
+        case "tap":
+            switch (jsonObj.op) {
+                case "token-send":
+                    return {
+                        pFlag: "tap",
+                        op: jsonObj.op,
+                        items: jsonObj.items
+                    };
+                case "token-deploy":
+                case "token-mint":
+                case "token-transfer":
+                    return {
+                        pFlag: "tap",
+                        op: jsonObj.op,
+                        tick: jsonObj.tick,
+                        amt: jsonObj.amt || null,  // only present in some operations
+                        max: jsonObj.max || null,  // only present in token-deploy
+                        lim: jsonObj.lim || null   // only present in token-deploy
+                    };
+                default:
+                    return jsonStr;  // or some default object for unrecognized operations
+            }
 
         default:
             // If p flag is not recognized, return the original string

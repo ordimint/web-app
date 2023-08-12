@@ -10,12 +10,12 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
   const [text, setText] = useState("")
 
   function renderJsonData(jsonData) {
-    // Handle different p flags
+
     switch (jsonData.pFlag) {
       case "ons":
         return (
           <>
-            <p>News</p>
+            <h4>News</h4>
             <p><strong>Title:</strong> {jsonData.title}</p>
             {/* <p><strong>URL:</strong> <a href={jsonData.url}>{jsonData.url}</a></p>
                         <p><strong>Author:</strong> {jsonData.author}</p>
@@ -28,7 +28,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
         return (
           <>
             <p>.sats Domain</p>
-            <h5>{jsonData.name}</h5>
+            <h4>{jsonData.name}</h4>
           </>
         );
 
@@ -37,7 +37,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
           return (
 
             <>
-              <p>BRC-20 {jsonData.op}</p>
+              <h4>BRC-20 {jsonData.op}</h4>
               <p><strong>Ticker:</strong> {jsonData.tick}</p>
               <p><strong>Amount:</strong> {jsonData.amt}</p>
             </>
@@ -47,7 +47,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
           return (
 
             <>
-              <p>BRC-20 {jsonData.op}</p>
+              <h4>BRC-20 {jsonData.op}</h4>
               <p><strong>Ticker:</strong> {jsonData.tick}</p>
               <p><strong>Amount:</strong> {jsonData.amt}</p>
             </>
@@ -58,13 +58,65 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
           return (
 
             <>
-              <p>BRC-20 {jsonData.op}</p>
+              <h4>BRC-20 {jsonData.op}</h4>
               <p><strong>Ticker:</strong> {jsonData.tick}</p>
-              <p><strong>Amount:</strong> {jsonData.amt}</p>
+              {jsonData.max && <p><strong>Max:</strong> {jsonData.max}</p>}
+              {jsonData.lim && <p><strong>Limit:</strong> {jsonData.lim}</p>}
             </>
 
           );
         }
+
+      case "tap":
+        console.log(jsonData)
+        if (jsonData.op === "token-send") {
+          return (
+            <>
+              <h4>TAP Token {jsonData.op}</h4>
+              {jsonData.items.map((item, index) => (
+                <div key={index}>
+                  <p><strong>Ticker:</strong> {item.tick}</p>
+                  <p><strong>Amount:</strong> {item.amt}</p>
+                  <p><strong>Address:</strong> {item.address}</p>
+                </div>
+              ))}
+            </>
+          );
+        } else
+          if (jsonData.op === "token-mint") {
+            return (
+
+              <>
+                <h4>TAP {jsonData.op}</h4>
+                <p><strong>Ticker:</strong> {jsonData.tick}</p>
+                <p><strong>Amount:</strong> {jsonData.amt}</p>
+              </>
+
+            );
+          } else if (jsonData.op === "token-transfer") {
+            return (
+
+              <>
+                <h4>TAP {jsonData.op}</h4>
+                <p><strong>Ticker:</strong> {jsonData.tick}</p>
+                <p><strong>Amount:</strong> {jsonData.amt}</p>
+              </>
+
+            );
+          }
+          else if (jsonData.op === "token-deploy") {
+            return (
+
+              <>
+                <h4>TAP {jsonData.op}</h4>
+                <p><strong>Ticker:</strong> {jsonData.tick}</p>
+                {jsonData.max && <p><strong>Max:</strong> {jsonData.max}</p>}
+                {jsonData.lim && <p><strong>Limit:</strong> {jsonData.lim}</p>}
+              </>
+
+            );
+          }
+
 
       default:
         return <p>Unknown operation.</p>;
@@ -84,7 +136,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
         setText(renderJsonData(parsedText))
       }
       else {
-        setText(parsedText)
+        setText(parsedText.substring(0, 600))
       }
       setIsText(true)
 

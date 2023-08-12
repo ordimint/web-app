@@ -1094,3 +1094,67 @@ span.input-group-text.required .required:after {
 .nav-item a {
   white-space: nowrap;
 }
+
+.tap-group-repeat {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.tap-group-repeat > div {
+}
+
+.input-field-tap {
+  display: flex;
+  margin: 5px 0 5px 0;
+  flex-direction: row;
+}
+
+.tap-group-repeat input {
+  background-color: #1c1d1d;
+  color: #fff;
+  border: 2px solid #6a6b6b;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.tap-group-repeat .input-group-text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.preview-modal-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+.preview-modal-buttons > button {
+  padding: 15px 40px;
+  flex-grow: 1; /* This ensures both buttons take up the same width */
+  width: calc(
+    50% - 5px
+  ); /* This makes sure both buttons are equal width considering the 10px gap */
+}
+
+.preview-modal-body {
+  overflow-x: auto; /* Enables horizontal scrolling */
+}
+.token-preview-string {
+  width: 100%;
+}
+
+#auction-ordinal-row {
+  gap: 15px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* display: flex;
+  flex-direction: row;
+  justify-content: center; 
+  align-items: center;  */
+}

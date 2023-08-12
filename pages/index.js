@@ -17,13 +17,14 @@ import TextInput from '../components/TextInput';
 import DomainInput from '../components/DomainInput';
 import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
+import TAP from '../components/TAP';
 import Head from 'next/head';
 import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
 import TestnetSwitch from '../components/TestnetSwitch';
-import BRCPreviewModal from '../components/modals/BRCPreviewModal';
+import PreviewModal from '../components/modals/PreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
 import WalletSelect from '../components/WalletSelect';
 
@@ -38,6 +39,7 @@ const outputCostText = process.env.REACT_APP_output_cost_text;
 const outputCostDomain = process.env.REACT_APP_output_cost_domain;
 const outputCostNews = process.env.REACT_APP_output_cost_news;
 const outputCostBRC = process.env.REACT_APP_output_cost_brc;
+const outputCostTAP = process.env.REACT_APP_output_cost_tap;
 const outputCostTestnet = process.env.REACT_APP_output_cost_testnet;
 const securityBuffer = process.env.REACT_APP_security_buffer;
 
@@ -77,9 +79,9 @@ function Home() {
     const renderConfigModal = () => showConfigModal(true);
     const hideConfigModal = () => showConfigModal(false);
     //////Modal BRC Preview
-    const [showBRCPreviewModal, setShowBRCPreviewModal] = useState(false);
-    const closeBRCPreviewModal = () => setShowBRCPreviewModal(false);
-    const showBRCPreviewModalFunc = () => setShowBRCPreviewModal(true);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
+    const closePreviewModal = () => setShowPreviewModal(false);
+    const showPreviewModalFunc = () => setShowPreviewModal(true);
 
     //////Alert - Modal
     const [alertModalparams, showAlertModal] = useState({
@@ -111,10 +113,13 @@ function Home() {
     const handleRestoreWalletModalClose = () => setShowRestoreWalletModal(false);
     const handleRestoreWalletModalShow = () => setShowRestoreWalletModal(true);
     const [ordimintPubkey, setOrdimintPubkey] = useState(null);
-    /////Inscription number + or -
+    /////Testnet
     const { testnet, setTestnet } = useContext(TestnetContext);
     const [fee, setFee] = useState(20);
     const [price, setPrice] = useState(1);
+    ///// Tap protocol items
+    const [btcItems, setBtcItems] = useState([]);
+
 
 
 
@@ -169,6 +174,7 @@ function Home() {
                 news: outputCostNews,
                 domain: outputCostDomain,
                 brc: outputCostBRC,
+                tap: outputCostTAP
             };
 
             const newPrice = outputCosts[tabKey]
@@ -216,7 +222,9 @@ function Home() {
     };
 
 
-    //Get the invoice
+
+
+    //Get the invoice and perform validity checks
     const getInvoice = (price) => {
         if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
             showAlertModal({
@@ -252,9 +260,24 @@ function Home() {
                 type: "danger",
             });
         }
+        else if (tokenTicker.length === 4 && tabKey === 'tap') {
+            showAlertModal({
+                show: true,
+                text: "4 letter token ticker are reserved for BRC",
+                type: "danger",
+            });
+        }
+        else if (tabKey === 'tap' && (tokenTicker.length !== 3 && (tokenTicker.length < 5 || tokenTicker.length > 32))) {
+            showAlertModal({
+                show: true,
+                text: "Token ticker must be 3 symbols or between 5 to 32 symbols.",
+                type: "danger",
+            });
+        }
+
         else {
-            if (tabKey === 'brc') {
-                awaitBRCPreviewConfirmation();
+            if (tabKey === 'brc' || tabKey === 'tap') {
+                awaitPreviewConfirmation();
             } else {
 
                 socket.emit("getInvoice", price);
@@ -263,12 +286,12 @@ function Home() {
         }
     };
 
-    const awaitBRCPreviewConfirmation = () => {
-        setShowBRCPreviewModal(true);
+    const awaitPreviewConfirmation = () => {
+        setShowPreviewModal(true);
     }
 
-    const handleBRCPreviewConfirmation = () => {
-        setShowBRCPreviewModal(false);
+    const handlePreviewConfirmation = () => {
+        setShowPreviewModal(false);
         socket.emit("getInvoice", price);
         showInvoiceModal();
     }
@@ -312,6 +335,7 @@ function Home() {
                 const newsString = JSON.stringify(newsObject)
                 socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee);
             }
+
             if (tabKey === 'brc') {
                 var brcString = "";
                 if (brcRadioButton === "deploy") {
@@ -328,6 +352,38 @@ function Home() {
                 socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee);
 
             }
+
+            if (tabKey === 'tap') {
+                var tapString = "";
+                if (brcRadioButton === "deploy") {
+                    tapString = `{"p":"tap","op":"token-deploy","tick":"${tokenTicker}","max":"${tokenSupply}","lim":"${mintLimit}"}`
+
+                }
+                else if (brcRadioButton === "mint") {
+                    tapString = `{"p":"tap","op":"token-mint","tick":"${tokenTicker}","amt":"${mintAmount}"}`
+                }
+                else if (brcRadioButton === "transfer") {
+                    tapString = `{"p":"tap","op":"token-transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
+                }
+                else if (brcRadioButton === "token-send") {
+                    const items = btcItems.map(item => ({
+                        tick: item.tick,
+                        amt: item.amt,
+                        address: item.address
+                    }));
+                    tapString = JSON.stringify({
+                        p: "tap",
+                        op: "token-send",
+                        items: items
+                    });
+                    console.log(tapString);
+                }
+
+                console.log(brcString);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee);
+
+            }
+
 
         }
     });
@@ -473,7 +529,7 @@ function Home() {
                                             setNewsUrl={setNewsUrl}
                                         />
                                     </Tab>
-                                    <Tab eventKey="domain" title="Domain">
+                                    <Tab eventKey="domain" title=".sats Domain">
                                         <DomainInput
                                             setFileSize={setFileSize}
                                             domainInput={domainInput}
@@ -499,6 +555,25 @@ function Home() {
                                             setTransferAmount={setTransferAmount}
                                         />
 
+                                    </Tab>
+                                    <Tab eventKey="tap" title="TAP">
+                                        <TAP
+                                            setTokenTicker={setTokenTicker}
+                                            setFileSize={setFileSize}
+                                            tokenSupply={tokenSupply}
+                                            setTokenSupply={setTokenSupply}
+                                            tokenName={tokenTicker}
+                                            setTokenName={setTokenTicker}
+                                            mintLimit={mintLimit}
+                                            setMintLimit={setMintLimit}
+                                            mintAmount={mintAmount}
+                                            setMintAmount={setMintAmount}
+                                            onChange={setbrcRadioButton}
+                                            brcRadioButton={brcRadioButton}
+                                            transferAmount={transferAmount}
+                                            setTransferAmount={setTransferAmount}
+                                            onUpdateBtcFields={setBtcItems}
+                                        />
                                     </Tab>
                                 </Tabs>
                             </div>
@@ -590,17 +665,18 @@ function Home() {
                 variant={alertModalparams.type}
                 handleClose={hideAlertModal}
             />
-            <BRCPreviewModal
-                show={showBRCPreviewModal}
-                handleClose={closeBRCPreviewModal}
+            <PreviewModal
+                show={showPreviewModal}
+                handleClose={closePreviewModal}
                 tokenSupply={tokenSupply}
                 tokenTicker={tokenTicker}
                 mintLimit={mintLimit}
                 mintAmount={mintAmount}
                 brcRadioButton={brcRadioButton}
                 transferAmount={transferAmount}
-                onOK={handleBRCPreviewConfirmation}
-
+                onOK={handlePreviewConfirmation}
+                tokenStandard={tabKey}
+                btcItems={btcItems}
             />
             <ReceiveAddressModal
                 testnet={testnet}

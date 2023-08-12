@@ -59,7 +59,7 @@ const xverse = () => {
 
     async function connect() {
         const addr = await getAddress(getAddressOptions);
-
+        console.log(addr)
     }
 
     async function fetchUtxosForAddress() {
