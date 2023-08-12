@@ -546,7 +546,7 @@ function Home() {
                                             setNewsUrl={setNewsUrl}
                                         />
                                     </Tab>
-                                    <Tab eventKey="domain" title="Domain">
+                                    <Tab eventKey="domain" title=".sats Domain">
                                         <DomainInput
                                             setFileSize={setFileSize}
                                             domainInput={domainInput}

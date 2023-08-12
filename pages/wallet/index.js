@@ -40,9 +40,9 @@ const WalletPage = () => {
                     <Card className='m-2'>
                         <Card.Img className='wallet-logo' variant="top" src="/media/logo-dark.jpeg" />
                         <Card.Body>
-                            <Card.Title>Ordimint Wallet</Card.Title>
+                            <Card.Title>Ordimint Wallet </Card.Title>
                             <Card.Text>
-                                Create a new Ordimint wallet or restore an existing one.
+                                Use our wallet. No app download needed!
                             </Card.Text>
                             <Link href="/wallet/ordimint" className='d-flex justify-content-center text-decoration-none'>
                                 <button className='connect_button'>
