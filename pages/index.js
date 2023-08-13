@@ -27,11 +27,13 @@ import TestnetSwitch from '../components/TestnetSwitch';
 import PreviewModal from '../components/modals/PreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
 import WalletSelect from '../components/WalletSelect';
+import PaymentModal from '../components/modals/PaymentModal';
 
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
-var clientPaymentHash;
+// var clientPaymentHash;
+let clientChargeId;
 var isPaid = false; //Is only necessary in the case of socket event is fireing multible times
 
 const outputCostPicture = process.env.REACT_APP_output_cost_picture;
@@ -74,6 +76,13 @@ function Home() {
     const [visibleInvoiceModal, setShowInvoiceModal] = useState(false);
     const closeInvoiceModal = () => setShowInvoiceModal(false);
     const showInvoiceModal = () => setShowInvoiceModal(true);
+    ///////Modal Payment
+    const [visiblePaymentModal, setShowPaymentModal] = useState(false);
+    const closePaymentModal = () => setShowPaymentModal(false);
+    const showPaymentModal = () => setShowPaymentModal(true);
+    const [chargeIdsate, setChargeId] = useState(null);
+
+
     ///////Modal Configdata
     const [isConfigModal, showConfigModal] = useState(false);
     const renderConfigModal = () => showConfigModal(true);
@@ -199,33 +208,52 @@ function Home() {
 
 
     //////Updates the QR-Code
-    const updatePaymentrequest = () => {
-        socket.on("lnbitsInvoice", (invoiceData) => {
-            setPaymentrequest(invoiceData.payment_request);
-            clientPaymentHash = invoiceData.payment_hash;
-            setSpinner(false);
-        });
-    };
+    // const updatePaymentrequest = () => {
+    //     socket.on("lnbitsInvoice", (invoiceData) => {
+    //         setPaymentrequest(invoiceData.payment_request);
+    //         clientPaymentHash = invoiceData.payment_hash;
+    //         setSpinner(false);
+    //     });
+    // };
+
+    socket.off("lnbitsCharge").on("lnbitsCharge", (chargeId) => {
+        clientChargeId = chargeId;
+        setChargeId(chargeId);
+        console.log(chargeId);
+    });
+
+
+
+
 
     ////Connect to WebSocket Server
     socket.off("connect").on("connect", () => {
         /////Checks for already paid invoice if browser switche tab on mobile
-        if (clientPaymentHash !== undefined) {
-            console.log("check invoice");
-            console.log(clientPaymentHash);
-            checkInvoice();
+        // if (clientPaymentHash !== undefined) {
+        //     console.log("check invoice");
+        //     console.log(clientPaymentHash);
+        //     checkInvoice();
+        // }
+        if (clientChargeId !== undefined) {
+            console.log("check charge");
+            console.log(clientChargeId);
+            checkCharge();
         }
     });
 
-    const checkInvoice = () => {
-        socket.emit("checkInvoice", clientPaymentHash);
+    // const checkInvoice = () => {
+    //     socket.emit("checkInvoice", clientPaymentHash);
+    // };
+
+    const checkCharge = () => {
+        socket.emit("checkCharge", clientChargeId);
     };
 
 
 
 
     //Get the invoice and perform validity checks
-    const getInvoice = (price) => {
+    const getCharge = (price) => {
         if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
             showAlertModal({
                 show: true,
@@ -279,9 +307,10 @@ function Home() {
             if (tabKey === 'brc' || tabKey === 'tap') {
                 awaitPreviewConfirmation();
             } else {
-
-                socket.emit("getInvoice", price);
-                showInvoiceModal();
+                socket.emit("getCharge", price);
+                // socket.emit("getInvoice", price);
+                // showInvoiceModal();
+                showPaymentModal();
             }
         }
     };
@@ -292,29 +321,30 @@ function Home() {
 
     const handlePreviewConfirmation = () => {
         setShowPreviewModal(false);
-        socket.emit("getInvoice", price);
-        showInvoiceModal();
+        socket.emit("getCharge", price);
+        // showInvoiceModal();
+        showPaymentModal()
     }
 
-    socket.off("invoicePaid").on("invoicePaid", async (paymentHash) => {
-        if (paymentHash === clientPaymentHash && !isPaid) {
+    socket.off("chargePaid").on("chargePaid", async (chargeId) => {
+        if (chargeId === clientChargeId && !isPaid) {
             renderAlert(true);
             isPaid = true;
             renderConfigModal();
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", chargeId, onChainAddress, testnet, dataUrl, fileType, false, fee);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee);
+                socket.emit("createOrder", chargeId, onChainAddress, testnet, textInput, 'txt', true, fee);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee);
+                socket.emit("createOrder", chargeId, onChainAddress, testnet, domainString, 'txt', true, fee);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -333,7 +363,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee);
+                socket.emit("createOrder", chargeId, onChainAddress, testnet, newsString, 'txt', true, fee);
             }
 
             if (tabKey === 'brc') {
@@ -349,7 +379,7 @@ function Home() {
                     brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee);
+                socket.emit("createOrder", chargeId, onChainAddress, testnet, brcString, 'txt', true, fee);
 
             }
 
@@ -380,7 +410,7 @@ function Home() {
                 }
 
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee);
+                socket.emit("createOrder", chargeId, onChainAddress, testnet, tapString, 'txt', true, fee);
 
             }
 
@@ -635,11 +665,10 @@ function Home() {
                     <button
                         className='pay_button'
                         onClick={() => {
-                            getInvoice(price);
+                            getCharge(price);
                             renderAlert(false);
-                            // showInvoiceModal();
                             hideConfigModal();
-                            updatePaymentrequest();
+                            // updatePaymentrequest();
                             setSpinner(true);
                             isPaid = false;
                             window.gtag('event', 'click', {
@@ -650,7 +679,7 @@ function Home() {
                         variant="success"
                         size="lg"
                     >
-                        Pay with Lightning
+                        Complete Order
                     </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
@@ -685,7 +714,7 @@ function Home() {
                 nostrPublicKey={nostrPublicKey}
 
             />
-            <InvoiceModal
+            {/* <InvoiceModal
                 show={visibleInvoiceModal}
                 showSpinner={showSpinner}
                 isConfigModal={isConfigModal}
@@ -697,6 +726,12 @@ function Home() {
                 }}
                 handleClose={closeInvoiceModal}
                 showPaymentAlert={showPaymentSuccessfull}
+            /> */}
+            <PaymentModal
+                show={visiblePaymentModal}
+                handleClose={closePaymentModal}
+                chargeId={chargeIdsate}
+                isPaid={isPaid}
             />
             <SelectWalletModal
                 show={showSelectWalletModal}
