@@ -213,6 +213,56 @@ const FAQ = () => {
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
+                        </Accordion>
+                    </Col>
+                    <Col >
+                        <Accordion id="myAccordion"
+                        >
+                            <Accordion.Item eventKey="6">
+                                <Accordion.Header>What is the TAP Protocol?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        TAP is an innovative OrdFi-enabling protocol characterized by its unique TAP token standard. It's designed to enhance the capabilities of decentralized finance without relying on overly complicated mechanics.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="7">
+                                <Accordion.Header>How does TAP differ from other protocols?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        Unlike many other platforms, TAP doesn't depend on L2 chains. Instead, it utilizes 'tapping', a streamlined mechanism for verifying transactions within the protocol itself.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="8">
+                                <Accordion.Header>Is TAP trying to replace BRC-20?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        No, TAP isn't aiming to compete with BRC-20. Instead, it recognizes and embraces the strengths of BRC-20. TAP's mission is to complement and expand upon BRC-20's features, with new additions driven by community governance.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="9">
+                                <Accordion.Header>Are there any ticker lengths reserved on TAP?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        Yes, TAP reserves BRC-20 ticker lengths 1, 2, and 4. This ensures these tickers won't be deployed on TAP and lays the foundation for future interordinal integration between BRC-20 and TAP Tokens.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="10">
+                                <Accordion.Header>Why are certain ticker lengths reserved on TAP?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        Reserving specific ticker lengths ensures seamless bridging and compatibility between BRC-20 and TAP Tokens in the future, promoting collaborative advancements in the OrdFi space.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
 
                         </Accordion>
                     </Col>
