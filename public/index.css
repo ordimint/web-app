@@ -1158,3 +1158,14 @@ span.input-group-text.required .required:after {
   justify-content: center; 
   align-items: center;  */
 }
+
+#btc-address-input-send-modal {
+  border-radius: 0.375rem;
+}
+
+#camera-symbol {
+  margin: 10px;
+  padding: 5%;
+  border: white 2px solid;
+  border-radius: 0.375rem;
+}
