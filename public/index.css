@@ -976,6 +976,7 @@ span.input-group-text.required .required:after {
 }
 
 .glow {
+  z-index: -100;
   border-radius: 560px;
   opacity: 0.6000000238418579;
   background: #500e49;
