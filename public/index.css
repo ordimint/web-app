@@ -1173,10 +1173,7 @@ span.input-group-text.required .required:after {
 
 .breadcrumb {
   z-index: 5;
-}
-
-nav {
-  z-index: 5;
+  position: relative;
 }
 
 #testnet-switch {
