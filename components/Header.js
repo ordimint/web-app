@@ -30,9 +30,9 @@ const Header = (props) => {
                     <div style={{
                         position: "absolute", left: -10, borderRadius: "560px",
                         opacity: "0.6000000238418579", filter: "blur(280px)",
-                        zIndex: "-100",
+                        zIndex: "1",
                     }}>
-                        <div style={{ height: "560px", width: '560px', background: "#500e49", zIndex: "-100", }}>
+                        <div style={{ height: "560px", width: '560px', background: "#500e49", zIndex: "0", }}>
 
                             <div className="glow">
 
