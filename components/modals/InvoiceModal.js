@@ -19,9 +19,9 @@ function InvoiceModal(props) {
     const targetID = useRef(null);
 
     const [showTooltip, setShowTooltip] = useState(false);
-    const [openCollapse, setOpen] = useState(false);
-    const target = useRef(null);
 
+    const target = useRef(null);
+    const [openCollapse, setOpen] = useState(false);
     const renderTooltipID = (show) => {
         setShowTooltipID(show);
         setTimeout(() => setShowTooltipID(false), [1000]);

@@ -1,7 +1,6 @@
 import { React, useEffect, useContext } from 'react';
 import { io } from "socket.io-client";
 import FileUpload from '../components/FileUpload';
-import InvoiceModal from '../components/modals/InvoiceModal';
 import { validate, Network } from 'bitcoin-address-validation'
 import { Row, Container, Button, Tab, Tabs, Col, Alert } from "react-bootstrap";
 import { useState } from "react";
@@ -72,21 +71,16 @@ function Home() {
     const [showSpinner, setSpinner] = useState(true);
     const [payment_request, setPaymentrequest] = useState(0);
     const [showPaymentSuccessfull, setPaymentAlert] = useState(false);
-    ///////Modal Invoice
-    const [visibleInvoiceModal, setShowInvoiceModal] = useState(false);
-    const closeInvoiceModal = () => setShowInvoiceModal(false);
-    const showInvoiceModal = () => setShowInvoiceModal(true);
+
     ///////Modal Payment
     const [visiblePaymentModal, setShowPaymentModal] = useState(false);
     const closePaymentModal = () => setShowPaymentModal(false);
     const showPaymentModal = () => setShowPaymentModal(true);
-    const [chargeIdsate, setChargeId] = useState(null);
+    /////Charge by lnbits
+    const [chargeIdState, setChargeIdState] = useState(null);
+    const [paymentOnChainAddress, setPaymentOnChainAddress] = useState(null);
+    const [paymentAmount, setPaymentAmount] = useState(null);
 
-
-    ///////Modal Configdata
-    const [isConfigModal, showConfigModal] = useState(false);
-    const renderConfigModal = () => showConfigModal(true);
-    const hideConfigModal = () => showConfigModal(false);
     //////Modal BRC Preview
     const [showPreviewModal, setShowPreviewModal] = useState(false);
     const closePreviewModal = () => setShowPreviewModal(false);
@@ -128,9 +122,6 @@ function Home() {
     const [price, setPrice] = useState(1);
     ///// Tap protocol items
     const [btcItems, setBtcItems] = useState([]);
-
-
-
 
 
     useEffect(() => {
@@ -194,10 +185,7 @@ function Home() {
         }
     }, [fileSize, fee, tabKey, testnet]);
 
-    ///////Successfull payment alert
-    const renderAlert = (show) => {
-        setPaymentAlert(show);
-    };
+
     const fileTooBig = () => {
         showAlertModal({
             show: true,
@@ -206,20 +194,61 @@ function Home() {
         });
     }
 
+    function handleTransactionDetected() {
+        console.log("Transaction true");
+        setPaymentAlert(true);
+        isPaid = true;
 
-    //////Updates the QR-Code
-    // const updatePaymentrequest = () => {
-    //     socket.on("lnbitsInvoice", (invoiceData) => {
-    //         setPaymentrequest(invoiceData.payment_request);
-    //         clientPaymentHash = invoiceData.payment_hash;
-    //         setSpinner(false);
-    //     });
-    // };
+    }
 
-    socket.off("lnbitsCharge").on("lnbitsCharge", (chargeId) => {
-        clientChargeId = chargeId;
-        setChargeId(chargeId);
-        console.log(chargeId);
+    const checkForTransaction = async () => {
+        console.log("Checking for transaction");
+        try {
+            const response = await fetch(`https://mempool.space/api/address/${paymentOnChainAddress}/txs/mempool`);
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                for (let tx of data) { // iterate over each transaction
+                    for (let output of tx.vout) { // iterate over each output of the transaction
+                        // Check if this output matches the desired address and amount
+                        if (output.scriptpubkey_address === paymentOnChainAddress && output.value === paymentAmount) {
+                            console.log("Transaction detected for the specific address with the correct amount");
+                            console.log(tx);
+                            handleTransactionDetected();
+                            return; // exit after finding a matching transaction
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error checking for transaction:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        if (paymentOnChainAddress === null || showPaymentSuccessfull === true) return;
+        const interval = setInterval(() => {
+            checkForTransaction();
+        }, 3000);
+        return () => clearInterval(interval);  // This will clear the interval when the component is unmounted or the onchain address changes.
+    }, [paymentOnChainAddress, showPaymentSuccessfull]);
+
+
+    socket.off("lnbitsCharge").on("lnbitsCharge", (charge) => {
+        if (charge.status === "success") {
+            console.log(charge);
+            setPaymentOnChainAddress(charge.data.onchainaddress);
+            setPaymentrequest(charge.data.payment_request);
+            setPaymentAmount(charge.data.amount);
+            clientChargeId = charge.data.charge_id;
+            setChargeIdState(clientChargeId);
+            console.log(clientChargeId);
+        }
+        else {
+            console.log(charge);
+
+        }
     });
 
 
@@ -328,9 +357,9 @@ function Home() {
 
     socket.off("chargePaid").on("chargePaid", async (chargeId) => {
         if (chargeId === clientChargeId && !isPaid) {
-            renderAlert(true);
+            setPaymentAlert(true);
             isPaid = true;
-            renderConfigModal();
+
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
@@ -666,8 +695,8 @@ function Home() {
                         className='pay_button'
                         onClick={() => {
                             getCharge(price);
-                            renderAlert(false);
-                            hideConfigModal();
+                            setPaymentAlert(false);
+
                             // updatePaymentrequest();
                             setSpinner(true);
                             isPaid = false;
@@ -730,8 +759,12 @@ function Home() {
             <PaymentModal
                 show={visiblePaymentModal}
                 handleClose={closePaymentModal}
-                chargeId={chargeIdsate}
-                isPaid={isPaid}
+                chargeIdState={chargeIdState}
+                paymentOnChainAddress={paymentOnChainAddress}
+                payment_request={payment_request}
+                amount={paymentAmount}
+                isPaid={showPaymentSuccessfull}
+                onTransactionDetected={handleTransactionDetected}
             />
             <SelectWalletModal
                 show={showSelectWalletModal}

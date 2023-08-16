@@ -1158,3 +1158,14 @@ span.input-group-text.required .required:after {
   justify-content: center; 
   align-items: center;  */
 }
+
+#lightning-onchain-toggle {
+  display: flex;
+
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+#lightning-onchain-toggle .btn {
+  flex-grow: 1;
+}

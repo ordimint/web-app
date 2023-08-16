@@ -46,6 +46,7 @@
     "sats-connect": "^0.5.0",
     "secp256k1": "^5.0.0",
     "socket.io-client": "^4.4.1",
+    "swr": "^2.2.1",
     "tiny-secp256k1": "^2.2.1",
     "web-vitals": "^2.1.4",
     "ws": "^8.12.1"
