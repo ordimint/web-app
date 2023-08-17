@@ -38,7 +38,7 @@ const WalletPage = () => {
                 <div id="wallet-connect-cards">
 
                     <Card className='m-2'>
-                        <Card.Img className='wallet-logo' variant="top" src="/media/logo-dark.jpeg" />
+                        <Card.Img className='wallet-logo' variant="top" src="/media/OrdimintSVGLogo-black.svg" />
                         <Card.Body>
                             <Card.Title>Ordimint Wallet </Card.Title>
                             <Card.Text>
