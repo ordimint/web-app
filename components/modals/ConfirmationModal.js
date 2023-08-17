@@ -245,9 +245,9 @@ export default function ConfirmationModal({
       await signTransaction(signPsbtOptions);
       return true
     }
-
+    var res;
     if (!unisatPublicKey && !xversePublicKey) {
-      const res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
+      res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
         console.error(err);
         return null;
       });

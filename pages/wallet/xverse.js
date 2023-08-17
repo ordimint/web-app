@@ -120,15 +120,15 @@ const xverse = () => {
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
 
-            <div style={{ position: "absolute", left: 50 }}>
 
-                <Container>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Xverse Wallet</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Container>
-            </div>
+
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Xverse Wallet</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
                 <TestnetSwitch />
                 <h2 className="text-center m-4">Xverse Wallet</h2>

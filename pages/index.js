@@ -51,7 +51,7 @@ function Home() {
     const [xversePublicKey, setXversePublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
-    const [tabKey, setTabKey] = useState('file');
+    const [tabKey, setTabKey] = useState('tap');
 
     const [textInput, setTextInput] = useState('Enter any text you want to store on the blockchain');
     const [domainInput, setDomainInput] = useState('stacking');

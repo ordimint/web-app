@@ -114,14 +114,14 @@ const LedgerWallet = () => {
                 <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
-            <div style={{ position: "absolute", left: 50 }}>
-                <Container>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Ledger Wallet</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Container>
-            </div>
+
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Ledger Wallet</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
 
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">

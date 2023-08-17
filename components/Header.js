@@ -24,14 +24,15 @@ const Header = (props) => {
                     expand="lg"
                     key="nav"
                     variant="dark"
-                    className="mb-3 pt-4"
+                    className="mb-4 pt-4"
                     style={{ border: "none" }}
                 >
                     <div style={{
                         position: "absolute", left: -10, borderRadius: "560px",
                         opacity: "0.6000000238418579", filter: "blur(280px)",
+                        zIndex: "1",
                     }}>
-                        <div style={{ height: "560px", width: '560px', background: "#500e49" }}>
+                        <div style={{ height: "560px", width: '560px', background: "#500e49", zIndex: "0", }}>
 
                             <div className="glow">
 
@@ -41,12 +42,11 @@ const Header = (props) => {
                     </div>
 
                     <Link href="/" style={{ zIndex: 5 }}  >
-                        <Navbar.Brand  >
+                        <Navbar.Brand className="m-3"  >
                             <Image
-                                src="/media/logo.png"
-                                width={130}
-                                height={50}
-
+                                src="/media/OrdimintSVGLogo.svg"
+                                width={150}
+                                height={70}
                                 priority={false}
                                 className="d-inline-block align-top align-start "
                                 alt="Ordimint Brand Logo"
@@ -71,6 +71,11 @@ const Header = (props) => {
                         </Offcanvas.Header>
                         <Offcanvas.Body id="mobile-menu">
                             <Nav variant="pills" className="container" style={{ zIndex: 5 }}>
+
+                            </Nav>
+
+
+                            <Nav >
                                 <Nav.Item>
                                     <a href="/" className={isActive('/')}>
 
@@ -92,44 +97,25 @@ const Header = (props) => {
                                         Collections
                                     </a>
                                 </Nav.Item>
-                                {/* <Nav.Item>
 
-                                    <a href="/market" className={isActive('/market')}>
-
-                                        Market
-                                    </a>
-                                </Nav.Item> */}
-                                <Nav.Item>
-
-                                    <a href="/search" className={isActive('/search')}>
-
-                                        Search
-                                    </a>
-
-                                </Nav.Item>
                                 <Nav.Item>
                                     <a href="/faq" className={isActive('/faq')}>
 
                                         FAQ
                                     </a>
                                 </Nav.Item>
-                            </Nav>
-
-                            <hr></hr>
-                            <Nav >
-
-                                <Nav.Item className="mb-4">
+                                <Nav.Item >
                                     <a className="nav_button" href="https://api.ordimint.com" target="_blank" rel="noreferrer">
                                         API
 
                                     </a>
                                 </Nav.Item>
-                                <Nav.Item className="mb-4" >
+                                <Nav.Item  >
                                     <a className="nav_button" href="https://testnet.ordimint.com" target="_blank" rel="noreferrer">
                                         Testnet Explorer
                                     </a>
                                 </Nav.Item>
-                                <Nav.Item className="mb-4">
+                                <Nav.Item >
 
                                     <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <span>Ordinals Explorer</span>

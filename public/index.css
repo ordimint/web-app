@@ -976,6 +976,7 @@ span.input-group-text.required .required:after {
 }
 
 .glow {
+  z-index: 0;
   border-radius: 560px;
   opacity: 0.6000000238418579;
   background: #500e49;
@@ -1157,4 +1158,24 @@ span.input-group-text.required .required:after {
   flex-direction: row;
   justify-content: center; 
   align-items: center;  */
+}
+
+#btc-address-input-send-modal {
+  border-radius: 0.375rem;
+}
+
+#camera-symbol {
+  margin: 10px;
+  padding: 5%;
+  border: white 2px solid;
+  border-radius: 0.375rem;
+}
+
+.breadcrumb {
+  z-index: 5;
+  position: relative;
+}
+
+#testnet-switch {
+  z-index: 5;
 }

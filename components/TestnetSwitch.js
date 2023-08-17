@@ -16,7 +16,7 @@ const TestnetSwitch = () => {
     }, [testnet]);
 
     return (
-        <div>
+        <div id="testnet-switch">
             <Container>
                 <div id="switch-inscription-number-container">
                     <ToggleButtonGroup type="radio" name="switch-inscription-number" className='toggle-button-custom' value={testnet}>
