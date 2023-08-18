@@ -124,6 +124,20 @@ const WalletPage = () => {
                             </Link>
                         </Card.Body>
                     </Card>
+                    <Card className='m-2'>
+                        <Card.Img className='wallet-logo' variant="top" src="/media/HiroWalletLogo.jpg" />
+                        <Card.Body>
+                            <Card.Title>Hiro</Card.Title>
+                            <Card.Text>
+                                Connect here with your Hiro browser wallet.
+                            </Card.Text>
+                            <Link href="/wallet/hiro" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'
+                                >Connect</button>
+
+                            </Link>
+                        </Card.Body>
+                    </Card>
 
 
                 </div>
