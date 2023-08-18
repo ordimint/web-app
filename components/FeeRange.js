@@ -40,7 +40,7 @@ const FeeRange = (props) => {
             <div id="fee-range">
                 <ToggleButtonGroup type="radio" name="options" className='toggle-button-custom2' value={selectedFee}>
                     <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
-                        {minFee} sats/vByte <br></br><b> &gt; 1 day </b> <br></br>
+                        <b> &gt; 1 day </b> <br></br> {minFee} sats/vByte <br></br>
                     </ToggleButton>
                     <ToggleButton
                         id="tbg-radio-4"
@@ -49,7 +49,7 @@ const FeeRange = (props) => {
                         title="normal"
 
                     >
-                        {mediumFee} sats/vByte <br></br><b> 4 hours</b> <br></br>
+                        <b> 4 hours</b> <br></br>   {mediumFee} sats/vByte <br></br>
                     </ToggleButton>
                     <ToggleButton id="tbg-radio-5"
                         value={maxFee}
@@ -57,7 +57,7 @@ const FeeRange = (props) => {
                         title="fast"
 
                     >
-                        {maxFee} sats/vByte <br></br><b> 1 hour</b> <br></br>
+                        <b> 1 hour</b> <br></br>    {maxFee} sats/vByte <br></br>
                     </ToggleButton>
                 </ToggleButtonGroup>
             </div>

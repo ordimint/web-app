@@ -52,7 +52,7 @@ export default function ReceiveAddressModal({ showReceiveAddressModal,
       <Modal.Body className="px-5 py-3 text-center">
         <div className="bitcoin-address">{getAddressForQRCode()}</div>
         <br />
-        <QRCodeCanvas value={getAddressForQRCode()} size={256} />
+        <QRCodeCanvas className='m-3' value={getAddressForQRCode()} size={256} />
 
         <br />
 

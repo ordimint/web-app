@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Head from 'next/head';
-import { Breadcrumb } from 'react-bootstrap';
+import { Breadcrumb, Row } from 'react-bootstrap';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
@@ -106,15 +106,16 @@ export default function NostrWallet() {
                 <meta name="description" content="Effortlessly manage your Bitcoin Ordinals with Ordimint's Alby browser extension wallet integration, offering a seamless and user-friendly experience for your Inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Alby, Browser Extension, Wallet, Integration, Digital Assets, Digital Artefacts" />
             </Head>
-            <div style={{ position: "absolute", left: 50 }}>
 
-                <Container>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Alby Wallet</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Container>
-            </div>
+
+
+            <Container style={{ zIndex: 5 }}>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Alby Wallet</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
 

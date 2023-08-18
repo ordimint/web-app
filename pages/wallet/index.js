@@ -38,7 +38,7 @@ const WalletPage = () => {
                 <div id="wallet-connect-cards">
 
                     <Card className='m-2'>
-                        <Card.Img className='wallet-logo' variant="top" src="/media/logo-dark.jpeg" />
+                        <Card.Img className='wallet-logo' variant="top" src="/media/OrdimintSVGLogo-black.svg" />
                         <Card.Body>
                             <Card.Title>Ordimint Wallet </Card.Title>
                             <Card.Text>
@@ -118,6 +118,20 @@ const WalletPage = () => {
                                 Connect with your Xverse browser wallet.
                             </Card.Text>
                             <Link href="/wallet/xverse" className='d-flex justify-content-center text-decoration-none'>
+                                <button className='connect_button'
+                                >Connect</button>
+
+                            </Link>
+                        </Card.Body>
+                    </Card>
+                    <Card className='m-2'>
+                        <Card.Img className='wallet-logo' variant="top" src="/media/HiroWalletLogo.jpg" />
+                        <Card.Body>
+                            <Card.Title>Hiro</Card.Title>
+                            <Card.Text>
+                                Connect here with your Hiro browser wallet.
+                            </Card.Text>
+                            <Link href="/wallet/hiro" className='d-flex justify-content-center text-decoration-none'>
                                 <button className='connect_button'
                                 >Connect</button>
 
