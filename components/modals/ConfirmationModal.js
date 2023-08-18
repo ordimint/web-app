@@ -35,6 +35,7 @@ export default function ConfirmationModal({
   ordimintPubkey,
   unisatPublicKey,
   xversePublicKey,
+  hiroPublicKey,
   address,
 }) {
   function toXOnly(key) {
@@ -50,7 +51,7 @@ export default function ConfirmationModal({
 
 
   async function sendUtxo() {
-    var inputAddressInfo, publicKey, sig, txHex, fullTx, hex;
+    var inputAddressInfo, publicKey, sig, txHex, fullTx, hex, sighashType;
 
     if (nostrPublicKey) {
       inputAddressInfo = getAddressInfoNostr(nostrPublicKey, testnet)
@@ -73,35 +74,49 @@ export default function ConfirmationModal({
 
     if (xversePublicKey) {
       inputAddressInfo = await bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(xversePublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
-      console.log("Adress Info Unisat Address info", inputAddressInfo)
+      console.log("Adress Info Xverse Address info", inputAddressInfo)
+    }
+    if (hiroPublicKey) {
+      inputAddressInfo = await bitcoin.payments.p2tr({ internalPubkey: toXOnly(Buffer.from(hiroPublicKey, 'hex')), network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
+      console.log("Adress Info Hiro Address info", inputAddressInfo)
     }
 
     const psbt = new bitcoin.Psbt({ network: testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin })
 
     if (nostrPublicKey) {
+      sighashType = bitcoin.Transaction.SIGHASH_ALL
       publicKey = Buffer.from(await window.nostr.getPublicKey(), 'hex')
       console.log("Public Key Nostr:", publicKey);
     }
 
     if (ledgerPublicKey) {
+      sighashType = bitcoin.Transaction.SIGHASH_ALL
       const pubkeyBuffer = Buffer.from(ledgerPublicKey, 'hex')
       const pubkey = ECPair.fromPublicKey(pubkeyBuffer)
       publicKey = Buffer.from(pubkey.publicKey, 'hex').slice(1)
     }
 
     if (ordimintPubkey) {
+      sighashType = bitcoin.Transaction.SIGHASH_ALL
       publicKey = Buffer.from(ordimintPubkey, 'hex');
       console.log("Public Key Ordimint:", publicKey);
     }
 
     if (unisatPublicKey) {
+      sighashType = bitcoin.Transaction.SIGHASH_ALL
       publicKey = Buffer.from(unisatPublicKey, 'hex');
       console.log("Public Key Unisat:", publicKey);
     }
 
     if (xversePublicKey) {
+      sighashType = bitcoin.Transaction.SIGHASH_ALL
       publicKey = Buffer.from(xversePublicKey, 'hex');
       console.log("Public Key Xverse:", publicKey);
+    }
+    if (hiroPublicKey) {
+      sighashType = bitcoin.Transaction.SIGHASH_ALL
+      publicKey = Buffer.from(hiroPublicKey, 'hex');
+      console.log("Public Key Hiro:", publicKey);
     }
 
     const inputParams = {
@@ -112,7 +127,7 @@ export default function ConfirmationModal({
         script: inputAddressInfo.output
       },
       tapInternalKey: toXOnly(publicKey),
-      // sighashType: bitcoin.Transaction.SIGHASH_SINGLE | bitcoin.Transaction.SIGHASH_ANYONECANPAY,
+      sighashType: sighashType,
     };
 
     psbt.addInput(inputParams)
@@ -215,11 +230,12 @@ export default function ConfirmationModal({
         console.log("Transaction sent with ID", { txid })
       } catch (e) {
         console.log(e);
+        alert(e.message);
+        return false;
       }
     }
 
     if (xversePublicKey) {
-
       const psbtB64 = psbt.toBase64()
       const signPsbtOptions = {
         payload: {
@@ -229,30 +245,60 @@ export default function ConfirmationModal({
           message: 'Sign Transaction',
           psbtBase64: psbtB64,
           broadcast: true,
+          allowedSighash: [bitcoin.Transaction.SIGHASH_ALL],
           inputsToSign: [{
             address: inputAddressInfo.address,
             signingIndexes: [0],
+            sigHash: bitcoin.Transaction.SIGHASH_ALL,
           }],
         },
         onFinish: (response) => {
-
-
           setSentTxid(response.txId)
         },
+
         onCancel: () => alert('Canceled'),
       }
+      let res; // Declare `res` outside the try-catch block
 
-      await signTransaction(signPsbtOptions);
-      return true
+      try {
+        res = await signTransaction(signPsbtOptions);
+      } catch (e) {
+        console.log(e);
+        alert(e.message);
+        return false; // Return false if there's an error in the try block
+      }
+
+      return res ? true : false; // Return based on the value of `res`
     }
 
-    if (!unisatPublicKey && !xversePublicKey) {
-      const res = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
+    if (hiroPublicKey) {
+      var signingResponse;
+      const requestParams = {
+        publicKey: hiroPublicKey,
+        hex: psbt.toHex(),
+        allowedSighash: [bitcoin.Transaction.SIGHASH_ALL],
+        signAtIndex: 0,
+        broadcast: true,
+      };
+      try {
+        signingResponse = await window.btc.request('signPsbt', requestParams);
+        console.log(signingResponse);  // Or process the result as required
+      } catch (error) {
+        alert("Error signing PSBT:", error);
+        return false;
+      }
+
+
+    }
+
+    let result_mempool;
+    if (!unisatPublicKey && !xversePublicKey && !hiroPublicKey) {
+      result_mempool = await axios.post(`https://${testnet ? 'mempool.space/testnet' : 'mempool.space'}/api/tx`, hex).catch(err => {
+        console.log(result_mempool);
         console.error(err);
-        return null;
       });
     }
-    if (!res) return false
+    if (!result_mempool) return false
 
     setSentTxid(fullTx.getId())
     return true

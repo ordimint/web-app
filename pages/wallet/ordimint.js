@@ -139,14 +139,14 @@ const OrdimintWallet = () => {
     return (
 
         <div className="container mt-5">
-            <div style={{ position: "absolute" }}>
-                <Container>
-                    <Breadcrumb>
-                        <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                        <Breadcrumb.Item active>Ordimint Wallet</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Container>
-            </div>
+
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Ordimint Wallet</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
                 <TestnetSwitch />

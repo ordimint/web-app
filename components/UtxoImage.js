@@ -68,7 +68,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
         }
 
       case "tap":
-        console.log(jsonData)
+
         if (jsonData.op === "token-send") {
           return (
             <>

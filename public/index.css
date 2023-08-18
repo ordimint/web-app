@@ -639,11 +639,12 @@ span.input-group-text.required .required:after {
 
 #wallet-buttons {
   display: flex;
+  flex-direction: column;
+}
+
+.wallet-buttons-row {
+  display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-content: space-around;
-  align-items: stretch;
-  justify-items: stretch;
 }
 
 .wallet-card {
@@ -976,6 +977,7 @@ span.input-group-text.required .required:after {
 }
 
 .glow {
+  z-index: 0;
   border-radius: 560px;
   opacity: 0.6000000238418579;
   background: #500e49;
@@ -989,10 +991,10 @@ span.input-group-text.required .required:after {
 
 .use_button {
   background: #303133;
-  padding: 7px 14px;
+  width: 100px; /* Adjust this value as needed */
+  height: 100px; /* Adjust this value as needed */
   color: #ffffff;
   border-radius: 10px;
-
   border: none;
 }
 
@@ -1168,4 +1170,24 @@ span.input-group-text.required .required:after {
 
 #lightning-onchain-toggle .btn {
   flex-grow: 1;
+}
+
+#btc-address-input-send-modal {
+  border-radius: 0.375rem;
+}
+
+#camera-symbol {
+  margin: 10px;
+  padding: 5%;
+  border: white 2px solid;
+  border-radius: 0.375rem;
+}
+
+.breadcrumb {
+  z-index: 5;
+  position: relative;
+}
+
+#testnet-switch {
+  z-index: 5;
 }
