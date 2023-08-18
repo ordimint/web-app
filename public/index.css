@@ -639,11 +639,12 @@ span.input-group-text.required .required:after {
 
 #wallet-buttons {
   display: flex;
+  flex-direction: column;
+}
+
+.wallet-buttons-row {
+  display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-content: space-around;
-  align-items: stretch;
-  justify-items: stretch;
 }
 
 .wallet-card {
@@ -990,10 +991,10 @@ span.input-group-text.required .required:after {
 
 .use_button {
   background: #303133;
-  padding: 7px 14px;
+  width: 100px; /* Adjust this value as needed */
+  height: 100px; /* Adjust this value as needed */
   color: #ffffff;
   border-radius: 10px;
-
   border: none;
 }
 

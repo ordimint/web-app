@@ -104,6 +104,7 @@ const Header = (props) => {
                                         FAQ
                                     </a>
                                 </Nav.Item>
+                                <hr></hr>
                                 <Nav.Item >
                                     <a className="nav_button" href="https://api.ordimint.com" target="_blank" rel="noreferrer">
                                         API

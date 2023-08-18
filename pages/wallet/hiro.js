@@ -14,10 +14,10 @@ import ReceiveAddressModal from '../../components/modals/ReceiveAddressModal';
 import { BsBoxArrowInDownLeft } from "react-icons/bs"
 import TestnetSwitch from '../../components/TestnetSwitch';
 import { TestnetContext } from '../../contexts/TestnetContext';
-import { getAddress } from 'sats-connect'
 
 
-const xverse = () => {
+
+const hiro = () => {
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [ownedUtxos, setOwnedUtxos] = useState([]);
     const [utxosReady, setUtxosReady] = useState(false)
@@ -37,30 +37,22 @@ const xverse = () => {
     const { testnet, setTestnet } = useContext(TestnetContext)
 
 
-
-    const getAddressOptions = {
-        payload: {
-            purposes: ['ordinals'],
-            message: 'Address for receiving Ordinals and payments',
-            network: {
-                type: testnet ? 'Testnet' : 'Mainnet',
-            },
-        },
-        onFinish: (response) => {
-            console.log(response)
-            setPublicKey(response.addresses[0].publicKey)
-            setAddress(response.addresses[0].address)
-            console.log('address', address)
-            console.log('publicKey', publicKey)
-
-        },
-        onCancel: () => alert('Request canceled'),
-    }
-
     async function connect() {
-        const addr = await getAddress(getAddressOptions);
-        console.log(addr)
+        const addr = await window.btc?.request('getAddresses');
+        console.log('addr', addr);
+
+        // Find the p2tr address in the addresses array
+        const p2trAddress = addr?.result?.addresses?.find(address => address.type === 'p2tr');
+
+        console.log('p2trAddress', p2trAddress);
+        if (p2trAddress && p2trAddress.address) {
+            setAddress(p2trAddress.address);
+            setPublicKey(p2trAddress.publicKey);
+            console.log("address: " + p2trAddress.address);
+            console.log("publicKey: " + p2trAddress.publicKey);
+        }
     }
+
 
     async function fetchUtxosForAddress() {
         if (!address) return
@@ -103,9 +95,9 @@ const xverse = () => {
     }, [testnet]);
 
     useEffect(() => {
+
         fetchUtxosForAddress()
-        console.log('Updated address:', address);
-        console.log('Updated publicKey:', publicKey);
+
     }, [address])
 
 
@@ -115,7 +107,7 @@ const xverse = () => {
     return (
         <div>
             <Head>
-                <title>Ordimint - Xverse Wallet</title>
+                <title>Ordimint - Hiro Wallet</title>
                 <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
@@ -125,13 +117,13 @@ const xverse = () => {
             <Container>
                 <Breadcrumb>
                     <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Xverse Wallet</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Hiro Wallet</Breadcrumb.Item>
                 </Breadcrumb>
             </Container>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
                 <TestnetSwitch />
-                <h2 className="text-center m-4">Xverse Wallet</h2>
+                <h2 className="text-center m-4">Hiro Wallet</h2>
                 {
                     publicKey ?
                         <div style={{ zIndex: 5 }}>
@@ -143,7 +135,7 @@ const xverse = () => {
                         <>
                             <div>
                                 <Alert variant="light">
-                                    It seems like your Xverse wallet is not installed.
+                                    It seems like your Hiro wallet is not installed.
                                 </Alert>
                                 <br />
 
@@ -215,7 +207,7 @@ const xverse = () => {
                 setShowSentModal={setShowSentModal}
                 sendFeeRate={sendFeeRate}
                 currentUtxo={currentUtxo}
-                xversePublicKey={publicKey}
+                hiroPublicKey={publicKey}
                 address={address}
                 destinationBtcAddress={destinationBtcAddress}
                 setSentTxid={setSentTxid}
@@ -233,4 +225,4 @@ const xverse = () => {
     )
 
 }
-export default xverse
+export default hiro
