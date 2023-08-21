@@ -1180,3 +1180,19 @@ span.input-group-text.required .required:after {
 #testnet-switch {
   z-index: 5;
 }
+
+#ordimint-wallet-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+#generate-wallet-button {
+  background: #f69102;
+  padding: 9px 15px;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}

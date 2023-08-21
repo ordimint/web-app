@@ -133,9 +133,6 @@ const OrdimintWallet = () => {
         }
     };
 
-
-
-
     return (
 
         <div className="container mt-5">
@@ -169,13 +166,27 @@ const OrdimintWallet = () => {
                                     Please generate one or use your wallet backup file.<br />
 
                                 </Alert>
-                                <div className="d-flex justify-content-evenly">
-                                    <Button variant="primary" onClick={() => handleGenerateWallet(testnet)}>Generate Wallet</Button>
+                                <div id="ordimint-wallet-buttons">
+                                    <Button
+                                        id="generate-wallet-button"
+                                        size='lg'
+                                        onClick={() => handleGenerateWallet(testnet)}>
+                                        Generate Wallet
+                                    </Button>
 
-                                    <Button variant="secondary" onClick={handleRestoreWalletModalShow}>Restore Wallet</Button>
-                                </div>
-                                <div className='mt-3'>
-                                    <Button variant="secondary" onClick={ShowWalletInfoModal}>How does it work?</Button>
+                                    <Button variant="secondary"
+                                        size='lg'
+                                        onClick={handleRestoreWalletModalShow}>
+                                        Restore Wallet
+                                    </Button>
+
+
+                                    <a href="#" onClick={(e) => {
+                                        e.preventDefault(); // Prevents the default action of the link
+                                        ShowWalletInfoModal();
+                                    }}>
+                                        How does it work?
+                                    </a>
                                 </div>
                                 <div>
 
