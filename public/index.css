@@ -593,6 +593,7 @@ span.input-group-text.required .required:after {
   white-space: nowrap;
 }
 #tab-container {
+  width: 100%;
   height: 100%;
   z-index: 5;
   opacity: 0.8;
@@ -1078,13 +1079,21 @@ span.input-group-text.required .required:after {
   color: #fff !important;
   background-color: #000 !important;
 }
-#myAccordion {
+
+div.myAccordion {
+  position: relative;
+  z-index: 5;
   --bs-accordion-color: #fff;
   --bs-accordion-header-color: #fff;
   --bs-accordion-bg: #000;
   --bs-accordion-btn-color: #fff;
   --bs-accordion-btn-active-color: #000;
 }
+
+div.myAccordion .accordion-body p {
+  font-size: 600 !important;
+}
+
 .accordion-button:not(.collapsed) {
   color: #000;
 }
@@ -1190,4 +1199,20 @@ span.input-group-text.required .required:after {
 
 #testnet-switch {
   z-index: 5;
+}
+
+#ordimint-wallet-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+#generate-wallet-button {
+  background: #f69102;
+  padding: 9px 15px;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
