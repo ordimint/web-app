@@ -149,7 +149,7 @@ function WalletSelect({
                             variant="success"
                             size="md"
                         >
-                            <Image src={HiroLogo} height="20" width="20" alt="Hiro Logo" /><br></br> use Hiro Wallet
+                            <Image src={HiroLogo} height="20" width="20" alt="Hiro Logo" id="hiro-wallet-logo" /><br></br> use Hiro Wallet
                         </button>
 
                         <button
