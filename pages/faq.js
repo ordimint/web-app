@@ -23,7 +23,7 @@ const FAQ = () => {
                 <Row xs={1} sm={1} md={1} lg={2}>
                     <Col >
 
-                        <Accordion id="myAccordion" >
+                        <Accordion className='myAccordion' >
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header >
                                     <span className='test'>What is this?</span>
@@ -216,7 +216,7 @@ const FAQ = () => {
                         </Accordion>
                     </Col>
                     <Col >
-                        <Accordion id="myAccordion"
+                        <Accordion className="myAccordion"
                         >
                             <Accordion.Item eventKey="6">
                                 <Accordion.Header>What is the TAP Protocol?</Accordion.Header>

@@ -60,7 +60,7 @@ const GenerateWalletModal = ({
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'ordimint-wallet.txt';
+        link.download = 'ordimint-backup.txt';
         document.body.appendChild(link);
         link.click();
 

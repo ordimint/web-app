@@ -593,6 +593,7 @@ span.input-group-text.required .required:after {
   white-space: nowrap;
 }
 #tab-container {
+  width: 100%;
   height: 100%;
   z-index: 5;
   opacity: 0.8;
@@ -1078,13 +1079,21 @@ span.input-group-text.required .required:after {
   color: #fff !important;
   background-color: #000 !important;
 }
-#myAccordion {
+
+div.myAccordion {
+  position: relative;
+  z-index: 5;
   --bs-accordion-color: #fff;
   --bs-accordion-header-color: #fff;
   --bs-accordion-bg: #000;
   --bs-accordion-btn-color: #fff;
   --bs-accordion-btn-active-color: #000;
 }
+
+div.myAccordion .accordion-body p {
+  font-size: 600 !important;
+}
+
 .accordion-button:not(.collapsed) {
   color: #000;
 }

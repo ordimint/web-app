@@ -75,7 +75,7 @@ const Header = (props) => {
                             </Nav>
 
 
-                            <Nav >
+                            <Nav style={{ zIndex: 5 }}>
                                 <Nav.Item>
                                     <a href="/" className={isActive('/')}>
 
