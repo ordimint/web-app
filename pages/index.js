@@ -661,7 +661,7 @@ function Home() {
                     </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
-                        <p>You get ~3.000 Sats back when you receive the Ordinal.</p>
+                        <p>You get ~1000 Sats back when you receive the Ordinal.</p>
                     </div>
 
                 </div>
