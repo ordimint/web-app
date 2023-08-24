@@ -234,7 +234,7 @@ h2.accordion-header button {
   border: 2px solid #6a6b6b;
 }
 
-@media screen and (min-width: 420px) {
+/* @media screen and (min-width: 420px) {
   #onchain-input input {
     min-width: 350px;
     background-color: #1c1d1d;
@@ -243,6 +243,16 @@ h2.accordion-header button {
     border: 2px solid #6a6b6b;
     max-width: 400px;
   }
+} */
+
+#onchain-input {
+  width: 90%;
+}
+
+#onchain-input input {
+  background-color: #1c1d1d;
+  color: #fff;
+  border: 2px solid #6a6b6b;
 }
 
 .range-slider__tooltip__label {

@@ -4,10 +4,11 @@ import { InputGroup, Form } from 'react-bootstrap'
 const OnchainInput = (props) => {
     return (
 
-        <div >
-            <InputGroup className="mb-3" id='onchain-input'>
+        <div id='onchain-input' >
+            <InputGroup className="mb-3">
                 {/* <InputGroup.Text id="basic-addon1">Receiver address</InputGroup.Text> */}
                 <Form.Control
+
                     value={props.onChainAddress || ''}
                     placeholder="Enter a Bitcoin address"
                     aria-label="onchain-address"

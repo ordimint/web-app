@@ -76,7 +76,7 @@ function WalletSelect({
             <div className="input-button">
                 <p>How do you want to receive your Ordinal?
                     <br />
-                    Enter an on-chain address or use a wallet.
+                    Enter a Bitcoin address or connect a wallet.
                 </p>
                 <OnchainInput
                     onChainAddress={onChainAddress}

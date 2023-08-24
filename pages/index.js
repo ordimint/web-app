@@ -657,7 +657,7 @@ function Home() {
                         variant="success"
                         size="lg"
                     >
-                        Pay with Lightning
+                        Complete Order
                     </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
