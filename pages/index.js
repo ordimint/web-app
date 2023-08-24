@@ -581,13 +581,13 @@ function Home() {
                             </div>
                         </Col>
                         <Col id="right-side-container">
-                            <div id="inscription-number-selection">
+                            {/* <div id="inscription-number-selection">
                                 <p>Do you want to inscribe on <br /> Mainnet or Testnet?<br /><a href="/faq"> (Ready our FAQ)</a ></p>
                                 <TestnetSwitch
 
                                 />
 
-                            </div>
+                            </div> */}
                             <WalletSelect
                                 nostrPublicKey={nostrPublicKey}
                                 ledgerPublicKey={ledgerPublicKey}

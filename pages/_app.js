@@ -34,7 +34,7 @@ export default function MyApp({ Component, pageProps }) {
             <Header />
             <SSRProvider>
                 <TestnetProvider>
-                    <div style={{ minHeight: "100vh", }}>
+                    <div style={{ minHeight: "80vh", }}>
                         <Component {...pageProps} />
                     </div>
                 </TestnetProvider>
