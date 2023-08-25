@@ -1260,3 +1260,14 @@ div.myAccordion .accordion-body p {
   overflow: hidden;
   position: relative;
 }
+
+.inscription-text {
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap; /* Opera <7 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* IE */
+  white-space: normal;
+  overflow: auto;
+  overflow-wrap: break-word;
+}

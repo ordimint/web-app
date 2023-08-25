@@ -138,6 +138,8 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
     const response = await fetch(contentURL);
     const contentType = response.headers.get('content-type');
     let detectedType = CONTENT_TYPES.UNKNOWN;
+    console.log("Content Type:", contentType); // right after you fetch the contentType
+
 
     if (contentType.includes("text/html")) {
       detectedType = CONTENT_TYPES.HTML;
@@ -146,12 +148,16 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
       detectedType = CONTENT_TYPES.IMAGE;
     } else if (contentType.startsWith("video/")) {
       detectedType = CONTENT_TYPES.VIDEO;
-    } else if (contentType.includes("text")) {
+    } else if (contentType.includes("text/plain")) {
       const text = await response.text();
       const parsedText = parseTextInscription(text);
 
       if (parsedText.pFlag) {
         setText(renderJsonData(parsedText));
+        detectedType = CONTENT_TYPES.TEXT;
+      } else {
+
+        setText(text.substring(0, 250)); // Directly set the text if there's no pFlag
         detectedType = CONTENT_TYPES.TEXT;
       }
     }
@@ -169,12 +175,12 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
     <>
       {isText === CONTENT_TYPES.HTML ? (
         <div className="thumbnail-container">
-          <div class="thumbnail">
+          <div className="thumbnail">
             <iframe
               className="iframe-content pt-3"
               src={text}
               title="Embedded content"
-              frameborder="0"
+              frameBorder="0"
             />
           </div>
         </div>
@@ -197,11 +203,15 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
           Your browser does not support the video tag.
         </video>
       ) : isText === CONTENT_TYPES.TEXT ? (
-        <div className='m-2'>
-          {text}
+
+        <div className='inscription-text'>
+          <p>
+            {text}
+          </p>
         </div>
+
       ) : (
-        <p>{text}</p>
+        <div className='inscription-text'>{text}</div>
       )}
     </>
   );
