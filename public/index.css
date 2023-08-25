@@ -479,6 +479,7 @@ div.wallet-card {
   max-width: 350px;
   position: relative;
   display: flex;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
   align-content: center;
@@ -1218,4 +1219,44 @@ div.myAccordion .accordion-body p {
 
 #hiro-wallet-logo {
   border-radius: 6px;
+}
+
+.thumbnail iframe {
+  width: 576px;
+  height: 576px;
+}
+
+.thumbnail {
+  position: relative;
+  -ms-zoom: 0.5; /* Change the scaling factor if you want it larger or smaller */
+  -moz-transform: scale(0.5);
+  -moz-transform-origin: 50% 50%;
+  -o-transform: scale(0.5);
+  -o-transform-origin: 50% 50%;
+  -webkit-transform: scale(0.5);
+  -webkit-transform-origin: 50% 50%;
+}
+
+.thumbnail:after {
+  display: block;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.thumbnail-container {
+  display: flex; /* Added this to use flexbox for centering */
+  align-items: center; /* Vertical centering */
+  justify-content: center; /* Horizontal centering */
+  /* width: calc(
+    1440px * 0.25
+  ); 
+  height: calc(900px * 0.35);  */
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
 }

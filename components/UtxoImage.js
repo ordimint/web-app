@@ -6,6 +6,15 @@ import { useState } from 'react'
 
 export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet }) {
 
+  const CONTENT_TYPES = {
+    TEXT: 'text',
+    HTML: 'html',
+    IMAGE: 'image',
+    VIDEO: 'video',
+    UNKNOWN: 'unknown'
+  };
+
+
   const [isText, setIsText] = useState(false)
   const [text, setText] = useState("")
 
@@ -125,23 +134,31 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
 
   async function setContentType(utxo, testnet) {
+    const contentURL = await ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet);
+    const response = await fetch(contentURL);
+    const contentType = response.headers.get('content-type');
+    let detectedType = CONTENT_TYPES.UNKNOWN;
 
-    const contentURL = await ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet)
-    const response = await fetch(contentURL)
-    const contentType = response.headers.get('content-type')
-    if (contentType.includes("text")) {
-      const text = await response.text()
-      const parsedText = parseTextInscription(text)
+    if (contentType.includes("text/html")) {
+      detectedType = CONTENT_TYPES.HTML;
+      setText(contentURL); // For iframe, we'd need the URL itself
+    } else if (contentType.startsWith("image/")) {
+      detectedType = CONTENT_TYPES.IMAGE;
+    } else if (contentType.startsWith("video/")) {
+      detectedType = CONTENT_TYPES.VIDEO;
+    } else if (contentType.includes("text")) {
+      const text = await response.text();
+      const parsedText = parseTextInscription(text);
+
       if (parsedText.pFlag) {
-        setText(renderJsonData(parsedText))
+        setText(renderJsonData(parsedText));
+        detectedType = CONTENT_TYPES.TEXT;
       }
-      else {
-        setText(parsedText.substring(0, 600))
-      }
-      setIsText(true)
-
     }
+
+    setIsText(detectedType);
   }
+
 
   useEffect(() => {
     setContentType(utxo, testnet)
@@ -150,24 +167,43 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
   return (
     <>
-      {
-        isText ? (<div className='m-2' >
+      {isText === CONTENT_TYPES.HTML ? (
+        <div className="thumbnail-container">
+          <div class="thumbnail">
+            <iframe
+              className="iframe-content pt-3"
+              src={text}
+              title="Embedded content"
+              frameborder="0"
+            />
+          </div>
+        </div>
+
+      ) : isText === CONTENT_TYPES.IMAGE ? (
+        <Figure>
+          <Figure.Image
+            className='m-2'
+            width={100}
+            thumbnail
+            src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet) : cloudfrontUrl(utxo)}
+          />
+          <Figure.Caption>
+            {/* Any caption content you want */}
+          </Figure.Caption>
+        </Figure>
+      ) : isText === CONTENT_TYPES.VIDEO ? (
+        <video width="320" height="240" controls>
+          <source src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet) : cloudfrontUrl(utxo)} type={contentType} />
+          Your browser does not support the video tag.
+        </video>
+      ) : isText === CONTENT_TYPES.TEXT ? (
+        <div className='m-2'>
           {text}
-        </div>) :
-          (
-            <Figure>
-              <Figure.Image
-                className='m-2'
-                width={100}
-                thumbnail
-                src={utxo.status.confirmed ? ordinalsImageUrl(inscriptionUtxosByUtxo[`${utxo.txid}:${utxo.vout}`], testnet) : cloudfrontUrl(utxo)}
-              />
-              <Figure.Caption>
-
-              </Figure.Caption>
-            </Figure>)
-      }
+        </div>
+      ) : (
+        <p>{text}</p>
+      )}
     </>
+  );
 
-  )
 }
