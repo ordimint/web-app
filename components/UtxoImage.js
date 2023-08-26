@@ -180,7 +180,6 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
               className="iframe-content pt-3"
               src={text}
               title="Embedded content"
-              sandbox='allow-scripts allow-same-origin'
               frameBorder="0"
             />
           </div>
