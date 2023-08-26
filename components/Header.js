@@ -118,7 +118,7 @@ const Header = (props) => {
                                 </Nav.Item>
                                 <Nav.Item >
 
-                                    <a className="nav_button" href="http://explorer.ordimint.com" target="_blank" rel="noreferrer">
+                                    <a className="nav_button" href="https://explorer.ordimint.com" target="_blank" rel="noreferrer">
                                         <span>Ordinals Explorer</span>
                                     </a>
                                 </Nav.Item>
