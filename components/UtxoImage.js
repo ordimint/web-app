@@ -205,13 +205,14 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
       ) : isText === CONTENT_TYPES.TEXT ? (
 
         <div className='inscription-text'>
-          <p>
+          <p className='inscription-text'>
             {text}
           </p>
         </div>
 
       ) : (
-        <div className='inscription-text'>{text}</div>
+        <div className='inscription-text'>
+          <p className='inscription-text'>{text}</p></div>
       )}
     </>
   );

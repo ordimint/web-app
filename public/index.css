@@ -1270,4 +1270,5 @@ div.myAccordion .accordion-body p {
   white-space: normal;
   overflow: auto;
   overflow-wrap: break-word;
+  word-break: break-word;
 }
