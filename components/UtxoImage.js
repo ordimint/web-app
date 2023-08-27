@@ -138,7 +138,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
     const response = await fetch(contentURL);
     const contentType = response.headers.get('content-type');
     let detectedType = CONTENT_TYPES.UNKNOWN;
-    console.log("Content Type:", contentType); // right after you fetch the contentType
+
 
 
     if (contentType.includes("text/html")) {
