@@ -262,20 +262,23 @@ function Home() {
                 type: "danger",
             });
         }
-        else if (tokenTicker.length === 4 && tabKey === 'tap') {
+        else if (tokenTicker.replace(/-/g, '').length === 4 && tabKey === 'tap') {
             showAlertModal({
                 show: true,
                 text: "4 letter token ticker are reserved for BRC",
                 type: "danger",
             });
         }
-        else if (tabKey === 'tap' && (tokenTicker.length !== 3 && (tokenTicker.length < 5 || tokenTicker.length > 32))) {
+        else if (tabKey === 'tap' &&
+            (tokenTicker.replace(/-/g, '').length !== 3 &&
+                (tokenTicker.replace(/-/g, '').length < 5 || tokenTicker.replace(/-/g, '').length > 32))) {
             showAlertModal({
                 show: true,
                 text: "Token ticker must be 3 symbols or between 5 to 32 symbols.",
                 type: "danger",
             });
         }
+
 
         else {
             if (tabKey === 'brc' || tabKey === 'tap') {
