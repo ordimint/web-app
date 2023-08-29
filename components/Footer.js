@@ -40,9 +40,12 @@ const Footer = () => {
 
             <div style={{
                 position: "absolute", right: -10, bottom: 0, borderRadius: "560px",
-                opacity: "0.6000000238418579", filter: "blur(280px)"
+                opacity: "0.6000000238418579", filter: "blur(280px)", zIndex: "0"
             }}>
-                <div style={{ height: "250px", width: '250px', background: "#f69102" }}>
+                <div style={{
+                    height: "250px", width: '250px',
+                    position: "relative", background: "#f69102", zIndex: "0"
+                }}>
 
                     <div className="glow">
 

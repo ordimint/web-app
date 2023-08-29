@@ -81,9 +81,9 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setCurrentUtxo, setSh
                 );
               })}
             </Row>
-            <Pagination>
+            <Pagination style={{ zIndex: "5" }}>
               {pageNumbers.map(num => (
-                <Pagination.Item key={num} active={num === currentPage} onClick={() => handlePageChange(num)}>
+                <Pagination.Item style={{ zIndex: "5" }} key={num} active={num === currentPage} onClick={() => handlePageChange(num)}>
                   {num}
                 </Pagination.Item>
               ))}
