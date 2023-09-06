@@ -20,6 +20,7 @@ import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
 import TAP from '../components/TAP';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
@@ -46,6 +47,7 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 function Home() {
+    const router = useRouter();
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [unisatPublicKey, setUnisatPublicKey] = useState(null);
@@ -54,7 +56,7 @@ function Home() {
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
     const [tabKey, setTabKey] = useState('tap');
-
+    const [partnerCode, setPartnerCode] = useState(getRefCodeFromURL());
     const [textInput, setTextInput] = useState('Enter any text you want to store on the blockchain');
     const [domainInput, setDomainInput] = useState('stacking');
     const [newsText, setNewsText] = useState('');
@@ -161,6 +163,15 @@ function Home() {
         }
         setShowWalletConnectModal(true)
     };
+
+    function getRefCodeFromURL() {
+        if (router.isReady) {
+            const refCode = router.query.ref;
+            return refCode;
+        }
+        return null;
+    }
+
 
 
 
@@ -309,17 +320,17 @@ function Home() {
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee, partnerCode);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee, partnerCode);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee, partnerCode);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -338,7 +349,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee, partnerCode);
             }
 
             if (tabKey === 'brc') {
@@ -354,7 +365,7 @@ function Home() {
                     brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee, partnerCode);
 
             }
 
@@ -384,8 +395,8 @@ function Home() {
                     console.log(tapString);
                 }
 
-                console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee);
+
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee, partnerCode);
 
             }
 
@@ -660,7 +671,7 @@ function Home() {
                         variant="success"
                         size="lg"
                     >
-                        Complete Order
+                        Submit & Pay
                     </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>

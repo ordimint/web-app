@@ -97,6 +97,11 @@ const Header = (props) => {
                                         Collections
                                     </a>
                                 </Nav.Item>
+                                <Nav.Item>
+                                    <a href="/partners" className={isActive('/partners')}>
+                                        Partners
+                                    </a>
+                                </Nav.Item>
 
                                 <Nav.Item>
                                     <a href="/faq" className={isActive('/faq')}>
