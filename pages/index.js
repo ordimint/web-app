@@ -56,7 +56,7 @@ function Home() {
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
     const [tabKey, setTabKey] = useState('tap');
-    const [partnerCode, setPartnerCode] = useState(getRefCodeFromURL());
+    const [partnerCode, setPartnerCode] = useState("none");
     const [textInput, setTextInput] = useState('Enter any text you want to store on the blockchain');
     const [domainInput, setDomainInput] = useState('stacking');
     const [newsText, setNewsText] = useState('');
@@ -128,6 +128,7 @@ function Home() {
 
 
 
+
     useEffect(() => {
         if (!showGenerateWalletModal && ordimintPubkey) {
             setShowWalletConnectModal(true)
@@ -171,6 +172,13 @@ function Home() {
         }
         return null;
     }
+
+    useEffect(() => {
+        if (getRefCodeFromURL()) {
+            setPartnerCode(getRefCodeFromURL());
+            console.log(partnerCode);
+        }
+    }, [router.isReady]);
 
 
 
@@ -317,6 +325,8 @@ function Home() {
             renderAlert(true);
             isPaid = true;
             renderConfigModal();
+            console.log("Invoice paid");
+            console.log(partnerCode);
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
