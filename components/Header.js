@@ -1,4 +1,4 @@
-import { Navbar, Nav, Button, Offcanvas, Container } from "react-bootstrap";
+import { Navbar, Nav, Badge, Offcanvas, Container } from "react-bootstrap";
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Image from 'next/image';
@@ -99,8 +99,10 @@ const Header = (props) => {
                                 </Nav.Item>
                                 <Nav.Item>
                                     <a href="/partners" className={isActive('/partners')}>
-                                        Partners
+                                        Partners{" "}
+                                        <Badge bg="danger">New!</Badge>
                                     </a>
+
                                 </Nav.Item>
 
                                 <Nav.Item>
