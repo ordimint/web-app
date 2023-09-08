@@ -146,7 +146,7 @@ const partners = () => {
                 {step === 3 && (
                     <div className='partner-programm-input-container'>
                         <div className='partner-programm-success'>
-                            <h3>Congrats! You are part of the OrdinalsBot Affiliate Program!</h3>
+                            <h3>Congrats! You are part of the Ordimint Affiliate Program!</h3>
                             <h5>Your personal referral code is: <b><span>{custom_code}</span></b></h5>
                             You will find your affiliate link below. Copy and share to start earning Bitcoin rewards!
                             <br></br>
