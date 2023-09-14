@@ -704,6 +704,8 @@ span.input-group-text.required .required:after {
 
 .search-input {
   max-width: 300px;
+  z-index: 5;
+  position: relative;
 }
 .search-input input {
   background-color: #0f1010;

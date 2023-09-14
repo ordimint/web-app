@@ -93,7 +93,7 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
       </div>
 
       <div className="main-middle">
-        <h1>{collectionMeta.name}</h1>
+        <h1 className="mt-4">{collectionMeta.name}</h1>
         {isText ? (
           <Figure>
             <iframe
