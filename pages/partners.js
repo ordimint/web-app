@@ -97,8 +97,9 @@ const partners = () => {
                 {step === 1 && (
                     <>
                         <div className='partner-programm-input-container'>
-                            <h3>Join the Ordimint Affiliate Program <br></br> and earn 20% from inscription referrals.</h3>
-                            <p>Generate your affiliate link below. Promote and start earning Bitcoin rewards!</p>
+                            <h3>Become a Part of the Ordimint Affiliate Initiative <br></br> and receive 20% for every inscription referral.</h3>
+                            <p>Create your unique affiliate link below. Share it and begin earning Bitcoin incentives!</p>
+
                             <InputGroup className='partner-programm-input'  >
                                 <Form.Label className='mt-2'>Type your preferred referral code:</Form.Label>
                                 <div className='partner-programm-input-item'>
@@ -146,10 +147,12 @@ const partners = () => {
                 {step === 3 && (
                     <div className='partner-programm-input-container'>
                         <div className='partner-programm-success'>
-                            <h3>Congrats! You are part of the Ordimint Affiliate Program!</h3>
-                            <h5>Your personal referral code is: <b><span>{custom_code}</span></b></h5>
-                            You will find your affiliate link below. Copy and share to start earning Bitcoin rewards!
+                            <h3>Welcome! You are part of the Ordimint Affiliate Program!</h3>
                             <br></br>
+                            <p>
+                                You will find your affiliate link below. Copy and share to start earning Bitcoin rewards!
+
+                            </p>
 
 
                             <Form className="order-ID">

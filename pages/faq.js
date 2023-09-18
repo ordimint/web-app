@@ -264,6 +264,42 @@ const FAQ = () => {
                             </Accordion.Item>
 
 
+
+                            <Accordion.Item eventKey="101">
+                                <Accordion.Header>What is the Ordimint Affiliate Program?</Accordion.Header>
+                                <Accordion.Body>
+                                    The Ordimint Affiliate Program allows you to earn Bitcoin by referring new customers to Ordimint. When someone uses your referral link and makes a purchase, you earn a 20% commission in Bitcoin.
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="102">
+                                <Accordion.Header>How do I join the Ordimint Affiliate Program?</Accordion.Header>
+                                <Accordion.Body>
+                                    It's simple! Create your unique referral link and provide a Bitcoin address where you'd like to receive your commissions. No account registration is required.
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="103">
+                                <Accordion.Header>How much can I earn?</Accordion.Header>
+                                <Accordion.Body>
+                                    You earn a 20% commission for every user you refer who makes a purchase. The sky's the limit! The more users you refer, the more you earn.
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="104">
+                                <Accordion.Header>When and how do I get paid?</Accordion.Header>
+                                <Accordion.Body>
+                                    Payouts are made directly to your provided Bitcoin address once a month. Ensure you provide a valid Bitcoin address to receive your commissions. We process payouts as soon as you've earned up to 100k Sats.
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="105">
+                                <Accordion.Header>Do I need an account to track my earnings?</Accordion.Header>
+                                <Accordion.Body>
+                                    No account is needed. We send your rewards directly to the Bitcoin address you provide. However, we are currently working on a site that will allow you to track your referrals and earnings. Ensure you keep track of your referral link and monitor your Bitcoin address for incoming transactions in the meantime.
+                                </Accordion.Body>
+                            </Accordion.Item>
+
                         </Accordion>
                     </Col>
 

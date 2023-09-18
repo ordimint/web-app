@@ -1300,6 +1300,18 @@ div.myAccordion .accordion-body p {
   width: 100%;
 }
 
+@media screen and (max-width: 420px) {
+  .partner-programm-input-item {
+    flex-direction: column;
+  }
+  .partner-programm-input-item input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
 .partner-programm-input-item input {
   background-color: #1c1d1d;
   color: #fff;
