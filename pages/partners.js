@@ -138,6 +138,7 @@ const partners = () => {
                     <>
                         <div className='partner-programm-input-container'>
                             <h3>Become a Part of the Ordimint Affiliate Initiative <br></br> and receive 20% for every inscription referral.</h3>
+                            <h5>Check out our <a href="/faq">FAQ</a> if you have any questions.</h5>
                             <p>Create your unique affiliate link below. Share it and begin earning Bitcoin incentives!</p>
 
                             <InputGroup className='partner-programm-input'  >
