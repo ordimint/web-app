@@ -296,9 +296,16 @@ const FAQ = () => {
                             <Accordion.Item eventKey="105">
                                 <Accordion.Header>Do I need an account to track my earnings?</Accordion.Header>
                                 <Accordion.Body>
-                                    No account is needed. We send your rewards directly to the Bitcoin address you provide. However, we are currently working on a site that will allow you to track your referrals and earnings. Ensure you keep track of your referral link and monitor your Bitcoin address for incoming transactions in the meantime.
+                                    No account is needed. We send your rewards directly to the Bitcoin address you provide. Ensure you keep track of your referral link and monitor your Bitcoin address for incoming transactions in the meantime.
                                 </Accordion.Body>
                             </Accordion.Item>
+                            <Accordion.Item eventKey="106">
+                                <Accordion.Header>How can I check my balance?</Accordion.Header>
+                                <Accordion.Body>
+                                    To check your balance, simply visit our Partners page and enter the Bitcoin address you provided when joining the affiliate program in the designated input field. After clicking on the "Check Balance" button, your current balance in satoshis and the number of orders associated with your referral code will be displayed right below.
+                                </Accordion.Body>
+                            </Accordion.Item>
+
 
                         </Accordion>
                     </Col>
