@@ -20,6 +20,7 @@ import NewsInput from '../components/NewsInput';
 import BRC from '../components/BRC';
 import TAP from '../components/TAP';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
@@ -28,6 +29,7 @@ import TestnetSwitch from '../components/TestnetSwitch';
 import PreviewModal from '../components/modals/PreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
 import WalletSelect from '../components/WalletSelect';
+import { useRef } from 'react';
 
 
 
@@ -46,6 +48,8 @@ const securityBuffer = process.env.REACT_APP_security_buffer;
 
 
 function Home() {
+    const router = useRouter();
+    const refCodeRef = useRef(null);
     const [nostrPublicKey, setNostrPublicKey] = useState(null);
     const [ledgerPublicKey, setLedgerPublicKey] = useState(null);
     const [unisatPublicKey, setUnisatPublicKey] = useState(null);
@@ -54,7 +58,6 @@ function Home() {
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
     const [tabKey, setTabKey] = useState('tap');
-
     const [textInput, setTextInput] = useState('Enter any text you want to store on the blockchain');
     const [domainInput, setDomainInput] = useState('stacking');
     const [newsText, setNewsText] = useState('');
@@ -126,6 +129,7 @@ function Home() {
 
 
 
+
     useEffect(() => {
         if (!showGenerateWalletModal && ordimintPubkey) {
             setShowWalletConnectModal(true)
@@ -161,6 +165,28 @@ function Home() {
         }
         setShowWalletConnectModal(true)
     };
+
+    async function getRefCodeFromURL() {
+        if (router.isReady) {
+            const refCode = await router.query.ref;
+            console.log("Ref Code:", refCode);
+            return refCode;
+        }
+        return null;
+    }
+
+    useEffect(() => {
+        async function fetchRefCode() {
+            const refCode = await getRefCodeFromURL();
+            if (refCode) {
+                refCodeRef.current = refCode;
+                console.log("Ref Code:", refCodeRef.current);
+            }
+        }
+
+        fetchRefCode();
+    }, [router.isReady]);
+
 
 
 
@@ -306,20 +332,22 @@ function Home() {
             renderAlert(true);
             isPaid = true;
             renderConfigModal();
+            console.log("Invoice paid");
+            console.log(refCodeRef.current);
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee);
+                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee, refCodeRef.current, price);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee, refCodeRef.current, price);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee, refCodeRef.current, price);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -338,7 +366,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee, refCodeRef.current, price);
             }
 
             if (tabKey === 'brc') {
@@ -354,7 +382,7 @@ function Home() {
                     brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee, refCodeRef.current, price);
 
             }
 
@@ -384,8 +412,8 @@ function Home() {
                     console.log(tapString);
                 }
 
-                console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee);
+
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee, refCodeRef.current, price);
 
             }
 
@@ -660,7 +688,7 @@ function Home() {
                         variant="success"
                         size="lg"
                     >
-                        Complete Order
+                        Submit & Pay
                     </button>
                     <div id='info-text-home-bottom'>
                         <p className='mt-2'>We mint directly to your address. No intermediaries.</p>

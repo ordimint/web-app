@@ -1,4 +1,4 @@
-import { Navbar, Nav, Button, Offcanvas, Container } from "react-bootstrap";
+import { Navbar, Nav, Badge, Offcanvas, Container } from "react-bootstrap";
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Image from 'next/image';
@@ -96,6 +96,13 @@ const Header = (props) => {
                                     <a href="/ordinal-collections" className={isActive('/ordinal-collections')}>
                                         Collections
                                     </a>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <a href="/partners" className={isActive('/partners')}>
+                                        Partners{" "}
+                                        <Badge bg="danger">New!</Badge>
+                                    </a>
+
                                 </Nav.Item>
 
                                 <Nav.Item>
