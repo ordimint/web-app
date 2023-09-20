@@ -6,6 +6,7 @@ import { validate } from 'bitcoin-address-validation'
 import AlertModal from '../components/modals/AlterModal'
 import { io } from "socket.io-client";
 import { IoIosCopy } from "react-icons/io";
+import axios from 'axios'
 var socket = io.connect(process.env.REACT_APP_socket_port);
 
 const partners = () => {
@@ -20,6 +21,8 @@ const partners = () => {
     const [custom_code, setCustomCode] = useState('')
     const [payoutAddress, setPayoutAddress] = useState('')
     const [custom_code_link, setCustomCodeLink] = useState('')
+    const [balance, setBalance] = useState(null);
+    const [numberOfOrders, setNumberOfOrders] = useState(null);
 
 
     const [step, setStep] = useState(1);
@@ -29,6 +32,7 @@ const partners = () => {
         text: "",
         type: "",
     });
+
     const hideAlertModal = () =>
         showAlertModal({ show: false, text: "", type: "" });
 
@@ -74,6 +78,42 @@ const partners = () => {
     });
 
 
+
+    const checkBalance = async () => {
+
+        if (validate(payoutAddress) === false) {
+            showAlertModal({
+                show: true,
+                text: 'Invalid Bitcoin Address',
+                type: "danger",
+            });
+            return
+        }
+
+        if (payoutAddress === "") {
+            return;
+        }
+
+        await axios.get(
+            `${process.env.REACT_APP_BACKEND_API_PARTNER}${payoutAddress}`
+        ).then(response => {
+            setBalance(response.data.balance);
+            setNumberOfOrders(response.data.numberOfOrders);
+
+        })
+            // if error
+            .catch(function (error) {
+                console.log(error);
+                showAlertModal({
+                    show: true,
+                    text: "No Balance Found",
+                    type: "danger",
+                });
+
+            });
+    }
+
+
     return (
 
         <>
@@ -90,7 +130,7 @@ const partners = () => {
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:image" content="https://ordimint.com/OrdimintSVGLogo-black.svg" />
             </Head>
-            <div className='main-middle'>
+            <div className='main-middle container fluid'>
 
 
 
@@ -124,6 +164,7 @@ const partners = () => {
                                 </div>
                             </InputGroup>
                             <div className='partner-programm-buttons'>
+
                                 <button
                                     className='pay_button'
                                     size="lg"
@@ -132,6 +173,14 @@ const partners = () => {
                                         addAddressToDB(payoutAddress, custom_code)
                                     }}>
                                     Submit  </button>
+                                <Button
+                                    className='pay_button'
+                                    size="lg"
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setStep(4)
+                                    }}>
+                                    I am already a partner  </Button>
                             </div>
                         </div>
                     </>
@@ -180,6 +229,61 @@ const partners = () => {
                         </div>
                     </div>
                 )}
+                {step === 4 && (
+
+                    <div className='partner-programm-input-container'>
+                        <h3>Check your current refferal balance</h3>
+
+                        <InputGroup className='partner-programm-input'  >
+
+
+                            <Form.Label className='mt-3'>Enter the Bitcoin address you provided.</Form.Label>
+                            <div className='partner-programm-input-item'>
+                                <InputGroup.Text required>Bitcoin Address</InputGroup.Text>
+                                <Form.Control
+                                    size="lg"
+                                    value={payoutAddress}
+                                    placeholder="Receiver Address"
+                                    onChange={(e) => setPayoutAddress(e.target.value)}
+                                />
+                            </div>
+                            {balance !== null && numberOfOrders !== null && (
+                                <>
+                                    <div className='partner-balance-column mt-3'>
+                                        <div className="m-1">
+                                            <strong>Balance:</strong> {balance} Sats
+                                        </div>
+
+
+
+                                        <div className="m-1">
+                                            <strong>Number of Orders:</strong> {numberOfOrders}
+                                        </div>
+                                        <div className="m-1">
+                                            <p>Payouts are sheduled every month. Minimum payout is 100k Sats.</p>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+
+
+                        </InputGroup>
+                        <div className='partner-programm-buttons'>
+
+                            <Button
+                                className='pay_button'
+                                size="lg"
+                                variant="success"
+                                onClick={() => {
+                                    checkBalance()
+                                }}>
+                                Check Balance  </Button>
+                        </div>
+                    </div>
+
+                )}
+
             </div>
             <AlertModal
                 show={alertModalparams.show}

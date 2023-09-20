@@ -337,17 +337,17 @@ function Home() {
 
             if (tabKey === 'file') {
                 await base64Encode(file, function (dataUrl) {
-                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee, refCodeRef.current);
+                    socket.emit("createOrder", paymentHash, onChainAddress, testnet, dataUrl, fileType, false, fee, refCodeRef.current, price);
                 });
             }
             if (tabKey === 'text') {
                 console.log(textInput);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee, refCodeRef.current);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, textInput, 'txt', true, fee, refCodeRef.current, price);
             }
             if (tabKey === 'domain') {
                 console.log(domainInput);
                 const domainString = `{"p":"sns","op":"reg","name":"${domainInput}.sats"}`
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee, refCodeRef.current);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, domainString, 'txt', true, fee, refCodeRef.current, price);
             }
             if (tabKey === 'news') {
                 var newsObject =
@@ -366,7 +366,7 @@ function Home() {
                     newsObject = { ...newsObject, body: `${newsText}` }
                 }
                 const newsString = JSON.stringify(newsObject)
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee, refCodeRef.current);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, newsString, 'txt', true, fee, refCodeRef.current, price);
             }
 
             if (tabKey === 'brc') {
@@ -382,7 +382,7 @@ function Home() {
                     brcString = `{"p":"brc-20","op":"transfer","tick":"${tokenTicker}","amt":"${transferAmount}"}`
                 }
                 console.log(brcString);
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee, refCodeRef.current);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, brcString, 'txt', true, fee, refCodeRef.current, price);
 
             }
 
@@ -413,7 +413,7 @@ function Home() {
                 }
 
 
-                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee, refCodeRef.current);
+                socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee, refCodeRef.current, price);
 
             }
 

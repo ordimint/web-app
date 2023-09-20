@@ -1331,6 +1331,7 @@ div.myAccordion .accordion-body p {
 
 .partner-programm-buttons {
   display: flex;
+  gap: 10px;
   flex-direction: row-reverse;
 }
 
@@ -1352,4 +1353,11 @@ div.myAccordion .accordion-body p {
   z-index: 5;
   padding: 5%;
   margin: 10px 0px 10px 0px;
+}
+
+.partner-balance-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
 }
