@@ -4,7 +4,7 @@ import { InputGroup, Form } from 'react-bootstrap'
 const OnchainInput = (props) => {
     return (
 
-        <div id='onchain-input' >
+        <div id='onchain-input'>
             <InputGroup className="mb-3">
                 {/* <InputGroup.Text id="basic-addon1">Receiver address</InputGroup.Text> */}
                 <Form.Control

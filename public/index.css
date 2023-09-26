@@ -238,19 +238,14 @@ h2.accordion-header button {
   border: 2px solid #6a6b6b;
 }
 
-/* @media screen and (min-width: 420px) {
-  #onchain-input input {
-    min-width: 350px;
-    background-color: #1c1d1d;
-    border-radius: 10px;
-    color: #ffffff;
-    border: 2px solid #6a6b6b;
-    max-width: 400px;
-  }
-} */
-
 #onchain-input {
-  width: 90%;
+  width: 100%;
+}
+
+@media screen and (max-width: 750px) {
+  #onchain-input {
+    width: 100%;
+  }
 }
 
 #onchain-input input {
@@ -266,11 +261,6 @@ h2.accordion-header button {
 #fee-range {
   width: 100%;
   margin: 10px 0px 10px 0px;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 #price {
@@ -359,6 +349,7 @@ div.bitcoin-address a {
 
 .success-alert-input {
   /* max-width: min-content; */
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -374,7 +365,7 @@ div.bitcoin-address a {
 }
 
 div.preview-image-container {
-  max-width: 400px;
+  width: 100%;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -434,7 +425,7 @@ div.preview-image-container img {
 }
 
 #text-input-container {
-  width: 400px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -550,7 +541,7 @@ div.wallet-card {
   justify-content: flex-start;
   align-items: strech;
   align-content: stretch;
-  width: 400px;
+  width: 100%;
 }
 
 @media screen and (max-width: 420px) {
@@ -607,17 +598,36 @@ span.input-group-text.required .required:after {
 #tab-container .nav-link {
   white-space: nowrap;
 }
+
 #tab-container {
   width: 100%;
+}
+
+#multistep-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.multistep-container-item {
+  position: relative;
+  width: 75%;
   height: 100%;
   z-index: 5;
   opacity: 0.8;
-
+  display: flex;
+  justify-content: center;
   text-align: center;
   border: 2px solid #6a6b6b;
   background-color: #1e1f20;
   border-radius: 12px;
   padding: 15px;
+}
+@media screen and (max-width: 420px) {
+  .multistep-container-item {
+    width: 100%;
+  }
 }
 
 #brc-20-input-container {
@@ -828,23 +838,6 @@ span.input-group-text.required .required:after {
   flex-wrap: wrap; */
 }
 
-#fee-select-container {
-  max-width: 450px;
-  padding: 15px;
-  margin-top: 10px;
-  border: 2px solid #6a6b6b;
-  background-color: #1e1f20;
-  border-radius: 12px;
-  text-align: center;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  align-content: stretch;
-  flex-wrap: wrap;
-}
-
 .preview-image-container {
   display: flex;
   flex-direction: column;
@@ -1024,6 +1017,7 @@ span.input-group-text.required .required:after {
   border: none;
   border-radius: 10px;
   margin-bottom: 15px;
+  font-size: 1.25rem;
 }
 
 .active_link:hover {
@@ -1358,4 +1352,43 @@ div.myAccordion .accordion-body p {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.multistep-buttons {
+  position: relative;
+  z-index: 5;
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.wallet-selector-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wallet-change-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.separation-line {
+  border-top: 2px solid white;
+}
+
+.overview-table td:first-child {
+  text-align: left;
+}
+
+#overview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

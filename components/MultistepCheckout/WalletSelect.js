@@ -1,14 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 import OnchainInput from './OnchainInput';
-import WalletConnectModal from './modals/WalletConnectModal';
-import AlbyLogo from '../public/media/alby-logo.svg'
-import LedgerLogo from '../public/media/ledger-logo-small.svg';
-import OrdimintLogo from '../public/media/ordimint-coin-white.png';
-import XverseLogo from '../public/media/xverse-logo.png';
-import UnisatLogo from '../public/media/unisat-logo.svg';
-import HiroLogo from '../public/media/HiroWalletLogo.jpg';
-import hiro from '../pages/wallet/hiro';
+import WalletConnectModal from '../modals/WalletConnectModal';
+import AlbyLogo from '../../public/media/alby-logo.svg'
+import LedgerLogo from '../../public/media/ledger-logo-small.svg';
+import OrdimintLogo from '../../public/media/ordimint-coin-white.png';
+import XverseLogo from '../../public/media/xverse-logo.png';
+import UnisatLogo from '../../public/media/unisat-logo.svg';
+import HiroLogo from '../../public/media/HiroWalletLogo.jpg';
+import { Button } from 'react-bootstrap';
 
 function WalletSelect({
     nostrPublicKey,
@@ -39,16 +39,38 @@ function WalletSelect({
     connectXverse,
     connectHiro,
 }) {
+
+    const [hasSelectedWallet, setHasSelectedWallet] = React.useState(false);
+
+
     return (
         (nostrPublicKey || ledgerPublicKey || ordimintPubkey || unisatPublicKey || xversePublicKey || hiroPublicKey) ? (
             <>
                 {(nostrPublicKey || ledgerPublicKey || unisatPublicKey || xversePublicKey || hiroPublicKey) ? (
-                    <div className="success-alert-input input-button">
-                        <p>Your receiver address:</p>
+                    <div className="success-alert-input">
+                        <h5>Your receiver address:</h5>
                         <OnchainInput
                             onChainAddress={onChainAddress}
                             setOnChainAddress={setOnChainAddress}
                         />
+                        {hasSelectedWallet && (
+                            <div className='wallet-change-button'>
+                                <Button
+                                    size="md"
+                                    variant="success"
+                                    onClick={() => {
+                                        setNostrPublicKey(null);
+                                        setLedgerPublicKey(null);
+                                        setUnisatPublicKey(null);
+                                        setXversePublicKey(null);
+                                        setHiroPublicKey(null);
+                                        setHasSelectedWallet(false);
+                                    }}
+                                >
+                                    Change Wallet
+                                </Button>
+                            </div>
+                        )}
                         <WalletConnectModal
                             address={onChainAddress}
                             show={showWalletConnectModal}
@@ -57,8 +79,8 @@ function WalletSelect({
                     </div>
                 ) : (
                     <>
-                        <div className="success-alert-input input-button">
-                            <p>Your receiver address:</p>
+                        <div className="success-alert-input">
+                            <h5>Your receiver address:</h5>
                             <OnchainInput
                                 onChainAddress={onChainAddress}
                                 setOnChainAddress={setOnChainAddress}
@@ -73,11 +95,11 @@ function WalletSelect({
                 )}
             </>
         ) : (
-            <div className="input-button">
-                <p>How do you want to receive your Ordinal?
-                    <br />
-                    Enter a Bitcoin address or connect a wallet.
-                </p>
+            <div className='wallet-selector-container' >
+                <h3>How do you want to receive your Ordinal?   </h3>
+
+                <h5>Enter a Bitcoin address or connect a wallet.</h5>
+
                 <OnchainInput
                     onChainAddress={onChainAddress}
                     setOnChainAddress={setOnChainAddress}
@@ -90,6 +112,7 @@ function WalletSelect({
                                 setNostrPublicKey(await connectWallet());
                                 setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
                                 setShowWalletConnectModal(true);
+                                setHasSelectedWallet(true);
                             }}
                             variant="success"
                             size="md"
@@ -102,6 +125,7 @@ function WalletSelect({
                             onClick={async () => {
                                 setLedgerPublicKey(await getLedgerPubkey(false));
                                 setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
+                                setHasSelectedWallet(true);
                             }}
                             variant="success"
                             size="md"
@@ -115,6 +139,7 @@ function WalletSelect({
                                 setUnisatPublicKey(await connectUnisat())
                                 const address = await getAddressInfoUnisat();
                                 setOnChainAddress(address);
+                                setHasSelectedWallet(true);
 
                             }}
                             variant="success"
@@ -131,6 +156,7 @@ function WalletSelect({
                                 setXversePublicKey(xversePubkey);
                                 const address = await getAddressInfoXverse();
                                 setOnChainAddress(address);
+                                setHasSelectedWallet(true);
                             }}
                             variant="success"
                             size="md"
@@ -145,6 +171,7 @@ function WalletSelect({
                                 setHiroPublicKey(hiroPubkey);
                                 const address = await getAdressInfoHiro();
                                 setOnChainAddress(address);
+                                setHasSelectedWallet(true);
                             }}
                             variant="success"
                             size="md"
@@ -154,7 +181,12 @@ function WalletSelect({
 
                         <button
                             className="m-1 use_button"
-                            onClick={renderSelectWalletModal}
+                            onClick={
+                                () => {
+                                    renderSelectWalletModal
+                                    setHasSelectedWallet(true);
+                                }
+                            }
                             variant="success"
                             size="md"
                         >
