@@ -1,6 +1,6 @@
 import { set } from 'mongoose';
 import React, { useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 const MultiStep = ({ steps, handleSubmit, validateContent, validateOnchainAddress }) => {
     const [currentStep, setCurrentStep] = useState(1);

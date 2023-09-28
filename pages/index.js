@@ -20,7 +20,6 @@ import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
-import PreviewModal from '../components/modals/PreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
 import WalletSelect from '../components/MultistepCheckout/WalletSelect';
 import { useRef } from 'react';
@@ -39,7 +38,10 @@ const outputCostNews = process.env.REACT_APP_output_cost_news;
 const outputCostBRC = process.env.REACT_APP_output_cost_brc;
 const outputCostTAP = process.env.REACT_APP_output_cost_tap;
 const outputCostTestnet = process.env.REACT_APP_output_cost_testnet;
+const outputCostRune = process.env.REACT_APP_output_cost_rune;
 const securityBuffer = process.env.REACT_APP_security_buffer;
+const ouputCostOpReturn = process.env.REACT_APP_output_cost_opreturn;
+
 
 
 function Home() {
@@ -59,7 +61,7 @@ function Home() {
     const [newsAuthor, setNewsAuthor] = useState('');
     const [newsTitle, setNewsTitle] = useState('');
     const [newsUrl, setNewsUrl] = useState('');
-
+    const [opReturnInput, setOpReturnInput] = useState('');
     const [brcRadioButton, setbrcRadioButton] = useState("deploy");
     const [tokenTicker, setTokenTicker] = useState('');
     const [tokenSupply, setTokenSupply] = useState('21000');
@@ -78,10 +80,7 @@ function Home() {
     const [isConfigModal, showConfigModal] = useState(false);
     const renderConfigModal = () => showConfigModal(true);
     const hideConfigModal = () => showConfigModal(false);
-    //////Modal BRC Preview
-    const [showPreviewModal, setShowPreviewModal] = useState(false);
-    const closePreviewModal = () => setShowPreviewModal(false);
-    const showPreviewModalFunc = () => setShowPreviewModal(true);
+
 
     //////Alert - Modal
     const [alertModalparams, showAlertModal] = useState({
@@ -119,10 +118,6 @@ function Home() {
     const [price, setPrice] = useState(1);
     ///// Tap protocol items
     const [btcItems, setBtcItems] = useState([]);
-
-
-
-
 
 
     useEffect(() => {
@@ -197,7 +192,9 @@ function Home() {
                 news: outputCostNews,
                 domain: outputCostDomain,
                 brc: outputCostBRC,
-                tap: outputCostTAP
+                tap: outputCostTAP,
+                rune: outputCostRune,
+                opreturn: ouputCostOpReturn
             };
 
             const newPrice = outputCosts[tabKey]
@@ -216,6 +213,14 @@ function Home() {
         showAlertModal({
             show: true,
             text: "File is too big! (>0.7MB)",
+            type: "danger",
+        });
+    }
+
+    const OP_RETURNTooBig = () => {
+        showAlertModal({
+            show: true,
+            text: "OP_RETURN is too big! (>80 Bytes)",
             type: "danger",
         });
     }
@@ -296,6 +301,23 @@ function Home() {
             });
             return false;
         }
+        else if (tokenTicker === "" && tabKey === 'rune') {
+            showAlertModal({
+                show: true,
+                text: "Please enter a token ticker",
+                type: "danger",
+            });
+            return false;
+        }
+        else if (opReturnInput === "" && tabKey === 'opreturn') {
+            showAlertModal({
+                show: true,
+                text: "Please enter a message",
+                type: "danger",
+            });
+            return false;
+        }
+
 
         return true;
 
@@ -370,27 +392,15 @@ function Home() {
             });
         }
 
-
         else {
-            if (tabKey === 'brc' || tabKey === 'tap') {
-                awaitPreviewConfirmation();
-            } else {
 
-                socket.emit("getInvoice", price);
-                showInvoiceModal();
-            }
+            socket.emit("getInvoice", price);
+            showInvoiceModal();
+
         }
     };
 
-    const awaitPreviewConfirmation = () => {
-        setShowPreviewModal(true);
-    }
 
-    const handlePreviewConfirmation = () => {
-        setShowPreviewModal(false);
-        socket.emit("getInvoice", price);
-        showInvoiceModal();
-    }
 
     socket.off("invoicePaid").on("invoicePaid", async (paymentHash) => {
         if (paymentHash === clientPaymentHash && !isPaid) {
@@ -480,6 +490,26 @@ function Home() {
 
                 socket.emit("createOrder", paymentHash, onChainAddress, testnet, tapString, 'txt', true, fee, refCodeRef.current, price);
 
+            }
+
+            // if (tabKey === 'rune') {
+            //     var operation = "";
+            //     if (brcRadioButton === "deploy") {
+            //         operation = "deploy"
+
+            //     }
+            //     else if (brcRadioButton === "mint") {
+            //         operation = "mint"
+            //     }
+            //     else if (brcRadioButton === "transfer") {
+            //         operation = "transfer"
+            //     }
+            //     console.log(runeString);
+            //     socket.emit("createRuneOrder", paymentHash, onChainAddress, testnet, tokenTicker, tokenSupply, operation, fee, refCodeRef.current, price);
+
+            // }
+            if (tabKey === "opreturn") {
+                socket.emit("createOP_RETURN", paymentHash, opReturnInput, fee, refCodeRef.current, price);
             }
 
 
@@ -576,6 +606,7 @@ function Home() {
             setFileSize={setFileSize}
             testnet={testnet}
             fileTooBig={fileTooBig}
+            OP_RETURNTooBig={OP_RETURNTooBig}
             textInput={textInput}
             setTextInput={setTextInput}
             setNewsAuthor={setNewsAuthor}
@@ -596,7 +627,8 @@ function Home() {
             setTransferAmount={setTransferAmount}
             setbrcRadioButton={setbrcRadioButton}
             brcRadioButton={brcRadioButton}
-            setBtcItems
+            opReturnInput={opReturnInput}
+            setOpReturnInput={setOpReturnInput}
         />
         ,
         <WalletSelect
@@ -630,6 +662,7 @@ function Home() {
             connectUnisat={connectUnisat}
             connectXverse={connectXverse}
             connectHiro={connectHiro}
+            tabKey={tabKey}
 
         />,
 
@@ -640,7 +673,21 @@ function Home() {
             value={fee}
         />
         ,
-        <Overview price={price} />
+        <Overview
+            price={price}
+            fee={fee}
+            tabKey={tabKey}
+            filesize={fileSize}
+            tokenSupply={tokenSupply}
+            tokenTicker={tokenTicker}
+            mintLimit={mintLimit}
+            mintAmount={mintAmount}
+            brcRadioButton={brcRadioButton}
+            transferAmount={transferAmount}
+            tokenStandard={tabKey}
+            btcItems={btcItems}
+            textInput={textInput}
+        />
 
     ];
 
@@ -684,6 +731,7 @@ function Home() {
 
             <Container>
                 <MultiStep
+                    tabKey={tabKey}
                     steps={steps}
                     handleSubmit={handleSubmit}
                     validateContent={validateContent}
@@ -697,19 +745,6 @@ function Home() {
                 text={alertModalparams.text}
                 variant={alertModalparams.type}
                 handleClose={hideAlertModal}
-            />
-            <PreviewModal
-                show={showPreviewModal}
-                handleClose={closePreviewModal}
-                tokenSupply={tokenSupply}
-                tokenTicker={tokenTicker}
-                mintLimit={mintLimit}
-                mintAmount={mintAmount}
-                brcRadioButton={brcRadioButton}
-                transferAmount={transferAmount}
-                onOK={handlePreviewConfirmation}
-                tokenStandard={tabKey}
-                btcItems={btcItems}
             />
             <ReceiveAddressModal
                 testnet={testnet}

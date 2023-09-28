@@ -121,7 +121,7 @@ const FileUpload = (props) => {
                 src={compressImage && compressedImageURL ? compressedImageURL : props.file}
               />
             ) : (
-              <h5 className="non-image-filename-preview">{props.fileName}</h5>
+              <h5 className="non-image-filename-preview m-2">{props.fileName}</h5>
             )}
           </div>
         )}

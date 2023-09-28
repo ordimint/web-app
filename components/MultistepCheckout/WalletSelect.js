@@ -8,7 +8,7 @@ import OrdimintLogo from '../../public/media/ordimint-coin-white.png';
 import XverseLogo from '../../public/media/xverse-logo.png';
 import UnisatLogo from '../../public/media/unisat-logo.svg';
 import HiroLogo from '../../public/media/HiroWalletLogo.jpg';
-import { Button } from 'react-bootstrap';
+import { set } from 'mongoose';
 
 function WalletSelect({
     nostrPublicKey,
@@ -38,166 +38,137 @@ function WalletSelect({
     connectUnisat,
     connectXverse,
     connectHiro,
+    tabKey,
 }) {
 
-    const [hasSelectedWallet, setHasSelectedWallet] = React.useState(false);
+    const [activeWallet, setActiveWallet] = React.useState(null);
 
-
-    return (
-        (nostrPublicKey || ledgerPublicKey || ordimintPubkey || unisatPublicKey || xversePublicKey || hiroPublicKey) ? (
-            <>
-                {(nostrPublicKey || ledgerPublicKey || unisatPublicKey || xversePublicKey || hiroPublicKey) ? (
-                    <div className="success-alert-input">
-                        <h5>Your receiver address:</h5>
-                        <OnchainInput
-                            onChainAddress={onChainAddress}
-                            setOnChainAddress={setOnChainAddress}
-                        />
-                        {hasSelectedWallet && (
-                            <div className='wallet-change-button'>
-                                <Button
-                                    size="md"
-                                    variant="success"
-                                    onClick={() => {
-                                        setNostrPublicKey(null);
-                                        setLedgerPublicKey(null);
-                                        setUnisatPublicKey(null);
-                                        setXversePublicKey(null);
-                                        setHiroPublicKey(null);
-                                        setHasSelectedWallet(false);
-                                    }}
-                                >
-                                    Change Wallet
-                                </Button>
-                            </div>
-                        )}
-                        <WalletConnectModal
-                            address={onChainAddress}
-                            show={showWalletConnectModal}
-                            handleClose={() => setShowWalletConnectModal(false)}
-                        />
-                    </div>
-                ) : (
-                    <>
-                        <div className="success-alert-input">
-                            <h5>Your receiver address:</h5>
-                            <OnchainInput
-                                onChainAddress={onChainAddress}
-                                setOnChainAddress={setOnChainAddress}
-                            />
-                        </div>
-                        <WalletConnectModal
-                            address={onChainAddress}
-                            show={showWalletConnectModal}
-                            handleClose={() => setShowWalletConnectModal(false)}
-                        />
-                    </>
-                )}
-            </>
-        ) : (
+    if (tabKey === "opreturn") {
+        setOnChainAddress("16ftSEQ4ctQFDtVZiUBusQUjRrGhM3JYwe");
+        return (
             <div className='wallet-selector-container' >
-                <h3>How do you want to receive your Ordinal?   </h3>
+                <h5>For OP_RETURN no receiver address is needed</h5>
+            </div>)
+    }
+    else {
+        return (
 
-                <h5>Enter a Bitcoin address or connect a wallet.</h5>
 
-                <OnchainInput
-                    onChainAddress={onChainAddress}
-                    setOnChainAddress={setOnChainAddress}
-                />
-                <div id="wallet-buttons">
-                    <div className='wallet-buttons-row'>
-                        <button
-                            className="m-1 use_button"
-                            onClick={async () => {
-                                setNostrPublicKey(await connectWallet());
-                                setOnChainAddress(async () => await getAddressInfoNostr(await connectWallet(), testnet));
-                                setShowWalletConnectModal(true);
-                                setHasSelectedWallet(true);
-                            }}
-                            variant="success"
-                            size="md"
-                        >
-                            <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /><br></br> use Alby Wallet
-                        </button>
+            <>
 
-                        <button
-                            className="m-1 use_button"
-                            onClick={async () => {
-                                setLedgerPublicKey(await getLedgerPubkey(false));
-                                setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
-                                setHasSelectedWallet(true);
-                            }}
-                            variant="success"
-                            size="md"
-                        >
-                            <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /><br></br> use Ledger HW
-                        </button>
+                <div className='wallet-selector-container' >
+                    <h3>How do you want to receive your Ordinal?   </h3>
 
-                        <button
-                            className="m-1 use_button"
-                            onClick={async () => {
-                                setUnisatPublicKey(await connectUnisat())
-                                const address = await getAddressInfoUnisat();
-                                setOnChainAddress(address);
-                                setHasSelectedWallet(true);
+                    <h5>Your receiver address:</h5>
 
-                            }}
-                            variant="success"
-                            size="md"
-                        >
-                            <Image src={UnisatLogo} height="20" width="20" alt="Unisat Logo" /><br></br> use Unisat Wallet
-                        </button>
-                    </div>
-                    <div className='wallet-buttons-row'>
-                        <button
-                            className="m-1 use_button"
-                            onClick={async () => {
-                                const xversePubkey = await connectXverse(testnet);
-                                setXversePublicKey(xversePubkey);
-                                const address = await getAddressInfoXverse();
-                                setOnChainAddress(address);
-                                setHasSelectedWallet(true);
-                            }}
-                            variant="success"
-                            size="md"
-                        >
-                            <Image src={XverseLogo} height="20" width="20" alt="Xverse Logo" /><br></br> use Xverse Wallet
-                        </button>
+                    <OnchainInput
+                        onChainAddress={onChainAddress}
+                        setOnChainAddress={setOnChainAddress}
+                    />
+                    <div id="wallet-buttons">
+                        <div className='wallet-buttons-row'>
+                            <button
+                                className={`m-1 use_button ${activeWallet === 'Alby' ? 'active-wallet' : ''}`}
+                                onClick={async () => {
+                                    const result = await connectWallet();
+                                    const info = await getAddressInfoNostr(result, testnet);
+                                    const address = info.address; // extract the address property
+                                    setNostrPublicKey(result);
+                                    setOnChainAddress(address); // set the extracted address string to the state
+                                    setShowWalletConnectModal(true);
+                                    setActiveWallet('Alby');
+                                }}
+                                variant="success"
+                                size="md"
+                            >
+                                <Image src={AlbyLogo} height="20" width="20" alt="Alby Logo" /><br></br> use Alby Wallet
+                            </button>
 
-                        <button
-                            className="m-1 use_button"
-                            onClick={async () => {
-                                const hiroPubkey = await connectHiro(testnet)
-                                setHiroPublicKey(hiroPubkey);
-                                const address = await getAdressInfoHiro();
-                                setOnChainAddress(address);
-                                setHasSelectedWallet(true);
-                            }}
-                            variant="success"
-                            size="md"
-                        >
-                            <Image src={HiroLogo} height="20" width="20" alt="Hiro Logo" id="hiro-wallet-logo" /><br></br> use Hiro Wallet
-                        </button>
 
-                        <button
-                            className="m-1 use_button"
-                            onClick={
-                                () => {
-                                    renderSelectWalletModal
-                                    setHasSelectedWallet(true);
+
+                            <button
+                                className={`m-1 use_button ${activeWallet === 'Ledger' ? 'active-wallet' : ''}`}
+                                onClick={async () => {
+                                    setLedgerPublicKey(await getLedgerPubkey(false));
+                                    setOnChainAddress(await (await getAddressInfoLedger(ledgerPublicKey, false, testnet)).address);
+                                    setActiveWallet('Ledger');
+                                }}
+                                variant="success"
+                                size="md"
+                            >
+                                <Image src={LedgerLogo} height="20" width="20" alt="Ledger Logo" /><br></br> use Ledger HW
+                            </button>
+
+                            <button
+                                className={`m-1 use_button ${activeWallet === 'Unisat' ? 'active-wallet' : ''}`}
+                                onClick={async () => {
+                                    setUnisatPublicKey(await connectUnisat())
+                                    const address = await getAddressInfoUnisat();
+                                    setOnChainAddress(address);
+                                    setActiveWallet('Unisat');
+
+                                }}
+                                variant="success"
+                                size="md"
+                            >
+                                <Image src={UnisatLogo} height="20" width="20" alt="Unisat Logo" /><br></br> use Unisat Wallet
+                            </button>
+                        </div>
+                        <div className='wallet-buttons-row'>
+                            <button
+                                className={`m-1 use_button ${activeWallet === 'Xverse' ? 'active-wallet' : ''}`}
+                                onClick={async () => {
+                                    const xversePubkey = await connectXverse(testnet);
+                                    setXversePublicKey(xversePubkey);
+                                    const address = await getAddressInfoXverse();
+                                    setOnChainAddress(address);
+                                    setActiveWallet('Xverse');
+                                }}
+                                variant="success"
+                                size="md"
+                            >
+                                <Image src={XverseLogo} height="20" width="20" alt="Xverse Logo" /><br></br> use Xverse Wallet
+                            </button>
+
+                            <button
+                                className={`m-1 use_button ${activeWallet === 'Hiro' ? 'active-wallet' : ''}`}
+                                onClick={async () => {
+                                    const hiroPubkey = await connectHiro(testnet)
+                                    setHiroPublicKey(hiroPubkey);
+                                    const address = await getAdressInfoHiro();
+                                    setOnChainAddress(address);
+                                    setActiveWallet('Hiro');
+                                }}
+                                variant="success"
+                                size="md"
+                            >
+                                <Image src={HiroLogo} height="20" width="20" alt="Hiro Logo" id="hiro-wallet-logo" /><br></br> use Hiro Wallet
+                            </button>
+
+                            <button
+                                className={`m-1 use_button ${activeWallet === 'Ordimint' ? 'active-wallet' : ''}`}
+                                onClick={
+                                    () => {
+                                        renderSelectWalletModal();
+                                        setActiveWallet('Ordimint');
+                                    }
                                 }
-                            }
-                            variant="success"
-                            size="md"
-                        >
-                            <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
-                        </button>
+                                variant="success"
+                                size="md"
+                            >
+                                <Image src={OrdimintLogo} height="20" width="20" alt="Ordimint Logo" /> use Ordimint Wallet
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
-
-    );
+                <WalletConnectModal
+                    address={onChainAddress}
+                    show={showWalletConnectModal}
+                    handleClose={() => setShowWalletConnectModal(false)}
+                />
+            </>
+        );
+    }
 }
 
 export default WalletSelect;

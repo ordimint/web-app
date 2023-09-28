@@ -1162,7 +1162,11 @@ div.myAccordion .accordion-body p {
   overflow-x: auto; /* Enables horizontal scrolling */
 }
 .token-preview-string {
+  border: white 2px solid;
+  border-radius: 15px;
+  padding: 5%;
   width: 100%;
+  margin: 5%;
 }
 
 #auction-ordinal-row {
@@ -1387,6 +1391,31 @@ div.myAccordion .accordion-body p {
 }
 
 #overview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.seperation-line-tab {
+  border-top: 1px solid white;
+  color: white;
+  width: 100%;
+}
+
+.active-wallet {
+  border: 2px solid #f69102;
+}
+
+#opreturn-input input {
+  background-color: #1c1d1d;
+  border-radius: 10px;
+  color: #ffffff;
+  border: 2px solid #6a6b6b;
+}
+
+#opreturn-input-container {
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
