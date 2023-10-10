@@ -7,12 +7,13 @@ import TextInput from './TextInput';
 import DomainInput from './DomainInput';
 import NewsInput from './NewsInput';
 import Rune from './Rune';
-
+import Price from './Price';
 import TAP from './TAP';
 import OP_RETURN from './OP_RETURN'
 
 
 const ContentSelector = ({
+    price,
     file,
     fileType,
     fileName,
@@ -52,7 +53,7 @@ const ContentSelector = ({
 }) => {
     return (
         <div id="tab-container">
-            <h3 className='m-3'>What do you want to inscribe?</h3>
+
             <Tabs
                 transition={false}
                 activeKey={tabKey}
@@ -64,6 +65,7 @@ const ContentSelector = ({
 
                 <Tab eventKey="file" title="File">
                     <hr className='seperation-line-tab' />
+                    <h5 className='mt-3'>Store a file on the Bitcoin blockchain</h5>
                     <FileUpload
                         file={file}
                         fileType={fileType}
@@ -79,6 +81,7 @@ const ContentSelector = ({
                 </Tab>
                 <Tab eventKey="text" title="Text">
                     <hr className='seperation-line-tab' />
+                    <h5 className='mt-3'>Write text forever into Bitcoin</h5>
                     <TextInput
                         setFileSize={setFileSize}
                         textInput={textInput}
@@ -87,6 +90,7 @@ const ContentSelector = ({
                 </Tab>
                 <Tab eventKey="news" title="News">
                     <hr className='seperation-line-tab' />
+                    <h5 className='mt-3'>Write an immutable News articel</h5>
                     <NewsInput
                         setFileSize={setFileSize}
                         setNewsAuthor={setNewsAuthor}
@@ -97,6 +101,7 @@ const ContentSelector = ({
                 </Tab>
                 <Tab eventKey="domain" title=".sats Domain">
                     <hr className='seperation-line-tab' />
+                    <h5 className='mt-3'>Register a .sats Domain</h5>
                     <DomainInput
                         setFileSize={setFileSize}
                         domainInput={domainInput}
@@ -106,6 +111,7 @@ const ContentSelector = ({
                 </Tab>
                 <Tab eventKey="brc" title="BRC-20">
                     <hr className='seperation-line-tab' />
+                    {/* <h5 className='mt-3'>BRC-20 operations</h5> */}
                     <BRC
                         setTokenTicker={setTokenTicker}
                         setFileSize={setFileSize}
@@ -126,6 +132,7 @@ const ContentSelector = ({
                 </Tab>
                 <Tab eventKey="tap" title="TAP-Token">
                     <hr className='seperation-line-tab' />
+                    {/* <h5 className='mt-3'>TAP-Token operations</h5> */}
                     <TAP
                         setTokenTicker={setTokenTicker}
                         setFileSize={setFileSize}
@@ -146,6 +153,7 @@ const ContentSelector = ({
                 </Tab>
                 <Tab eventKey="opreturn" title="OP_RETURN">
                     <hr className='seperation-line-tab' />
+                    <h5 className='mt-3'>Write a message into OP_RETURN</h5>
                     <OP_RETURN
                         opReturnInput={opReturnInput}
                         setOpReturnInput={setOpReturnInput}
@@ -174,7 +182,7 @@ const ContentSelector = ({
                     />
                 </Tab> */}
             </Tabs>
-
+            <Price price={price} />
         </div>
     )
 }

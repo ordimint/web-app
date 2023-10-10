@@ -1,11 +1,13 @@
 import { set } from 'mongoose';
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ProgressBar } from 'react-bootstrap';
 
 const MultiStep = ({ steps, handleSubmit, validateContent, validateOnchainAddress }) => {
     const [currentStep, setCurrentStep] = useState(1);
 
-
+    const calculateProgress = () => {
+        return (currentStep / steps.length) * 100;
+    };
 
 
     const nextStep = () => {
@@ -44,10 +46,24 @@ const MultiStep = ({ steps, handleSubmit, validateContent, validateOnchainAddres
 
     const validations = [validateStep1, validateStep2, validateStep3, validateStep4];
 
+    const stepHeadlines = [
+        "What do you want to inscribe?",
+        "Choose receiver address",
+        "Choose fee",
+        "Summary"
+    ];
+
 
 
     return (
         <div id='multistep-container'>
+            <div id='steps-headline'>
+                <h2>{stepHeadlines[currentStep - 1]}</h2>
+            </div>
+            <div className='multistep-progress m-3'>
+                <ProgressBar now={calculateProgress()} label={`${calculateProgress()}%`} />
+            </div>
+
             <div className='multistep-container-item'>
                 {steps[currentStep - 1]}
             </div>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
-import { Container } from 'react-bootstrap';
+import Price from './Price';
 
 const getFeesRecommended = async () => {
     const response = await fetch('https://mempool.space/api/v1/fees/recommended');
@@ -37,7 +37,7 @@ const FeeRange = (props) => {
     return (
 
         <div>
-            <h4>How fast should your Ordinal be minted?</h4>
+            <h5 className='m-3'>How urgent is your order?</h5>
             <div id="fee-range">
                 <ToggleButtonGroup type="radio" name="options" className='toggle-button-custom2' value={selectedFee}>
                     <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
@@ -64,6 +64,7 @@ const FeeRange = (props) => {
                         <h5> 1 hour</h5>   {maxFee} sats/vByte <br></br>
                     </ToggleButton>
                 </ToggleButtonGroup>
+                <Price price={props.price} />
             </div>
 
         </div>

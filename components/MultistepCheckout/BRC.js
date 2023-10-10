@@ -27,7 +27,7 @@ const BRC = (props) => {
   return (
     <div id="brc-20-input-container">
       <div className='mt-2'>
-        <p>Deploy, mint or transfer BRC-20 token.</p>
+        <h5 className='mt-3'>Deploy, mint or transfer BRC-20 token.</h5>
       </div>
       <Form className="mt-2">
 

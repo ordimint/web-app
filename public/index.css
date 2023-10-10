@@ -13,6 +13,22 @@ body {
   text-align: center;
   font-family: Jost-Regular;
 }
+
+@media (min-width: 768px) {
+  /* 768px is a common breakpoint for tablets and above */
+  .App {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This centers the div vertically */
+    height: 90vh;
+    justify-content: flex-start;
+  }
+
+  #multistep-container {
+    margin-top: 50px;
+  }
+}
+
 .App {
   text-align: center;
 }
@@ -376,6 +392,7 @@ div.preview-image-container {
 .dropzone {
   width: 400px;
 }
+
 div.preview-image-container img {
   /* max-height: 300px; */
   background-color: black;
@@ -443,10 +460,11 @@ div.preview-image-container img {
   color: #fff;
   border: 2px solid #6a6b6b;
   border-radius: 10px;
+  max-height: 200px;
 }
 
 #file-upload-selector {
-  max-width: 400px;
+  /* max-width: 400px; */
   width: 100%;
 }
 
@@ -501,7 +519,7 @@ div.wallet-card {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  /* width: 400px; */
 }
 
 @media screen and (max-width: 420px) {
@@ -567,6 +585,7 @@ div.wallet-card {
   background-color: #1c1d1d;
   color: #fff;
   border: 2px solid #6a6b6b;
+  max-height: 150px;
 }
 span.input-group-text.required .required:after {
   content: "*";
@@ -636,7 +655,8 @@ span.input-group-text.required .required:after {
   justify-content: center;
   align-items: center;
   align-content: strecht;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 @media screen and (max-width: 420px) {
@@ -1369,10 +1389,17 @@ div.myAccordion .accordion-body p {
 }
 
 .wallet-selector-container {
+  width: 75%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 420px) {
+  .wallet-selector-container {
+    width: 100%;
+  }
 }
 
 .wallet-change-button {
@@ -1420,4 +1447,24 @@ div.myAccordion .accordion-body p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.multistep-progress {
+  width: 75%;
+}
+
+.multistep-progress .progress-bar {
+  color: white;
+  background-color: #f69102;
+}
+
+@media screen and (max-width: 420px) {
+  .multistep-progress {
+    width: 100%;
+  }
+}
+#steps-headline {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }

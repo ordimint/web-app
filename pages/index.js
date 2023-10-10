@@ -595,6 +595,7 @@ function Home() {
     const steps = [
 
         <ContentSelector
+            price={price}
             tabKey={tabKey}
             setTabKey={setTabKey}
             file={file}
@@ -671,6 +672,7 @@ function Home() {
                 setFee(e.target.value)
             }}
             value={fee}
+            price={price}
         />
         ,
         <Overview
@@ -687,6 +689,7 @@ function Home() {
             tokenStandard={tabKey}
             btcItems={btcItems}
             textInput={textInput}
+            opReturnInput={opReturnInput}
         />
 
     ];

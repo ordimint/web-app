@@ -47,7 +47,10 @@ function WalletSelect({
         setOnChainAddress("16ftSEQ4ctQFDtVZiUBusQUjRrGhM3JYwe");
         return (
             <div className='wallet-selector-container' >
-                <h5>For OP_RETURN no receiver address is needed</h5>
+                <h5>For OP_RETURN no receiver address is needed.
+
+                    You can proceed to the next step.
+                </h5>
             </div>)
     }
     else {
@@ -57,11 +60,12 @@ function WalletSelect({
             <>
 
                 <div className='wallet-selector-container' >
-                    <h3>How do you want to receive your Ordinal?   </h3>
 
-                    <h5>Your receiver address:</h5>
+
+                    <h5 className='m-3'>Your receiver address:</h5>
 
                     <OnchainInput
+                        id='onchain-input'
                         onChainAddress={onChainAddress}
                         setOnChainAddress={setOnChainAddress}
                     />

@@ -87,23 +87,41 @@ const Overview = (props) => {
 
     return (
         <div id='overview-container'>
-            <h3>Overview</h3>
+
             {brcString &&
                 <pre className='token-preview-string'>{brcString}</pre>
             }
             {props.tabKey === "rune" &&
-                <div className='token-preview-string'>
+                <>
                     <h5>RUNE operation: {props.brcRadioButton} </h5>
-                    <h6>Tokenticker: {props.tokenTicker}</h6>
-                    <h6>Tokensupply: {props.tokenSupply}</h6>
+                    <div className='token-preview-string'>
 
-                </div>
+                        <h6>Tokenticker: {props.tokenTicker}</h6>
+                        <h6>Tokensupply: {props.tokenSupply}</h6>
+
+                    </div>
+                </>
             }
             {props.tabKey === "text" &&
-                <div className='token-preview-string'>
-                    <h6>{props.textInput}</h6>
+                <>
+                    <h5>Text inscription:</h5>
+                    <div className='token-preview-string'>
 
-                </div>
+                        <h6>{props.textInput}</h6>
+
+                    </div>
+                </>
+            }
+            {props.tabKey === "opreturn" &&
+                <>
+                    <h5>OP_RETURN message </h5>
+
+                    <div className='token-preview-string'>
+
+                        <h6>{props.opReturnInput}</h6>
+
+                    </div>
+                </>
             }
             <table className="overview-table">
                 <tbody>
