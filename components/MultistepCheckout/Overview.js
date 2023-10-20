@@ -123,6 +123,28 @@ const Overview = (props) => {
                     </div>
                 </>
             }
+            {props.tabKey === "domain" &&
+                <>
+                    <h5>Domain inscription </h5>
+
+                    <div className='token-preview-string'>
+
+                        <h6>{props.domainInput}.sats</h6>
+
+                    </div>
+                </>
+            }
+            {props.tabKey === "file" &&
+                <>
+                    <h5>File inscription </h5>
+
+                    <div className='token-preview-string'>
+
+                        <h6>{props.fileName}</h6>
+
+                    </div>
+                </>
+            }
             <table className="overview-table">
                 <tbody>
                     {/* <tr>
@@ -130,7 +152,7 @@ const Overview = (props) => {
                         <td>~{Math.round(price)} Sats</td>
                         <td>~${(price / priceUSDinSats).toFixed(2)}</td>
                     </tr> */}
-                    <tr>
+                    {/* <tr>
                         <td>Mining-Fees:</td>
                         <td>~{fees} Sats</td>
                         <td>~${(fees / priceUSDinSats).toFixed(2)}</td>
@@ -144,8 +166,8 @@ const Overview = (props) => {
                         <td>Network Fee:</td>
                         <td>~{networkFee} Sats</td>
                         <td>~${(networkFee / priceUSDinSats).toFixed(2)}</td>
-                    </tr>
-                    <tr className="separation-line">
+                    </tr> */}
+                    <tr className="separation-linee">
                         <td><strong>Total:</strong></td>
                         <td><strong>~{totalAmount} Sats</strong></td>
                         <td><strong>~${(totalAmount / priceUSDinSats).toFixed(2)}</strong></td>

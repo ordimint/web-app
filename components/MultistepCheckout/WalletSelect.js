@@ -43,8 +43,15 @@ function WalletSelect({
 
     const [activeWallet, setActiveWallet] = React.useState(null);
 
+    React.useEffect(() => {
+        if (tabKey === "opreturn") {
+            setOnChainAddress("16ftSEQ4ctQFDtVZiUBusQUjRrGhM3JYwe");
+        }
+    }, [tabKey]);
+
+
     if (tabKey === "opreturn") {
-        setOnChainAddress("16ftSEQ4ctQFDtVZiUBusQUjRrGhM3JYwe");
+
         return (
             <div className='wallet-selector-container' >
                 <h5>For OP_RETURN no receiver address is needed.

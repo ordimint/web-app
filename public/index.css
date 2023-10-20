@@ -1468,3 +1468,15 @@ div.myAccordion .accordion-body p {
   flex-direction: row;
   justify-content: flex-start;
 }
+
+/* Mobile styling */
+@media (max-width: 768px) {
+  .ref-link-group > * {
+    font-size: 0.8rem !important;
+    border-radius: 12px !important;
+
+    display: flex; /* Stack children vertically */
+    width: 100%; /* Take full width */
+    margin-bottom: 5px; /* Optional: add some space between elements */
+  }
+}

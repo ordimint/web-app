@@ -679,6 +679,7 @@ function Home() {
             price={price}
             fee={fee}
             tabKey={tabKey}
+            domainInput={domainInput}
             filesize={fileSize}
             tokenSupply={tokenSupply}
             tokenTicker={tokenTicker}
@@ -688,6 +689,7 @@ function Home() {
             transferAmount={transferAmount}
             tokenStandard={tabKey}
             btcItems={btcItems}
+            fileName={fileName}
             textInput={textInput}
             opReturnInput={opReturnInput}
         />
