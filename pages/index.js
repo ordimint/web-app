@@ -344,63 +344,12 @@ function Home() {
 
     //Get the invoice and perform validity checks
     const getInvoice = (price) => {
-        if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
-            showAlertModal({
-                show: true,
-                text: `Please provide a valid ${testnet ? 'Testnet' : ''} BTC address`,
-                type: "danger",
-            });
-        } else if (file === null && tabKey === 'file') {
-            showAlertModal({
-                show: true,
-                text: "Please provide your own image",
-                type: "danger",
-            });
-        }
-        else if (domainInput === "" && tabKey === 'domain') {
-            showAlertModal({
-                show: true,
-                text: "Please enter a domain name",
-                type: "danger",
-            });
-        }
-        else if (newsTitle === "" && tabKey === 'news') {
-            showAlertModal({
-                show: true,
-                text: "Please enter a title",
-                type: "danger",
-            });
-        }
-        else if (tokenTicker === "" && tabKey === 'brc') {
-            showAlertModal({
-                show: true,
-                text: "Please enter a token ticker",
-                type: "danger",
-            });
-        }
-        else if (tokenTicker.replace(/-/g, '').length === 4 && tabKey === 'tap') {
-            showAlertModal({
-                show: true,
-                text: "4 letter token ticker are reserved for BRC",
-                type: "danger",
-            });
-        }
-        else if (tabKey === 'tap' &&
-            (tokenTicker.replace(/-/g, '').length !== 3 &&
-                (tokenTicker.replace(/-/g, '').length < 5 || tokenTicker.replace(/-/g, '').length > 32))) {
-            showAlertModal({
-                show: true,
-                text: "Token ticker must be 3 symbols or between 5 to 32 symbols.",
-                type: "danger",
-            });
-        }
 
-        else {
 
-            socket.emit("getInvoice", price);
-            showInvoiceModal();
+        socket.emit("getInvoice", price);
+        showInvoiceModal();
 
-        }
+
     };
 
 
