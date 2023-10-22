@@ -54,6 +54,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "deploy": "npm run build && sudo systemctl restart next-app",
     "start-babel": "NODE_ENV=development webpack serve",
     "build-babel": "npm run clean; NODE_ENV=production webpack --color; cp -f _redirects build/"
   },
