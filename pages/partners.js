@@ -205,9 +205,9 @@ const partners = () => {
                             </p>
 
 
-                            <Form className="order-ID">
+                            <Form className="order-ID" >
                                 <Form.Group className="m-2">
-                                    <InputGroup>
+                                    <InputGroup className="ref-link-group">
                                         <InputGroup.Text>Your Personal Ref-Link</InputGroup.Text>
                                         <Form.Control
                                             size="lg"

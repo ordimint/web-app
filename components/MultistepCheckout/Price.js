@@ -22,11 +22,7 @@ const Price = (props) => {
         });
     }, []);
 
-    const renderTooltip = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-            When we send you the Ordinal you get ~10.000 Sats back.
-        </Tooltip>
-    );
+
 
 
     return (
@@ -34,16 +30,12 @@ const Price = (props) => {
         <div className='m-3' >
             <h5 >
                 <div id="price">
-                    <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 150, hide: 400 }}
-                        overlay={renderTooltip}
-                    >
-                        <div> {Math.round(props.price)} Sats {" "}
-                            <BsInfoCircle />
 
-                        </div>
-                    </OverlayTrigger>
+                    <div> {Math.round(props.price)} Sats {" "}
+
+
+                    </div>
+
                     <div> {(props.price / priceUSDinSats).toFixed(2)}$</div>
 
                 </div>

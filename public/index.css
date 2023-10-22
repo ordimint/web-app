@@ -13,6 +13,22 @@ body {
   text-align: center;
   font-family: Jost-Regular;
 }
+
+@media (min-width: 768px) {
+  /* 768px is a common breakpoint for tablets and above */
+  .App {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This centers the div vertically */
+    height: 90vh;
+    justify-content: flex-start;
+  }
+
+  #multistep-container {
+    margin-top: 50px;
+  }
+}
+
 .App {
   text-align: center;
 }
@@ -238,19 +254,14 @@ h2.accordion-header button {
   border: 2px solid #6a6b6b;
 }
 
-/* @media screen and (min-width: 420px) {
-  #onchain-input input {
-    min-width: 350px;
-    background-color: #1c1d1d;
-    border-radius: 10px;
-    color: #ffffff;
-    border: 2px solid #6a6b6b;
-    max-width: 400px;
-  }
-} */
-
 #onchain-input {
-  width: 90%;
+  width: 100%;
+}
+
+@media screen and (max-width: 750px) {
+  #onchain-input {
+    width: 100%;
+  }
 }
 
 #onchain-input input {
@@ -266,11 +277,6 @@ h2.accordion-header button {
 #fee-range {
   width: 100%;
   margin: 10px 0px 10px 0px;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 #price {
@@ -359,6 +365,7 @@ div.bitcoin-address a {
 
 .success-alert-input {
   /* max-width: min-content; */
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -374,7 +381,7 @@ div.bitcoin-address a {
 }
 
 div.preview-image-container {
-  max-width: 400px;
+  width: 100%;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -385,6 +392,7 @@ div.preview-image-container {
 .dropzone {
   width: 400px;
 }
+
 div.preview-image-container img {
   /* max-height: 300px; */
   background-color: black;
@@ -434,7 +442,7 @@ div.preview-image-container img {
 }
 
 #text-input-container {
-  width: 400px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -452,10 +460,11 @@ div.preview-image-container img {
   color: #fff;
   border: 2px solid #6a6b6b;
   border-radius: 10px;
+  max-height: 200px;
 }
 
 #file-upload-selector {
-  max-width: 400px;
+  /* max-width: 400px; */
   width: 100%;
 }
 
@@ -510,7 +519,7 @@ div.wallet-card {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  /* width: 400px; */
 }
 
 @media screen and (max-width: 420px) {
@@ -550,7 +559,7 @@ div.wallet-card {
   justify-content: flex-start;
   align-items: strech;
   align-content: stretch;
-  width: 400px;
+  width: 100%;
 }
 
 @media screen and (max-width: 420px) {
@@ -576,6 +585,7 @@ div.wallet-card {
   background-color: #1c1d1d;
   color: #fff;
   border: 2px solid #6a6b6b;
+  max-height: 150px;
 }
 span.input-group-text.required .required:after {
   content: "*";
@@ -607,17 +617,36 @@ span.input-group-text.required .required:after {
 #tab-container .nav-link {
   white-space: nowrap;
 }
+
 #tab-container {
   width: 100%;
+}
+
+#multistep-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.multistep-container-item {
+  position: relative;
+  width: 75%;
   height: 100%;
   z-index: 5;
   opacity: 0.8;
-
+  display: flex;
+  justify-content: center;
   text-align: center;
   border: 2px solid #6a6b6b;
   background-color: #1e1f20;
   border-radius: 12px;
   padding: 15px;
+}
+@media screen and (max-width: 420px) {
+  .multistep-container-item {
+    width: 100%;
+  }
 }
 
 #brc-20-input-container {
@@ -626,7 +655,8 @@ span.input-group-text.required .required:after {
   justify-content: center;
   align-items: center;
   align-content: strecht;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 @media screen and (max-width: 420px) {
@@ -828,23 +858,6 @@ span.input-group-text.required .required:after {
   flex-wrap: wrap; */
 }
 
-#fee-select-container {
-  max-width: 450px;
-  padding: 15px;
-  margin-top: 10px;
-  border: 2px solid #6a6b6b;
-  background-color: #1e1f20;
-  border-radius: 12px;
-  text-align: center;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  align-content: stretch;
-  flex-wrap: wrap;
-}
-
 .preview-image-container {
   display: flex;
   flex-direction: column;
@@ -1024,6 +1037,7 @@ span.input-group-text.required .required:after {
   border: none;
   border-radius: 10px;
   margin-bottom: 15px;
+  font-size: 1.25rem;
 }
 
 .active_link:hover {
@@ -1168,7 +1182,11 @@ div.myAccordion .accordion-body p {
   overflow-x: auto; /* Enables horizontal scrolling */
 }
 .token-preview-string {
+  border: white 2px solid;
+  border-radius: 15px;
+  padding: 5%;
   width: 100%;
+  margin: 5%;
 }
 
 #auction-ordinal-row {
@@ -1358,4 +1376,107 @@ div.myAccordion .accordion-body p {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.multistep-buttons {
+  position: relative;
+  z-index: 5;
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.wallet-selector-container {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 420px) {
+  .wallet-selector-container {
+    width: 100%;
+  }
+}
+
+.wallet-change-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.separation-line {
+  border-top: 2px solid white;
+}
+
+.overview-table td:first-child {
+  text-align: left;
+}
+
+#overview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.seperation-line-tab {
+  border-top: 1px solid white;
+  color: white;
+  width: 100%;
+}
+
+.active-wallet {
+  border: 2px solid #f69102;
+}
+
+#opreturn-input input {
+  background-color: #1c1d1d;
+  border-radius: 10px;
+  color: #ffffff;
+  border: 2px solid #6a6b6b;
+}
+
+#opreturn-input-container {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.multistep-progress {
+  width: 75%;
+}
+
+.multistep-progress .progress-bar {
+  color: white;
+  background-color: #f69102;
+}
+
+@media screen and (max-width: 420px) {
+  .multistep-progress {
+    width: 100%;
+  }
+}
+#steps-headline {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+/* Mobile styling */
+@media (max-width: 768px) {
+  .ref-link-group > * {
+    font-size: 0.8rem !important;
+    border-radius: 12px !important;
+
+    display: flex; /* Stack children vertically */
+    width: 100%; /* Take full width */
+    margin-bottom: 5px; /* Optional: add some space between elements */
+  }
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
-import { Container } from 'react-bootstrap';
+import Price from './Price';
 
 const getFeesRecommended = async () => {
     const response = await fetch('https://mempool.space/api/v1/fees/recommended');
@@ -35,12 +35,14 @@ const FeeRange = (props) => {
     };
 
     return (
-        <div>
 
+        <div>
+            <h5 className='m-3'>How urgent is your order?</h5>
             <div id="fee-range">
                 <ToggleButtonGroup type="radio" name="options" className='toggle-button-custom2' value={selectedFee}>
                     <ToggleButton id="tbg-radio-3" value={minFee} onChange={() => handleFeeChange(minFee)} title="slow">
-                        <b> &gt; 1 day </b> <br></br> {minFee} sats/vByte <br></br>
+                        <h5>Slow</h5>
+                        <h5> &gt; 1 day </h5>  {minFee} sats/vByte <br></br>
                     </ToggleButton>
                     <ToggleButton
                         id="tbg-radio-4"
@@ -49,7 +51,8 @@ const FeeRange = (props) => {
                         title="normal"
 
                     >
-                        <b> 4 hours</b> <br></br>   {mediumFee} sats/vByte <br></br>
+                        <h5>Normal</h5>
+                        <h5> 4 hours</h5>   {mediumFee} sats/vByte <br></br>
                     </ToggleButton>
                     <ToggleButton id="tbg-radio-5"
                         value={maxFee}
@@ -57,9 +60,11 @@ const FeeRange = (props) => {
                         title="fast"
 
                     >
-                        <b> 1 hour</b> <br></br>    {maxFee} sats/vByte <br></br>
+                        <h5>Fast</h5>
+                        <h5> 1 hour</h5>   {maxFee} sats/vByte <br></br>
                     </ToggleButton>
                 </ToggleButtonGroup>
+                <Price price={props.price} />
             </div>
 
         </div>

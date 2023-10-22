@@ -108,7 +108,7 @@ const TAP = (props) => {
     return (
         <div id="brc-20-input-container">
             <div className='mt-2'>
-                <p>Deploy, mint or transfer TAP token.</p>
+                <h5 className='mt-3'>Deploy, mint or transfer TAP token.</h5>
             </div>
             <Form className="mt-2">
 

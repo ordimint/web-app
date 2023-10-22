@@ -1,36 +1,30 @@
 import { React, useEffect, useContext } from 'react';
 import { io } from "socket.io-client";
-import FileUpload from '../components/FileUpload';
+
 import InvoiceModal from '../components/modals/InvoiceModal';
 import { validate, Network } from 'bitcoin-address-validation'
-import { Row, Container, Button, Tab, Tabs, Col, Alert } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useState } from "react";
 import AlertModal from '../components/modals/AlterModal';
-import FeeRange from '../components/FeeRange';
-import Price from '../components/Price';
+import FeeRange from '../components/MultistepCheckout/FeeRange';
 import ReceiveAddressModal from '../components/modals/ReceiveAddressModal';
 import { getAddressInfoNostr, connectWallet } from '../components/WalletConfig/utils';
 import { getLedgerPubkey, getAddressInfoLedger } from '../components/WalletConfig/connectLedger';
 import { getUnisatPubkey, getAddressInfoUnisat, connectUnisat } from '../components/WalletConfig/unisatWalletFunctions';
 import { getXversePubkey, getAddressInfoXverse, connectXverse } from '../components/WalletConfig/xverseWalletFunctions';
 import { getHiroPubkey, getAddressInfoHiro, connectHiro } from '../components/WalletConfig/hiroWalletFunctions';
-import TextInput from '../components/TextInput';
-import DomainInput from '../components/DomainInput';
-import NewsInput from '../components/NewsInput';
-import BRC from '../components/BRC';
-import TAP from '../components/TAP';
+import ContentSelector from '../components/MultistepCheckout/ContentSelector';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import GenerateWalletModal from '../components/modals/GenerateWalletModal';
 import RestoreWalletModal from '../components/modals/RestoreWalletModal';
 import SelectWalletModal from '../components/modals/SelectWalletModal';
 import { generateWallet, restoreWallet, getOrdimintAddress } from '../components/WalletConfig/ordimintWalletFunctions';
-import TestnetSwitch from '../components/TestnetSwitch';
-import PreviewModal from '../components/modals/PreviewModal';
 import { TestnetContext } from '../contexts/TestnetContext';
-import WalletSelect from '../components/WalletSelect';
+import WalletSelect from '../components/MultistepCheckout/WalletSelect';
 import { useRef } from 'react';
-
+import MultiStep from '../components/MultistepCheckout/MultiStep';
+import Overview from '../components/MultistepCheckout/Overview';
 
 
 var socket = io.connect(process.env.REACT_APP_socket_port);
@@ -44,7 +38,10 @@ const outputCostNews = process.env.REACT_APP_output_cost_news;
 const outputCostBRC = process.env.REACT_APP_output_cost_brc;
 const outputCostTAP = process.env.REACT_APP_output_cost_tap;
 const outputCostTestnet = process.env.REACT_APP_output_cost_testnet;
+const outputCostRune = process.env.REACT_APP_output_cost_rune;
 const securityBuffer = process.env.REACT_APP_security_buffer;
+const ouputCostOpReturn = process.env.REACT_APP_output_cost_opreturn;
+
 
 
 function Home() {
@@ -57,14 +54,14 @@ function Home() {
     const [hiroPubkey, setHiroPublicKey] = useState(null);
     const [showReceiveAddressModal, setShowReceiveAddressModal] = useState(false);
     const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
-    const [tabKey, setTabKey] = useState('tap');
+    const [tabKey, setTabKey] = useState('file');
     const [textInput, setTextInput] = useState('Enter any text you want to store on the blockchain');
     const [domainInput, setDomainInput] = useState('stacking');
     const [newsText, setNewsText] = useState('');
     const [newsAuthor, setNewsAuthor] = useState('');
     const [newsTitle, setNewsTitle] = useState('');
     const [newsUrl, setNewsUrl] = useState('');
-
+    const [opReturnInput, setOpReturnInput] = useState('');
     const [brcRadioButton, setbrcRadioButton] = useState("deploy");
     const [tokenTicker, setTokenTicker] = useState('');
     const [tokenSupply, setTokenSupply] = useState('21000');
@@ -83,10 +80,7 @@ function Home() {
     const [isConfigModal, showConfigModal] = useState(false);
     const renderConfigModal = () => showConfigModal(true);
     const hideConfigModal = () => showConfigModal(false);
-    //////Modal BRC Preview
-    const [showPreviewModal, setShowPreviewModal] = useState(false);
-    const closePreviewModal = () => setShowPreviewModal(false);
-    const showPreviewModalFunc = () => setShowPreviewModal(true);
+    const [activeWallet, setActiveWallet] = useState(null);
 
     //////Alert - Modal
     const [alertModalparams, showAlertModal] = useState({
@@ -124,10 +118,6 @@ function Home() {
     const [price, setPrice] = useState(1);
     ///// Tap protocol items
     const [btcItems, setBtcItems] = useState([]);
-
-
-
-
 
 
     useEffect(() => {
@@ -202,7 +192,9 @@ function Home() {
                 news: outputCostNews,
                 domain: outputCostDomain,
                 brc: outputCostBRC,
-                tap: outputCostTAP
+                tap: outputCostTAP,
+                rune: outputCostRune,
+                opreturn: ouputCostOpReturn
             };
 
             const newPrice = outputCosts[tabKey]
@@ -221,6 +213,14 @@ function Home() {
         showAlertModal({
             show: true,
             text: "File is too big! (>0.7MB)",
+            type: "danger",
+        });
+    }
+
+    const OP_RETURNTooBig = () => {
+        showAlertModal({
+            show: true,
+            text: "OP_RETURN is too big! (>80 Bytes)",
             type: "danger",
         });
     }
@@ -250,22 +250,14 @@ function Home() {
     };
 
 
-
-
-    //Get the invoice and perform validity checks
-    const getInvoice = (price) => {
-        if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
-            showAlertModal({
-                show: true,
-                text: `Please provide a valid ${testnet ? 'Testnet' : ''} BTC address`,
-                type: "danger",
-            });
-        } else if (file === null && tabKey === 'file') {
+    const validateContent = () => {
+        if (file === null && tabKey === 'file') {
             showAlertModal({
                 show: true,
                 text: "Please provide your own image",
                 type: "danger",
             });
+            return false;
         }
         else if (domainInput === "" && tabKey === 'domain') {
             showAlertModal({
@@ -273,6 +265,7 @@ function Home() {
                 text: "Please enter a domain name",
                 type: "danger",
             });
+            return false;
         }
         else if (newsTitle === "" && tabKey === 'news') {
             showAlertModal({
@@ -280,6 +273,7 @@ function Home() {
                 text: "Please enter a title",
                 type: "danger",
             });
+            return false;
         }
         else if (tokenTicker === "" && tabKey === 'brc') {
             showAlertModal({
@@ -287,6 +281,7 @@ function Home() {
                 text: "Please enter a token ticker",
                 type: "danger",
             });
+            return false;
         }
         else if (tokenTicker.replace(/-/g, '').length === 4 && tabKey === 'tap') {
             showAlertModal({
@@ -294,6 +289,7 @@ function Home() {
                 text: "4 letter token ticker are reserved for BRC",
                 type: "danger",
             });
+            return false;
         }
         else if (tabKey === 'tap' &&
             (tokenTicker.replace(/-/g, '').length !== 3 &&
@@ -303,29 +299,60 @@ function Home() {
                 text: "Token ticker must be 3 symbols or between 5 to 32 symbols.",
                 type: "danger",
             });
+            return false;
+        }
+        else if (tokenTicker === "" && tabKey === 'rune') {
+            showAlertModal({
+                show: true,
+                text: "Please enter a token ticker",
+                type: "danger",
+            });
+            return false;
+        }
+        else if (opReturnInput === "" && tabKey === 'opreturn') {
+            showAlertModal({
+                show: true,
+                text: "Please enter a message",
+                type: "danger",
+            });
+            return false;
         }
 
 
-        else {
-            if (tabKey === 'brc' || tabKey === 'tap') {
-                awaitPreviewConfirmation();
-            } else {
+        return true;
 
-                socket.emit("getInvoice", price);
-                showInvoiceModal();
-            }
-        }
-    };
-
-    const awaitPreviewConfirmation = () => {
-        setShowPreviewModal(true);
     }
 
-    const handlePreviewConfirmation = () => {
-        setShowPreviewModal(false);
+    const validateOnchainAddress = () => {
+        if (tabKey === "opreturn") {
+            return true;
+        }
+
+        if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
+            showAlertModal({
+                show: true,
+                text: `Please provide a valid ${testnet ? 'Testnet' : ''} BTC address`,
+                type: "danger",
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    //Get the invoice and perform validity checks
+    const getInvoice = (price) => {
+
+
         socket.emit("getInvoice", price);
         showInvoiceModal();
-    }
+
+
+    };
+
+
 
     socket.off("invoicePaid").on("invoicePaid", async (paymentHash) => {
         if (paymentHash === clientPaymentHash && !isPaid) {
@@ -417,6 +444,26 @@ function Home() {
 
             }
 
+            // if (tabKey === 'rune') {
+            //     var operation = "";
+            //     if (brcRadioButton === "deploy") {
+            //         operation = "deploy"
+
+            //     }
+            //     else if (brcRadioButton === "mint") {
+            //         operation = "mint"
+            //     }
+            //     else if (brcRadioButton === "transfer") {
+            //         operation = "transfer"
+            //     }
+            //     console.log(runeString);
+            //     socket.emit("createRuneOrder", paymentHash, onChainAddress, testnet, tokenTicker, tokenSupply, operation, fee, refCodeRef.current, price);
+
+            // }
+            if (tabKey === "opreturn") {
+                socket.emit("createOP_RETURN", paymentHash, opReturnInput, fee, refCodeRef.current, price);
+            }
+
 
         }
     });
@@ -497,6 +544,136 @@ function Home() {
     }, [testnet]);
 
 
+    const steps = [
+
+        <ContentSelector
+            price={price}
+            tabKey={tabKey}
+            setTabKey={setTabKey}
+            file={file}
+            fileType={fileType}
+            fileName={fileName}
+            setFile={setFile}
+            setFileType={setFileType}
+            setFileName={setFileName}
+            setFileSize={setFileSize}
+
+            testnet={testnet}
+            fileTooBig={fileTooBig}
+            OP_RETURNTooBig={OP_RETURNTooBig}
+            textInput={textInput}
+            setTextInput={setTextInput}
+            setNewsAuthor={setNewsAuthor}
+            setNewsText={setNewsText}
+            setNewsTitle={setNewsTitle}
+            setNewsUrl={setNewsUrl}
+            domainInput={domainInput}
+            setDomainInput={setDomainInput}
+            tokenTicker={tokenTicker}
+            setTokenTicker={setTokenTicker}
+            tokenSupply={tokenSupply}
+            setTokenSupply={setTokenSupply}
+            mintLimit={mintLimit}
+            setMintLimit={setMintLimit}
+            mintAmount={mintAmount}
+            setMintAmount={setMintAmount}
+            transferAmount={transferAmount}
+            setTransferAmount={setTransferAmount}
+            setbrcRadioButton={setbrcRadioButton}
+            brcRadioButton={brcRadioButton}
+            opReturnInput={opReturnInput}
+            setOpReturnInput={setOpReturnInput}
+        />
+        ,
+        <WalletSelect
+            nostrPublicKey={nostrPublicKey}
+            ledgerPublicKey={ledgerPublicKey}
+            ordimintPubkey={ordimintPubkey}
+            xversePublicKey={xversePublicKey}
+            hiroPublicKey={hiroPubkey}
+            activeWallet={activeWallet}
+            setActiveWallet={setActiveWallet}
+            onChainAddress={onChainAddress}
+            setOnChainAddress={setOnChainAddress}
+            showWalletConnectModal={showWalletConnectModal}
+            setShowWalletConnectModal={setShowWalletConnectModal}
+            connectWallet={connectWallet}
+            getAddressInfoNostr={getAddressInfoNostr}
+            testnet={testnet}
+            getLedgerPubkey={getLedgerPubkey}
+            getXversePubkey={getXversePubkey}
+            getHiroPubkey={getHiroPubkey}
+            getAddressInfoLedger={getAddressInfoLedger}
+            getAddressInfoXverse={getAddressInfoXverse}
+            renderSelectWalletModal={renderSelectWalletModal}
+            setNostrPublicKey={setNostrPublicKey}
+            setLedgerPublicKey={setLedgerPublicKey}
+            setHiroPublicKey={setHiroPublicKey}
+            unisatPublicKey={unisatPublicKey}
+            setUnisatPublicKey={setUnisatPublicKey}
+            setXversePublicKey={setXversePublicKey}
+            getUnisatPubkey={getUnisatPubkey}
+            getAddressInfoUnisat={getAddressInfoUnisat}
+            getAdressInfoHiro={getAddressInfoHiro}
+            connectUnisat={connectUnisat}
+            connectXverse={connectXverse}
+            connectHiro={connectHiro}
+            tabKey={tabKey}
+
+        />,
+
+        <FeeRange
+            setFee={(e) => {
+                setFee(e.target.value)
+            }}
+            value={fee}
+            price={price}
+        />
+        ,
+        <Overview
+            price={price}
+            fee={fee}
+            tabKey={tabKey}
+            domainInput={domainInput}
+            filesize={fileSize}
+            tokenSupply={tokenSupply}
+            tokenTicker={tokenTicker}
+            mintLimit={mintLimit}
+            mintAmount={mintAmount}
+            brcRadioButton={brcRadioButton}
+            transferAmount={transferAmount}
+            tokenStandard={tabKey}
+            btcItems={btcItems}
+            fileName={fileName}
+            textInput={textInput}
+            opReturnInput={opReturnInput}
+            newsTitle={newsTitle}
+            newsText={newsText}
+            newsAuthor={newsAuthor}
+            newsUrl={newsUrl}
+        />
+
+    ];
+
+    const handleSubmit = () => {
+
+        getInvoice(price);
+        renderAlert(false);
+        // showInvoiceModal();
+        hideConfigModal();
+        updatePaymentrequest();
+        setSpinner(true);
+        isPaid = false;
+        window.gtag('event', 'click', {
+            'event_category': 'Create Order',
+            'event_label': 'Get Invoice',
+        });
+
+
+    };
+
+
+
 
 
     return (
@@ -517,204 +694,21 @@ function Home() {
             </Head>
 
             <Container>
-                <div className=''>
-                    <Row style={{ display: "flex", justifyContent: "center" }}>
-                        <Col id='left-side-container'>
-                            <div id="tab-container">
-                                <p>What do you want to inscribe:</p>
-                                <Tabs
-                                    transition={false}
-                                    activeKey={tabKey}
-                                    onSelect={(k) => setTabKey(k)}
-                                    justify
-                                    fill
-                                    style={{ border: "none" }}
-                                >
+                <MultiStep
+                    tabKey={tabKey}
+                    steps={steps}
+                    handleSubmit={handleSubmit}
+                    validateContent={validateContent}
+                    validateOnchainAddress={validateOnchainAddress}
+                />
 
-                                    <Tab eventKey="file" title="File">
-
-                                        <FileUpload
-                                            file={file}
-                                            fileType={fileType}
-                                            fileName={fileName}
-                                            setFile={setFile}
-                                            setFileType={setFileType}
-                                            setFileName={setFileName}
-                                            setFileSize={setFileSize}
-                                            testnet={testnet}
-                                            fileTooBig={fileTooBig}
-                                        />
-
-                                    </Tab>
-                                    <Tab eventKey="text" title="Text">
-                                        <TextInput
-                                            setFileSize={setFileSize}
-                                            textInput={textInput}
-                                            setTextInput={setTextInput}
-                                        />
-                                    </Tab>
-                                    <Tab eventKey="news" title="News">
-                                        <NewsInput
-                                            setFileSize={setFileSize}
-                                            setNewsAuthor={setNewsAuthor}
-                                            setNewsText={setNewsText}
-                                            setNewsTitle={setNewsTitle}
-                                            setNewsUrl={setNewsUrl}
-                                        />
-                                    </Tab>
-                                    <Tab eventKey="domain" title=".sats Domain">
-                                        <DomainInput
-                                            setFileSize={setFileSize}
-                                            domainInput={domainInput}
-                                            setDomainInput={setDomainInput}
-
-                                        />
-                                    </Tab>
-                                    <Tab eventKey="brc" title="BRC-20">
-                                        <BRC
-                                            setTokenTicker={setTokenTicker}
-                                            setFileSize={setFileSize}
-                                            tokenSupply={tokenSupply}
-                                            setTokenSupply={setTokenSupply}
-                                            tokenName={tokenTicker}
-                                            setTokenName={setTokenTicker}
-                                            mintLimit={mintLimit}
-                                            setMintLimit={setMintLimit}
-                                            mintAmount={mintAmount}
-                                            setMintAmount={setMintAmount}
-                                            onChange={setbrcRadioButton}
-                                            brcRadioButton={brcRadioButton}
-                                            transferAmount={transferAmount}
-                                            setTransferAmount={setTransferAmount}
-                                        />
-
-                                    </Tab>
-                                    <Tab eventKey="tap" title="TAP">
-                                        <TAP
-                                            setTokenTicker={setTokenTicker}
-                                            setFileSize={setFileSize}
-                                            tokenSupply={tokenSupply}
-                                            setTokenSupply={setTokenSupply}
-                                            tokenName={tokenTicker}
-                                            setTokenName={setTokenTicker}
-                                            mintLimit={mintLimit}
-                                            setMintLimit={setMintLimit}
-                                            mintAmount={mintAmount}
-                                            setMintAmount={setMintAmount}
-                                            onChange={setbrcRadioButton}
-                                            brcRadioButton={brcRadioButton}
-                                            transferAmount={transferAmount}
-                                            setTransferAmount={setTransferAmount}
-                                            onUpdateBtcFields={setBtcItems}
-                                        />
-                                    </Tab>
-                                </Tabs>
-                            </div>
-                        </Col>
-                        <Col id="right-side-container">
-                            {/* <div id="inscription-number-selection">
-                                <p>Do you want to inscribe on <br /> Mainnet or Testnet?<br /><a href="/faq"> (Ready our FAQ)</a ></p>
-                                <TestnetSwitch
-
-                                />
-
-                            </div> */}
-                            <WalletSelect
-                                nostrPublicKey={nostrPublicKey}
-                                ledgerPublicKey={ledgerPublicKey}
-                                ordimintPubkey={ordimintPubkey}
-                                xversePublicKey={xversePublicKey}
-                                hiroPublicKey={hiroPubkey}
-                                onChainAddress={onChainAddress}
-                                setOnChainAddress={setOnChainAddress}
-                                showWalletConnectModal={showWalletConnectModal}
-                                setShowWalletConnectModal={setShowWalletConnectModal}
-                                connectWallet={connectWallet}
-                                getAddressInfoNostr={getAddressInfoNostr}
-                                testnet={testnet}
-                                getLedgerPubkey={getLedgerPubkey}
-                                getXversePubkey={getXversePubkey}
-                                getHiroPubkey={getHiroPubkey}
-                                getAddressInfoLedger={getAddressInfoLedger}
-                                getAddressInfoXverse={getAddressInfoXverse}
-                                renderSelectWalletModal={renderSelectWalletModal}
-                                setNostrPublicKey={setNostrPublicKey}
-                                setLedgerPublicKey={setLedgerPublicKey}
-                                setHiroPublicKey={setHiroPublicKey}
-                                unisatPublicKey={unisatPublicKey}
-                                setUnisatPublicKey={setUnisatPublicKey}
-                                setXversePublicKey={setXversePublicKey}
-                                getUnisatPubkey={getUnisatPubkey}
-                                getAddressInfoUnisat={getAddressInfoUnisat}
-                                getAdressInfoHiro={getAddressInfoHiro}
-                                connectUnisat={connectUnisat}
-                                connectXverse={connectXverse}
-                                connectHiro={connectHiro}
-
-                            />
-                            <div id="fee-select-container">
-                                <p>How fast should your Ordinal be minted?</p>
-                                <FeeRange
-                                    setFee={(e) => {
-                                        setFee(e.target.value)
-                                    }}
-                                    value={fee}
-                                />
-
-                            </div>
-
-                        </Col>
-                    </Row>
-
-
-                    <Price
-                        price={price}
-                    />
-                    <button
-                        className='pay_button'
-                        onClick={() => {
-                            getInvoice(price);
-                            renderAlert(false);
-                            // showInvoiceModal();
-                            hideConfigModal();
-                            updatePaymentrequest();
-                            setSpinner(true);
-                            isPaid = false;
-                            window.gtag('event', 'click', {
-                                'event_category': 'Create Order',
-                                'event_label': 'Get Invoice',
-                            });
-                        }}
-                        variant="success"
-                        size="lg"
-                    >
-                        Submit & Pay
-                    </button>
-                    <div id='info-text-home-bottom'>
-                        <p className='mt-2'>We mint directly to your address. No intermediaries.</p>
-                        <p>You get ~1000 Sats back when you receive the Ordinal.</p>
-                    </div>
-
-                </div>
             </Container >
+
             <AlertModal
                 show={alertModalparams.show}
                 text={alertModalparams.text}
                 variant={alertModalparams.type}
                 handleClose={hideAlertModal}
-            />
-            <PreviewModal
-                show={showPreviewModal}
-                handleClose={closePreviewModal}
-                tokenSupply={tokenSupply}
-                tokenTicker={tokenTicker}
-                mintLimit={mintLimit}
-                mintAmount={mintAmount}
-                brcRadioButton={brcRadioButton}
-                transferAmount={transferAmount}
-                onOK={handlePreviewConfirmation}
-                tokenStandard={tabKey}
-                btcItems={btcItems}
             />
             <ReceiveAddressModal
                 testnet={testnet}
