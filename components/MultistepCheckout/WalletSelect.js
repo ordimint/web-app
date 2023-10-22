@@ -27,6 +27,8 @@ function WalletSelect({
     getAddressInfoXverse,
     getAdressInfoHiro,
     testnet,
+    setActiveWallet,
+    activeWallet,
     getLedgerPubkey,
     getAddressInfoLedger,
     renderSelectWalletModal,
@@ -41,13 +43,8 @@ function WalletSelect({
     tabKey,
 }) {
 
-    const [activeWallet, setActiveWallet] = React.useState(null);
 
-    React.useEffect(() => {
-        if (tabKey === "opreturn") {
-            setOnChainAddress("16ftSEQ4ctQFDtVZiUBusQUjRrGhM3JYwe");
-        }
-    }, [tabKey]);
+
 
 
     if (tabKey === "opreturn") {

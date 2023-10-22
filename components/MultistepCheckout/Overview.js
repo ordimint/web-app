@@ -88,20 +88,26 @@ const Overview = (props) => {
     return (
         <div id='overview-container'>
 
-            {brcString &&
-                <pre className='token-preview-string'>{brcString}</pre>
-            }
-            {props.tabKey === "rune" &&
+
+            {props.tabKey === "tap" &&
                 <>
-                    <h5>RUNE operation: {props.brcRadioButton} </h5>
-                    <div className='token-preview-string'>
+                    <h5>TAP operation: {props.brcRadioButton} </h5>
 
-                        <h6>Tokenticker: {props.tokenTicker}</h6>
-                        <h6>Tokensupply: {props.tokenSupply}</h6>
 
-                    </div>
+                    <pre className='token-preview-string'>{brcString}</pre>
+
                 </>
             }
+            {props.tabKey === "brc" &&
+                <>
+                    <h5>BRC-20 operation: {props.brcRadioButton} </h5>
+
+
+                    <pre className='token-preview-string'>{brcString}</pre>
+
+                </>
+            }
+
             {props.tabKey === "text" &&
                 <>
                     <h5>Text inscription:</h5>
@@ -112,13 +118,27 @@ const Overview = (props) => {
                     </div>
                 </>
             }
+            {props.tabKey === "news" &&
+                <>
+                    <h5>News inscription:</h5>
+                    <div className='token-preview-string'>
+
+                        <h6>News Title: {props.newsTitle}</h6>
+                        <h6>News Author: {props.newsAuthor}</h6>
+                        <h6>News Url:{props.newsUrl}</h6>
+                        <h6>News Text: {props.newsText}</h6>
+
+
+                    </div>
+                </>
+            }
             {props.tabKey === "opreturn" &&
                 <>
                     <h5>OP_RETURN message </h5>
 
                     <div className='token-preview-string'>
 
-                        <h6>{props.opReturnInput}</h6>
+                        <h5>{props.opReturnInput}</h5>
 
                     </div>
                 </>
@@ -129,7 +149,7 @@ const Overview = (props) => {
 
                     <div className='token-preview-string'>
 
-                        <h6>{props.domainInput}.sats</h6>
+                        <h5>{props.domainInput}.sats</h5>
 
                     </div>
                 </>
@@ -170,7 +190,7 @@ const Overview = (props) => {
                     <tr className="separation-linee">
                         <td><strong>Total:</strong></td>
                         <td><strong>~{totalAmount} Sats</strong></td>
-                        <td><strong>~${(totalAmount / priceUSDinSats).toFixed(2)}</strong></td>
+                        <td><strong> ~${(totalAmount / priceUSDinSats).toFixed(2)}</strong></td>
                     </tr>
                 </tbody>
             </table>

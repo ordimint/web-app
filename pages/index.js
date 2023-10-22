@@ -80,7 +80,7 @@ function Home() {
     const [isConfigModal, showConfigModal] = useState(false);
     const renderConfigModal = () => showConfigModal(true);
     const hideConfigModal = () => showConfigModal(false);
-
+    const [activeWallet, setActiveWallet] = useState(null);
 
     //////Alert - Modal
     const [alertModalparams, showAlertModal] = useState({
@@ -324,6 +324,9 @@ function Home() {
     }
 
     const validateOnchainAddress = () => {
+        if (tabKey === "opreturn") {
+            return true;
+        }
 
         if (validate(onChainAddress, testnet ? Network.testnet : Network.mainnet) === false) {
             showAlertModal({
@@ -332,11 +335,11 @@ function Home() {
                 type: "danger",
             });
             return false;
-        } else {
-            return true
         }
 
+        return true;
     }
+
 
 
     //Get the invoice and perform validity checks
@@ -605,6 +608,7 @@ function Home() {
             setFileType={setFileType}
             setFileName={setFileName}
             setFileSize={setFileSize}
+
             testnet={testnet}
             fileTooBig={fileTooBig}
             OP_RETURNTooBig={OP_RETURNTooBig}
@@ -638,6 +642,8 @@ function Home() {
             ordimintPubkey={ordimintPubkey}
             xversePublicKey={xversePublicKey}
             hiroPublicKey={hiroPubkey}
+            activeWallet={activeWallet}
+            setActiveWallet={setActiveWallet}
             onChainAddress={onChainAddress}
             setOnChainAddress={setOnChainAddress}
             showWalletConnectModal={showWalletConnectModal}
@@ -692,6 +698,10 @@ function Home() {
             fileName={fileName}
             textInput={textInput}
             opReturnInput={opReturnInput}
+            newsTitle={newsTitle}
+            newsText={newsText}
+            newsAuthor={newsAuthor}
+            newsUrl={newsUrl}
         />
 
     ];
