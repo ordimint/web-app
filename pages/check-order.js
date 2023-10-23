@@ -22,9 +22,13 @@ const CheckOrder = () => {
         ).then(response => {
 
             setOrderStatus(response.data.status);
+
             if (response.data.mintingTransaction) {
                 setTxhash(response.data.mintingTransaction);
-                setInscriptionID(response.data.inscription_ID);
+                if (response.data.source === "Order") {
+                    setInscriptionID(response.data.inscription_ID);
+                }
+
             }
             if (response.data.testnet) {
                 setTestnet(true)
@@ -50,32 +54,22 @@ const CheckOrder = () => {
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
                 {txhash ? (
                     <div>
-                        {/* <div className="mt-2 order-status">
-                            <p>Preview:</p>
-                            <div className="iframe-container">
-                                <iframe
-                                    src={`https://live.ordilabs.org/content/${inscriptionID}`}
-                                    title="Inscription preview"
-                                ></iframe>
-                            </div>
-                        </div> */}
                         <h4 className="mt-3 order-status">
                             <a href={testnet ? `https://mempool.space/testnet/tx/${txhash}` : `https://mempool.space/tx/${txhash}`} target="_blank" rel="noreferrer">
-                                Minting Transaction
+                                {orderSource === "Order" ? "Minting Transaction" : "Your OP_RETURN Transaction"}
                             </a>
                         </h4>
-                        <h4 className="mt-3 order-status">
-                            <a href={testnet ? `http://testnet.ordimint.com/inscription/${inscriptionID}` : `https://explorer.ordimint.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
-                                Your Inscription (when minted)
-                            </a>
-                        </h4>
+                        {orderSource === "Order" && (
+                            <h4 className="mt-3 order-status">
+                                <a href={testnet ? `http://testnet.ordimint.com/inscription/${inscriptionID}` : `https://explorer.ordimint.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
+                                    Your Inscription (when minted)
+                                </a>
+                            </h4>
+                        )}
                         <p>Your inscription will be minted directly to your BTC address</p>
+                    </div>
+                ) : (<></>)}
 
-
-                    </div>) :
-                    (<></>)
-
-                }
                 {/* {sendingTxHash ? (<div>
                     <h4><a href={`https://mempool.space/de/tx/${sendingTxHash}`} target="_blank" rel="noreferrer">
                         Sending Transaction (After your ordinal was minted)

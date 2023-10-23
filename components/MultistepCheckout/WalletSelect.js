@@ -7,7 +7,7 @@ import LedgerLogo from '../../public/media/ledger-logo-small.svg';
 import OrdimintLogo from '../../public/media/ordimint-coin-white.png';
 import XverseLogo from '../../public/media/xverse-logo.png';
 import UnisatLogo from '../../public/media/unisat-logo.svg';
-import HiroLogo from '../../public/media/HiroWalletLogo.jpg';
+import LeatherLogo from '../../public/media/LeatherWalletLogo.svg';
 import { set } from 'mongoose';
 
 function WalletSelect({
@@ -150,7 +150,7 @@ function WalletSelect({
                                 variant="success"
                                 size="md"
                             >
-                                <Image src={HiroLogo} height="20" width="20" alt="Hiro Logo" id="hiro-wallet-logo" /><br></br> use Hiro Wallet
+                                <Image src={LeatherLogo} height="20" width="20" alt="Hiro Logo" id="hiro-wallet-logo" /><br></br> use Leather Wallet
                             </button>
 
                             <button

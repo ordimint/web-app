@@ -263,6 +263,16 @@ const FAQ = () => {
                                 </Accordion.Body>
                             </Accordion.Item>
 
+                            <Accordion.Item eventKey="11">
+                                <Accordion.Header>What is an OP_RETURN message?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>
+                                        An OP_RETURN message is a way to add a small note or message to a Bitcoin transaction. Think of it like leaving a short memo on a check. While this message doesn't change anything about the transaction itself, it allows people to include extra information for various purposes, like marking a special occasion or referencing an event.
+                                    </p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+
 
 
                             <Accordion.Item eventKey="101">

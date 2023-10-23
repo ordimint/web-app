@@ -107,7 +107,7 @@ const hiro = () => {
     return (
         <div>
             <Head>
-                <title>Ordimint - Hiro Wallet</title>
+                <title>Ordimint - Leather Wallet</title>
                 <meta name="description" content="Securely manage your Bitcoin Ordinals with Ordimint's seamless Ledger hardware wallet integration, ensuring top-notch security and convenience for your inscriptions." />
                 <meta name="keywords" content="Bitcoin, Ordinals, Ledger, Hardware Wallet, Integration, Security, Digital Assets, Digital Artefacts" />
             </Head>
@@ -117,13 +117,13 @@ const hiro = () => {
             <Container>
                 <Breadcrumb>
                     <Breadcrumb.Item href="/wallet">Wallets</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Hiro Wallet</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Leather Wallet</Breadcrumb.Item>
                 </Breadcrumb>
             </Container>
 
             <Container className="main-container d-flex flex-column text-center align-items-center justify-content-center">
                 <TestnetSwitch />
-                <h2 className="text-center m-4">Hiro Wallet</h2>
+                <h2 className="text-center m-4">Leather Wallet</h2>
                 {
                     publicKey ?
                         <div style={{ zIndex: 5 }}>
@@ -135,7 +135,7 @@ const hiro = () => {
                         <>
                             <div>
                                 <Alert variant="light">
-                                    It seems like your Hiro wallet is not installed.
+                                    It seems like your Leather wallet is not installed.
                                 </Alert>
                                 <br />
 

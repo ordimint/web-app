@@ -10,7 +10,7 @@ const OnchainInput = (props) => {
                 <Form.Control
 
                     value={props.onChainAddress || ''}
-                    placeholder="Enter a Bitcoin address"
+                    placeholder="Enter a Bitcoin address or connect a wallet"
                     aria-label="onchain-address"
                     aria-describedby="basic-addon1"
                     onChange={(e) => props.setOnChainAddress(e.target.value)}
