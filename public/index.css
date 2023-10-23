@@ -1480,3 +1480,8 @@ div.myAccordion .accordion-body p {
     margin-bottom: 5px; /* Optional: add some space between elements */
   }
 }
+
+.check-order-container{
+  z-index: 5;
+  position: relative;
+}
