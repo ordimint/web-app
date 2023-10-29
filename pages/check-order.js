@@ -10,6 +10,8 @@ const CheckOrder = () => {
     const [testnet, setTestnet] = useState(false)
     const [txhash, setTxhash] = useState("");
     const [inscriptionID, setInscriptionID] = useState("");
+    const [orderSource, setOrderSource] = useState("");
+
 
     const checkOrder = async () => {
 
@@ -20,20 +22,19 @@ const CheckOrder = () => {
         await axios.get(
             `${process.env.REACT_APP_BACKEND_API}${orderID}`
         ).then(response => {
-
             setOrderStatus(response.data.status);
-
             if (response.data.mintingTransaction) {
                 setTxhash(response.data.mintingTransaction);
-                if (response.data.source === "Order") {
-                    setInscriptionID(response.data.inscription_ID);
-                }
-
+            }
+            if (response.data.inscription_ID) {
+                setInscriptionID(response.data.inscription_ID);
             }
             if (response.data.testnet) {
-                setTestnet(true)
+                setTestnet(true);
             }
+            setOrderSource(response.data.source);
         })
+
             // if error
             .catch(function (error) {
                 setOrderStatus("Error: Order not found")
@@ -49,36 +50,35 @@ const CheckOrder = () => {
                 <meta name="description" content="Check your inscription order" />
                 <meta name="keywords" content="Bitcoin, Inscription service" />
             </Head>
-            <div className='main-middle'>
+            <div className='main-middle check-order-container'>
                 {/* <h1>Check your order</h1> */}
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
-                {txhash ? (
+                {txhash && (
                     <div>
                         <h4 className="mt-3 order-status">
                             <a href={testnet ? `https://mempool.space/testnet/tx/${txhash}` : `https://mempool.space/tx/${txhash}`} target="_blank" rel="noreferrer">
                                 {orderSource === "Order" ? "Minting Transaction" : "Your OP_RETURN Transaction"}
                             </a>
                         </h4>
-                        {orderSource === "Order" && (
+
+                        {orderSource === "Order" && inscriptionID && (
                             <h4 className="mt-3 order-status">
                                 <a href={testnet ? `http://testnet.ordimint.com/inscription/${inscriptionID}` : `https://explorer.ordimint.com/inscription/${inscriptionID}`} target="_blank" rel="noreferrer">
                                     Your Inscription (when minted)
                                 </a>
                             </h4>
                         )}
-                        <p>Your inscription will be minted directly to your BTC address</p>
-                    </div>
-                ) : (<></>)}
 
-                {/* {sendingTxHash ? (<div>
-                    <h4><a href={`https://mempool.space/de/tx/${sendingTxHash}`} target="_blank" rel="noreferrer">
-                        Sending Transaction (After your ordinal was minted)
-                    </a></h4>
-                </div >) : (<></>)} */}
+                        <p>
+                            {orderSource === "Order" ? " Your inscription will be minted directly to your BTC address" : ""}
+                        </p>
+                    </div>
+                )}
+
                 <Row>
                     <Col xs={12} lg={11}>
                         <InputGroup id='order-id-inputs'>
-                            <InputGroup.Text id="basic-addon1" style={{ border: "2px solid #6a6b6b", background: "#1c1d1d", color: "#fff" }}>Order ID</InputGroup.Text>
+                            <InputGroup.Text id="basic-addon1" style={{ border: "2px solid #6a6b6b", background: "#1c1d1d", color: "#fff", }}>Order ID</InputGroup.Text>
                             <Form.Control
                                 onChange={(e) => setOrderID(e.target.value)}
                                 placeholder="Insert Your Order ID"
