@@ -1270,12 +1270,10 @@ div.myAccordion .accordion-body p {
   display: flex; /* Added this to use flexbox for centering */
   align-items: center; /* Vertical centering */
   justify-content: center; /* Horizontal centering */
-  /* width: calc(
-    1440px * 0.25
-  ); 
-  height: calc(900px * 0.35);  */
-  width: 300px;
-  height: 300px;
+  /* width: calc(1440px * 0.25);
+  height: calc(900px * 0.35); */
+  max-width: 200px;
+  max-height: 200px;
   overflow: hidden;
   position: relative;
 }
@@ -1479,4 +1477,12 @@ div.myAccordion .accordion-body p {
     width: 100%; /* Take full width */
     margin-bottom: 5px; /* Optional: add some space between elements */
   }
+}
+
+.wallet-thumbnail {
+  padding: 3%;
+  margin: 3%;
+  border: 2px solid #6a6b6b;
+  background-color: #1e1f20;
+  border-radius: 12px;
 }

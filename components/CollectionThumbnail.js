@@ -11,14 +11,14 @@ const CollectionThumbnail = (props) => {
 
     async function setContentType() {
         const response = await getContentType(props.collection.inscription_icon)
+        console.log(response);
         const contentType = response
-        if (contentType.includes("text")) {
-            // console.log(contentType)
-            setIsText(true)
+        if (typeof contentType === 'string' && contentType.includes("text")) {
+            setIsText(true);
+        } else {
+            setIsText(false);
         }
-        else {
-            setIsText(false)
-        }
+
     }
 
 
@@ -33,13 +33,22 @@ const CollectionThumbnail = (props) => {
             {isText ? (
                 <Figure>
 
-                    <iframe className="ordinal-iframe image-thumbnail"
+                    {/* <iframe className="ordinal-iframe image-thumbnail"
                         title="ordinal-iframe"
 
                         src={`https://explorer.ordimint.com/preview/${props.collection.inscription_icon}`}
                     >
-                    </iframe>
-
+                    </iframe> */}
+                    <div className="thumbnail-container">
+                        <div className="thumbnail">
+                            <iframe
+                                className="iframe-content pt-3"
+                                src={`https://explorer.ordimint.com/preview/${props.collection.inscription_icon}`}
+                                title="Embedded content"
+                                frameBorder="0"
+                            />
+                        </div>
+                    </div>
 
                     <Figure.Caption>
                         <h4>

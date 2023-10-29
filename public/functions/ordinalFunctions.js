@@ -1,19 +1,23 @@
 const axios = require('axios');
+require('dotenv').config();
 
-async function getContentType(inscriptionID) {
+let baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+async function getContentType(inscriptionId) {
     try {
-        const response = await fetch(`https://ordapi.xyz/inscription/${inscriptionID}`)
-        const responseJSON = await response.json()
-        if (responseJSON) {
-            const contentType = responseJSON.content_type
-            // console.log(contentType)
-            return contentType
+
+        const response = await fetch(`${baseUrl}/inscription/${inscriptionId}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const responseJSON = await response.json();
+        return responseJSON.content_type;
     } catch (error) {
-        console.log(error)
-        return error
+        console.error(error);
+        return null;
     }
 }
+
 
 
 
@@ -42,22 +46,21 @@ async function getInscriptionData(utxo) {
 
 
 
-async function getInscriptionNumber(inscriptionID) {
-    let inscriptionNumber
+async function getInscriptionNumber(inscriptionId) {
     try {
-        const response = await fetch(`https://ordapi.xyz/inscription/${inscriptionID}`)
-        const responseJSON = await response.json()
-        // console.log(responseJSON)
-        inscriptionNumber = responseJSON.data.inscription_Number
-        // console.log(inscriptionNumber)
+        const response = await fetch(`${baseUrl}/inscription/${inscriptionId}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseJSON = await response.json();
+        console.log(responseJSON)
+        return responseJSON.inscription_number;
     } catch (error) {
-        console.log(error)
-        return error
-    }
-    if (inscriptionNumber) {
-        return inscriptionNumber
+        console.error(error);
+        return null;
     }
 }
+
 
 function parseTextInscription(jsonStr) {
     let jsonObj;

@@ -25,7 +25,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
         return (
           <>
             <h4>News</h4>
-            <p><strong>Title:</strong> {jsonData.title}</p>
+            <div><strong>Title:</strong> {jsonData.title}</div>
             {/* <p><strong>URL:</strong> <a href={jsonData.url}>{jsonData.url}</a></p>
                         <p><strong>Author:</strong> {jsonData.author}</p>
                         <p><strong>Body:</strong> {jsonData.body.length > 20 ? jsonData.body.substring(0, 20) + '...' : jsonData.body}</p> */}
@@ -47,8 +47,8 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
             <>
               <h4>BRC-20 {jsonData.op}</h4>
-              <p><strong>Ticker:</strong> {jsonData.tick}</p>
-              <p><strong>Amount:</strong> {jsonData.amt}</p>
+              <div><strong>Ticker:</strong> {jsonData.tick}</div>
+              <div><strong>Amount:</strong> {jsonData.amt}</div>
             </>
 
           );
@@ -57,8 +57,8 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
             <>
               <h4>BRC-20 {jsonData.op}</h4>
-              <p><strong>Ticker:</strong> {jsonData.tick}</p>
-              <p><strong>Amount:</strong> {jsonData.amt}</p>
+              <div><strong>Ticker:</strong> {jsonData.tick}</div>
+              <div><strong>Amount:</strong> {jsonData.amt}</div>
             </>
 
           );
@@ -68,9 +68,9 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
             <>
               <h4>BRC-20 {jsonData.op}</h4>
-              <p><strong>Ticker:</strong> {jsonData.tick}</p>
-              {jsonData.max && <p><strong>Max:</strong> {jsonData.max}</p>}
-              {jsonData.lim && <p><strong>Limit:</strong> {jsonData.lim}</p>}
+              <div><strong>Ticker:</strong> {jsonData.tick}</div>
+              {jsonData.max && <div><strong>Max:</strong> {jsonData.max}</div>}
+              {jsonData.lim && <div><strong>Limit:</strong> {jsonData.lim}</div>}
             </>
 
           );
@@ -97,8 +97,8 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
               <>
                 <h4>TAP {jsonData.op}</h4>
-                <p><strong>Ticker:</strong> {jsonData.tick}</p>
-                <p><strong>Amount:</strong> {jsonData.amt}</p>
+                <div><strong>Ticker:</strong> {jsonData.tick}</div>
+                <div><strong>Amount:</strong> {jsonData.amt}</div>
               </>
 
             );
@@ -107,8 +107,8 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
               <>
                 <h4>TAP {jsonData.op}</h4>
-                <p><strong>Ticker:</strong> {jsonData.tick}</p>
-                <p><strong>Amount:</strong> {jsonData.amt}</p>
+                <div><strong>Ticker:</strong> {jsonData.tick}</div>
+                <div><strong>Amount:</strong> {jsonData.amt}</div>
               </>
 
             );
@@ -118,9 +118,9 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
               <>
                 <h4>TAP {jsonData.op}</h4>
-                <p><strong>Ticker:</strong> {jsonData.tick}</p>
-                {jsonData.max && <p><strong>Max:</strong> {jsonData.max}</p>}
-                {jsonData.lim && <p><strong>Limit:</strong> {jsonData.lim}</p>}
+                <div><strong>Ticker:</strong> {jsonData.tick}</div>
+                {jsonData.max && <div><strong>Max:</strong> {jsonData.max}</div>}
+                {jsonData.lim && <div><strong>Limit:</strong> {jsonData.lim}</div>}
               </>
 
             );
@@ -172,7 +172,7 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
 
 
   return (
-    <>
+    <div className='wallet-thumbnail'>
       {isText === CONTENT_TYPES.HTML ? (
         <div className="thumbnail-container">
           <div className="thumbnail">
@@ -204,17 +204,17 @@ export default function UtxoImage({ utxo, style, inscriptionUtxosByUtxo, testnet
         </video>
       ) : isText === CONTENT_TYPES.TEXT ? (
 
-        <div className='inscription-text'>
-          <p className='inscription-text'>
+        <div >
+          <div className='inscription-text'>
             {text}
-          </p>
+          </div>
         </div>
 
       ) : (
-        <div className='inscription-text'>
+        <div >
           <p className='inscription-text'>{text}</p></div>
       )}
-    </>
+    </div>
   );
 
 }

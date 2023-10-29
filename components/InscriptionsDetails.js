@@ -1,51 +1,106 @@
-
-import React, { useEffect, useContext } from 'react'
-import { useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react';
 import { TailSpin } from 'react-loading-icons';
 import { TestnetContext } from '../contexts/TestnetContext';
+
 const InscriptionsDetails = (props) => {
-    const { testnet } = useContext(TestnetContext)
-
-    const [inscriptionData, setInscriptionData] = useState(null)
-
+    const { testnet } = useContext(TestnetContext);
+    const [inscriptionData, setInscriptionData] = useState(null);
 
     useEffect(() => {
-        getInscriptionData(props.utxo)
-    }, [testnet, props.utxo])
+
+        getInscriptionData(props.utxo);
+
+    }, [testnet, props.utxo]);
+
+    const getInscriptionDetails = async (inscriptionId) => {
+        const explorerURL = testnet ? process.env.REACT_APP_TESTNET_URL : process.env.REACT_APP_MAINNET_URL;
+        try {
+            const response = await fetch(`${explorerURL}/inscription/${inscriptionId}`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            if (response.headers.get('content-type').includes('application/json')) {
+                const responseJSON = await response.json();
+
+                return {
+                    inscription_number: responseJSON.inscription_number,
+                    value: responseJSON.output_value,
+                    timestamp: responseJSON.timestamp
+                };
+            } else {
+                console.error('The response is not in JSON format');
+                return null;
+            }
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
 
     async function getInscriptionData(utxo) {
-        if (testnet) return
         try {
-            const response = await fetch(`https://ordapi.xyz/output/${utxo.txid}:${utxo.vout}`)
-            const inscriptionPerOutput = await response.json()
-            const response2 = await fetch(`https://ordapi.xyz${inscriptionPerOutput.inscriptions}`)
-            const response2JSON = await response2.json()
-            setInscriptionData(response2JSON)
-        }
-        catch (e) {
-            console.log(e)
-        }
+            const explorerURL = testnet ? process.env.REACT_APP_TESTNET_URL : process.env.REACT_APP_MAINNET_URL;
+            if (!explorerURL) {
+                throw new Error('Explorer URL is not defined');
+            }
+            const response = await fetch(`${explorerURL}/output/${utxo.txid}:${utxo.vout}`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (response.ok && response.headers.get('content-type').includes('application/json')) {
+                const outputData = await response.json();
 
+                // Check if inscriptions array is present and has at least one inscription
+                if (Array.isArray(outputData.inscriptions) && outputData.inscriptions.length > 0) {
+                    const inscriptionId = outputData.inscriptions[0]; // Take the first inscription
+                    const inscriptionDetails = await getInscriptionDetails(inscriptionId);
+
+                    if (inscriptionDetails) {
+                        setInscriptionData(inscriptionDetails);
+                    } else {
+                        console.error('Failed to fetch inscription details');
+                    }
+                } else {
+                    console.error('No inscriptions found');
+                }
+            } else {
+                console.error('Failed to fetch data');
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     return (
-        <>
-            {
-                testnet ? <></>
-                    :
-                    <div>
+        <div>
 
-                        {inscriptionData ?
-                            <p>#{inscriptionData.inscription_number}</p> : <p>
-                                <br />
-                                <TailSpin stroke="#ffffff" speed={0.75} />
-                                <br />
-                                Loading...</p>
-                        }
-                    </div>
-            }
-        </>
-    )
-}
+            <div>
+                {inscriptionData ? (
+                    <>
+                        <h5 className='m-3'>#{inscriptionData.inscription_number}</h5>
+                        <h5 className='m-3'>{inscriptionData.value} Sats</h5>
+                        <h5 className='m-3'>
+                            {new Date(inscriptionData.timestamp * 1000).toLocaleDateString()}<br />
+                            {new Date(inscriptionData.timestamp * 1000).toLocaleTimeString()}
+                        </h5>
+                    </>
+                ) : (
+                    <p>
+                        <br />
+                        <TailSpin stroke="#ffffff" speed={0.75} />
+                        <br />
+                        Loading...
+                    </p>
+                )}
+            </div>
 
-export default InscriptionsDetails
+        </div>
+    );
+};
+
+export default InscriptionsDetails;
