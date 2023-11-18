@@ -1240,21 +1240,21 @@ div.myAccordion .accordion-body p {
   border-radius: 6px;
 }
 
-.thumbnail iframe {
+/* .thumbnail iframe {
   width: 576px;
   height: 576px;
-}
+} */
 
-.thumbnail {
+/* .thumbnail {
   position: relative;
-  -ms-zoom: 0.5; /* Change the scaling factor if you want it larger or smaller */
+  -ms-zoom: 0.5;
   -moz-transform: scale(0.5);
   -moz-transform-origin: 50% 50%;
   -o-transform: scale(0.5);
   -o-transform-origin: 50% 50%;
   -webkit-transform: scale(0.5);
   -webkit-transform-origin: 50% 50%;
-}
+} */
 
 .thumbnail:after {
   display: block;
@@ -1264,18 +1264,6 @@ div.myAccordion .accordion-body p {
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.thumbnail-container {
-  display: flex; /* Added this to use flexbox for centering */
-  align-items: center; /* Vertical centering */
-  justify-content: center; /* Horizontal centering */
-  /* width: calc(1440px * 0.25);
-  height: calc(900px * 0.35); */
-  max-width: 200px;
-  max-height: 200px;
-  overflow: hidden;
-  position: relative;
 }
 
 .inscription-text {
@@ -1490,4 +1478,18 @@ div.myAccordion .accordion-body p {
 .check-order-container {
   z-index: 5;
   position: relative;
+}
+
+.thumbnail-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.iframe-content {
+  max-width: 100%;
+  max-height: 100%;
 }

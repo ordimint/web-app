@@ -1,81 +1,43 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
-import { Image, Figure } from 'react-bootstrap'
-import { getContentType } from '../public/functions/ordinalFunctions';
+import { Figure } from 'react-bootstrap'
+import Link from 'next/link'
 
-const CollectionThumbnail = (props) => {
-
-
-    const [isText, setIsText] = useState(false)
-
-
-    async function setContentType() {
-        const response = await getContentType(props.collection.inscription_icon)
-        console.log(response);
-        const contentType = response
-        if (typeof contentType === 'string' && contentType.includes("text")) {
-            setIsText(true);
-        } else {
-            setIsText(false);
-        }
-
+const isValidUrl = (string) => {
+    try {
+        new URL(string);
+    } catch (_) {
+        return false;
     }
-
-
-    useEffect(() => {
-        setContentType()
-    }, [])
-
-
-
-    return (
-        <div >
-            {isText ? (
-                <Figure>
-
-                    {/* <iframe className="ordinal-iframe image-thumbnail"
-                        title="ordinal-iframe"
-
-                        src={`https://explorer.ordimint.com/preview/${props.collection.inscription_icon}`}
-                    >
-                    </iframe> */}
-                    <div className="thumbnail-container">
-                        <div className="thumbnail">
-                            <iframe
-                                className="iframe-content pt-3"
-                                src={`https://explorer.ordimint.com/preview/${props.collection.inscription_icon}`}
-                                title="Embedded content"
-                                frameBorder="0"
-                            />
-                        </div>
-                    </div>
-
-                    <Figure.Caption>
-                        <h4>
-                            {props.collection.name}
-                        </h4>
-                    </Figure.Caption>
-                </Figure>
-
-            ) :
-                <Figure>
-                    <Figure.Image
-                        thumbnail
-                        width={200}
-                        height={200}
-                        alt={props.collection.name}
-                        src={`https://explorer.ordimint.com/content/${props.collection.inscription_icon}`}
-                    />
-                    <Figure.Caption>
-                        <h4>
-                            {props.collection.name}
-                        </h4>
-                    </Figure.Caption>
-                </Figure>
-            }
-
-        </div >
-    )
+    return true;
 }
 
-export default CollectionThumbnail
+const CollectionThumbnail = (props) => {
+    const icon = props.collection.inscription_icon;
+    const url = icon ? `https://explorer.ordimint.com/preview/${icon}` : '';
+    const validUrl = isValidUrl(url);
+    const placeholderUrl = 'https://explorer.ordimint.com/preview/6fb976ab49dcec017f1e201e84395983204ae1a7c2abf7ced0a85d692e442799i0'; // replace with your placeholder image URL
+
+    return (
+
+        <div>
+
+            <Figure>
+
+                <iframe title="ordinal-iframe" className="ordinal-iframe"
+                    src={validUrl ? url : placeholderUrl}
+                >
+                </iframe>
+
+                <Figure.Caption>
+                    <h4>
+                        {props.collection.name}
+                    </h4>
+                </Figure.Caption>
+            </Figure>
+
+        </div>
+
+    );
+}
+
+export default CollectionThumbnail;

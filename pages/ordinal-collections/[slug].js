@@ -94,29 +94,20 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
 
       <div className="main-middle">
         <h1 className="mt-4">{collectionMeta.name}</h1>
-        {isText ? (
-          <Figure>
-            <iframe
-              className="ordinal-iframe image-thumbnail"
-              title="ordinal-iframe"
-              src={`https://explorer.ordimint.com/preview/${collectionMeta.inscription_icon}`}
-            ></iframe>
-            <Figure.Caption>
-              <h4>{collection.name}</h4>
-            </Figure.Caption>
-          </Figure>
-        ) : (
-          <Figure>
-            <Figure.Image
-              thumbnail
-              width={200}
-              height={200}
-              alt={collectionMeta.name}
-              src={`https://explorer.ordimint.com/content/${collectionMeta.inscription_icon}`}
-            />
-            <Figure.Caption></Figure.Caption>
-          </Figure>
-        )}
+
+        <Figure>
+          <iframe
+            className="ordinal-iframe image-thumbnail"
+            title="ordinal-iframe"
+            src={`https://explorer.ordimint.com/preview/${collectionMeta.inscription_icon}`}
+          ></iframe>
+          <Figure.Caption>
+            <h4>{collection.name}</h4>
+          </Figure.Caption>
+        </Figure>
+
+
+
         <Container id="social-icons-collections">
           <Row>
             <h2>

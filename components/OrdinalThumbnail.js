@@ -11,49 +11,29 @@ const OrdinalThumbnail = (props) => {
 
     return (
         <div >
-            {props.isText ? (
-                <Figure>
 
+            <h5 style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{props.collection.meta.name}</h5>
+            <a href={`https://explorer.ordimint.com/inscription/${props.collection.id}`}
+                target="_blank" rel="noopener noreferrer"
+            >
+                <Figure>
                     <iframe title="ordinal-iframe" className="ordinal-iframe"
                         src={`https://explorer.ordimint.com/preview/${props.collection.id}`}
-                        onClick={() => {
-                            renderDetailModal()
-                        }}
+                        onClick={renderDetailModal}
                     >
                     </iframe>
 
-
                     <Figure.Caption>
 
-                        <a href={`https://explorer.ordimint.com/inscription/${props.collection.id}`}
-                            target="_blank" rel="noopener noreferrer"
-                        >
-                            <h4>
-                                {props.collection.meta.name}
-                            </h4>
-                        </a >
+
+                        <h5>
+
+                            Detailpage
+                        </h5>
 
                     </Figure.Caption>
                 </Figure>
-
-            ) : (
-                <Figure>
-                    <Figure.Image
-                        thumbnail
-                        width={200}
-                        height={200}
-                        alt={props.collection.meta.name}
-                        src={`https://explorer.ordimint.com/content/${props.collection.id}`}
-                        onClick={() => {
-                            renderDetailModal()
-                        }}
-                    />
-                    <Figure.Caption>
-                        <h6>
-                            {props.collection.meta.name}
-                        </h6>
-                    </Figure.Caption>
-                </Figure>)}
+            </a>
             < SingleOrdinalModal
                 show={isDetailModal}
                 handleClose={hideDetailModal}
