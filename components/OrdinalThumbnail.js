@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { Figure } from 'react-bootstrap'
+import { Button, Figure } from 'react-bootstrap'
 import SingleOrdinalModal from '../components/modals/SingleOrdinalModal';
 
 const OrdinalThumbnail = (props) => {
@@ -12,35 +12,27 @@ const OrdinalThumbnail = (props) => {
     return (
         <div >
 
-            <h5 style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{props.collection.meta.name}</h5>
-            <a href={`https://explorer.ordimint.com/inscription/${props.collection.id}`}
-                target="_blank" rel="noopener noreferrer"
-            >
-                <Figure>
+
+
+            <Figure>
+                <div style={{ position: 'relative' }}>
                     <iframe title="ordinal-iframe" className="ordinal-iframe"
                         src={`https://explorer.ordimint.com/preview/${props.collection.id}`}
-                        onClick={renderDetailModal}
                     >
                     </iframe>
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer' }} onClick={renderDetailModal} />
+                </div>
 
-                    <Figure.Caption>
+                <h5 style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{props.collection.meta.name}</h5>
+            </Figure>
 
-
-                        <h5>
-
-                            Detailpage
-                        </h5>
-
-                    </Figure.Caption>
-                </Figure>
-            </a>
-            < SingleOrdinalModal
+            <SingleOrdinalModal
                 show={isDetailModal}
                 handleClose={hideDetailModal}
                 selectedOrdinal={props.collection.id}
                 selectedOrdinalName={props.collection.meta.name}
             />
-        </div>
+        </div >
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+
 import {
   Button,
   Figure,
@@ -19,29 +19,15 @@ import Head from "next/head";
 import { Breadcrumb } from "react-bootstrap";
 
 const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
-  const router = useRouter();
 
-  // const [collectionMeta, setCollectionMeta] = useState([])
-  // const [collection, setCollection] = useState([])
-  const [isText, setIsText] = useState(false);
-  const [text, setText] = useState("");
-  const [isDetailModal, showDetailModal] = useState(false);
-  const renderDetailModal = () => showDetailModal(true);
-  const hideDetailModal = () => showDetailModal(false);
-  const [ordinal, setOrdinal] = useState();
+  const [itemsToShow, setItemsToShow] = useState(30);
 
-  async function setContentType(inscriptionID) {
-    const response = await getContentType(inscriptionID);
-    const contentType = response;
-    if (contentType && contentType.includes("text")) {
-      console.log(contentType);
-      setIsText(true);
-    }
-  }
+  const loadMore = () => {
+    setItemsToShow(itemsToShow + 30);
+  };
 
-  useEffect(() => {
-    setContentType(collectionMeta.inscription_icon);
-  }, [collectionMeta]);
+
+
 
   return (
     <div>
@@ -162,17 +148,20 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
         <hr />
         <Container>
           <div className="row">
-            {collection.map((element, index) => {
-              return (
-                <div className="col-md-2 " key={index}>
-                  <OrdinalThumbnail
-                    collection={element}
-                    isText={isText}
-                    text={text}
-                  />
-                </div>
-              );
-            })}
+            {collection.slice(0, itemsToShow).map((item, index) => (
+
+              <div className="col-md-2 " key={index}>
+                <OrdinalThumbnail
+                  collection={item}
+                />
+              </div>
+
+            ))}
+          </div>
+          <div className="load-more-button-row">
+            {itemsToShow < collection.length && (
+              <Button onClick={loadMore}>Load More</Button>
+            )}
           </div>
         </Container>
       </div>

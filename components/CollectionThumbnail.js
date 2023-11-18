@@ -1,6 +1,6 @@
 import React from 'react'
 import { Figure } from 'react-bootstrap'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const isValidUrl = (string) => {
     try {
@@ -12,31 +12,29 @@ const isValidUrl = (string) => {
 }
 
 const CollectionThumbnail = (props) => {
+    const router = useRouter();
     const icon = props.collection.inscription_icon;
     const url = icon ? `https://explorer.ordimint.com/preview/${icon}` : '';
     const validUrl = isValidUrl(url);
-    const placeholderUrl = 'https://explorer.ordimint.com/preview/6fb976ab49dcec017f1e201e84395983204ae1a7c2abf7ced0a85d692e442799i0'; // replace with your placeholder image URL
+    const placeholderUrl = '/noThumbnail.html'; // replace with your placeholder image URL
+
+    const handleClick = () => {
+        router.push(`/collections/${props.collection.slug}`);
+    }
 
     return (
-
-        <div>
-
-            <Figure>
-
-                <iframe title="ordinal-iframe" className="ordinal-iframe"
-                    src={validUrl ? url : placeholderUrl}
-                >
-                </iframe>
-
-                <Figure.Caption>
-                    <h4>
-                        {props.collection.name}
-                    </h4>
-                </Figure.Caption>
-            </Figure>
-
+        <div style={{ position: 'relative' }}>
+            <iframe title="ordinal-iframe" className="ordinal-iframe"
+                src={validUrl ? url : placeholderUrl}
+            >
+            </iframe>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer' }} onClick={handleClick} />
+            <Figure.Caption>
+                <h4>
+                    {props.collection.name}
+                </h4>
+            </Figure.Caption>
         </div>
-
     );
 }
 
