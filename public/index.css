@@ -1504,3 +1504,29 @@ div.myAccordion .accordion-body p {
   align-items: center;
   align-content: center;
 }
+
+.ordinal-thumbnail-picture {
+  margin: 0 0 0;
+}
+
+.ordinal-thumbnail-caption {
+  margin-bottom: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.collection-thumbnails-container {
+  text-align: center;
+}
+.back-button {
+  position: relative;
+  z-index: 5;
+}
+
+.ordinals-collection-page-div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px; /* Add margin to create spacing between objects */
+}
+.breadcrumb {
+}

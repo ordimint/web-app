@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState, } from "react";
+import { useRouter } from 'next/router'
 import {
   Button,
   Figure,
@@ -8,7 +8,7 @@ import {
   Container,
   Placeholder,
 } from "react-bootstrap";
-import Link from "next/link";
+
 import { FaTwitterSquare, FaDiscord, FaGlobe } from "react-icons/fa";
 import OrdinalThumbnail from "../../components/OrdinalThumbnail";
 // import placeholderimage from "../../public/media/text-placeholder.png";
@@ -19,7 +19,7 @@ import Head from "next/head";
 import { Breadcrumb } from "react-bootstrap";
 
 const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
-
+  const router = useRouter()
   const [itemsToShow, setItemsToShow] = useState(30);
 
   const loadMore = () => {
@@ -30,7 +30,7 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
 
 
   return (
-    <div>
+    <div className="ordinals-collection-page-div">
       <Head>
         <title>Ordinal Collection - {collectionMeta.name}</title>
         <meta name="description" content={collectionMeta.description} />
@@ -67,19 +67,20 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Ordimint" />
       </Head>
-      <div style={{ position: "absolute", left: 50 }}>
-        <Container>
-          <Breadcrumb>
-            <Breadcrumb.Item href="/ordinal-collections">
-              Collections
-            </Breadcrumb.Item>
-            <Breadcrumb.Item active>{collectionMeta.name}</Breadcrumb.Item>
-          </Breadcrumb>
-        </Container>
-      </div>
+
+      <Container >
+        <Breadcrumb >
+          <Breadcrumb.Item href="/ordinal-collections">
+            Collections
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active>{collectionMeta.name}</Breadcrumb.Item>
+        </Breadcrumb>
+        <Button className="back-button" variant="secondary" onClick={() => router.back()}>&lt; Back</Button>
+      </Container>
+
 
       <div className="main-middle">
-        <h1 className="mt-4">{collectionMeta.name}</h1>
+        <h1 className="m-4">{collectionMeta.name}</h1>
 
         <Figure>
           <iframe
@@ -146,7 +147,7 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
           ) : null}
         </Container>
         <hr />
-        <Container>
+        <Container className="collection-thumbnails-container">
           <div className="row">
             {collection.slice(0, itemsToShow).map((item, index) => (
 
@@ -160,7 +161,7 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
           </div>
           <div className="load-more-button-row">
             {itemsToShow < collection.length && (
-              <Button onClick={loadMore}>Load More</Button>
+              <Button style={{ zIndex: 5 }} onClick={loadMore}>Load More</Button>
             )}
           </div>
         </Container>

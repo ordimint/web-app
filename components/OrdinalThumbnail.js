@@ -11,20 +11,19 @@ const OrdinalThumbnail = (props) => {
 
     return (
         <div >
-
-
-
-            <Figure>
+            <Figure className='ordinal-thumbnail-picture'>
                 <div style={{ position: 'relative' }}>
                     <iframe title="ordinal-iframe" className="ordinal-iframe"
                         src={`https://explorer.ordimint.com/preview/${props.collection.id}`}
                     >
                     </iframe>
+
                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer' }} onClick={renderDetailModal} />
                 </div>
 
-                <h5 style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{props.collection.meta.name}</h5>
             </Figure>
+            <h5 className='ordinal-thumbnail-caption' title={props.collection.meta.name}>{props.collection.meta.name}</h5>
+
 
             <SingleOrdinalModal
                 show={isDetailModal}
