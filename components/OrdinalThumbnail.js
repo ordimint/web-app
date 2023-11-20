@@ -1,38 +1,28 @@
 import React from 'react'
-import { useState } from 'react'
-import { Button, Figure } from 'react-bootstrap'
-import SingleOrdinalModal from '../components/modals/SingleOrdinalModal';
+import { useRouter } from 'next/router'
+import { Figure } from 'react-bootstrap'
 
 const OrdinalThumbnail = (props) => {
+    const router = useRouter()
 
-    const [isDetailModal, showDetailModal] = useState(false);
-    const renderDetailModal = () => showDetailModal(true);
-    const hideDetailModal = () => showDetailModal(false);
+    const handleClick = () => {
+        router.push(`/${props.collection.id}`);
+    }
 
     return (
-        <div >
+        <div>
             <Figure className='ordinal-thumbnail-picture'>
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative' }} onClick={handleClick}>
                     <iframe title="ordinal-iframe" className="ordinal-iframe"
                         src={`https://explorer.ordimint.com/preview/${props.collection.id}`}
                     >
                     </iframe>
-
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer' }} onClick={renderDetailModal} />
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer' }} />
                 </div>
-
             </Figure>
             <h5 className='ordinal-thumbnail-caption' title={props.collection.meta.name}>{props.collection.meta.name}</h5>
-
-
-            <SingleOrdinalModal
-                show={isDetailModal}
-                handleClose={hideDetailModal}
-                selectedOrdinal={props.collection.id}
-                selectedOrdinalName={props.collection.meta.name}
-            />
-        </div >
+        </div>
     )
 }
 
-export default OrdinalThumbnail
+export default OrdinalThumbnail;

@@ -1528,5 +1528,28 @@ div.myAccordion .accordion-body p {
   flex-direction: column;
   margin-bottom: 10px; /* Add margin to create spacing between objects */
 }
-.breadcrumb {
+
+.ordinal-data-tabel {
+  color: white;
+  border-radius: 5px;
+  padding: 1rem;
+  background-color: #1e1f20;
+  border: 2px solid #676767;
+}
+
+.ordinal-details-data-container {
+  padding: 2% 0 2% 0;
+  border: 2px solid #676767;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-data-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

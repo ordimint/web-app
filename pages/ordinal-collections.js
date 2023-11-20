@@ -73,11 +73,11 @@ const CollectionsCatalog = () => {
                 <Row xs={1} sm={2} md={3} lg={4} className="g-4">
                     {currentCollections.map((collection, index) => (
                         <Col key={index}>
-                            {/* <Link href={`/ordinal-collections/${collection.slug}`}> */}
+
                             <div className="collection-card">
                                 <CollectionThumbnail collection={collection} />
                             </div>
-                            {/* </Link> */}
+
                         </Col>
                     ))}
                 </Row>

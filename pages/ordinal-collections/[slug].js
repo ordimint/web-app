@@ -18,10 +18,9 @@ import Footer from "../../components/Footer";
 import Head from "next/head";
 import { Breadcrumb } from "react-bootstrap";
 
-const CollectionDetailPage = ({ collectionMeta, collection, slug }) => {
+const CollectionDetailPage = ({ collectionMeta, collection, slug, }) => {
   const router = useRouter()
   const [itemsToShow, setItemsToShow] = useState(30);
-
   const loadMore = () => {
     setItemsToShow(itemsToShow + 30);
   };
@@ -182,6 +181,7 @@ export async function getServerSideProps(context) {
     `https://raw.githubusercontent.com/ordinals-wallet/ordinals-collections/main/collections/${slug}/inscriptions.json`
   );
   const collection = await collectionRes.json();
+
 
   return {
     props: {
