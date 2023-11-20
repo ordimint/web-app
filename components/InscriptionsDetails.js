@@ -5,7 +5,7 @@ import { TestnetContext } from '../contexts/TestnetContext';
 const InscriptionsDetails = (props) => {
     const { testnet } = useContext(TestnetContext);
     const [inscriptionData, setInscriptionData] = useState(null);
-
+    const explorerURL = testnet ? process.env.REACT_APP_TESTNET_URL : process.env.REACT_APP_MAINNET_URL;
     useEffect(() => {
 
         getInscriptionData(props.utxo);
@@ -13,7 +13,7 @@ const InscriptionsDetails = (props) => {
     }, [testnet, props.utxo]);
 
     const getInscriptionDetails = async (inscriptionId) => {
-        const explorerURL = testnet ? process.env.REACT_APP_TESTNET_URL : process.env.REACT_APP_MAINNET_URL;
+
         try {
             const response = await fetch(`${explorerURL}/inscription/${inscriptionId}`, {
                 headers: {
