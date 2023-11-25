@@ -1580,3 +1580,8 @@ div.myAccordion .accordion-body p {
   border: 2px solid #676767;
   border-radius: 12px;
 }
+
+.ordinal-grid-col {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
