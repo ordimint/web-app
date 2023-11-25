@@ -1,7 +1,10 @@
-import { Table, Container, Button, Row, Col } from 'react-bootstrap';
+import { Table, Container, Button, Row, Col, Tooltip, Overlay } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { IoIosCopy } from "react-icons/io";
 import { Spinner } from 'react-bootstrap';
+
+import { useState, useRef } from 'react';
+
 
 export async function getServerSideProps(context) {
     const explorerURL = process.env.REACT_APP_MAINNET_URL;
@@ -21,7 +24,6 @@ export async function getServerSideProps(context) {
 
         if (response.headers.get('content-type').includes('application/json')) {
             const data = await response.json();
-            console.log(data)
             return {
                 props: { data }, // Will be passed to the page component as props
             };
@@ -37,6 +39,7 @@ export async function getServerSideProps(context) {
         };
     }
 }
+
 function formatString(str) {
     const start = str.substr(0, 5);
     const end = str.substr(-5);
@@ -50,6 +53,22 @@ function copyToClipboard(str) {
 
 export default function OrdinalPage({ data }) {
     const router = useRouter()
+    const [showTooltipID, setShowTooltipID] = useState(false);
+    const targetID = useRef(null);
+
+    const [showTooltip, setShowTooltip] = useState(false);
+    const target = useRef(null);
+
+    const renderTooltipID = (show) => {
+        setShowTooltipID(show);
+        setTimeout(() => setShowTooltipID(false), [1000]);
+    };
+
+    const renderTooltip = (show) => {
+        setShowTooltip(show);
+        setTimeout(() => setShowTooltip(false), [1000]);
+    };
+
     if (!data) {
         return <div className='no-data-spinner'>
             <Spinner animation="border" role="status">
@@ -67,50 +86,57 @@ export default function OrdinalPage({ data }) {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' };
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
     return (
-        <Container >
-            <Container >
-                <Button className="back-button mb-4" variant="secondary" onClick={() => router.back()}>&lt; Back</Button>
-            </Container>
+        <Container id='ordinals-detail-page'>
+
+            <Button className="back-button mb-4" variant="secondary" onClick={() => router.back()}>&lt; Back</Button>
+
+            <Row>
+                <Col className='m-4 ordinal-detail-headline'>
+                    <h3>Inscription</h3>
+                    <h1>{data.inscription_number}</h1>
+
+                </Col>
+                <hr></hr>
+            </Row>
             <Row>
 
-                <Col xs={12} md={6} >
-                    <Container>
-
-                        <div style={{ width: '100%', height: '50vh', overflow: 'hidden' }}>
-                            <iframe
-                                title="ordinal-iframe"
-                                className="ordinal-iframe"
-                                src={`https://explorer.ordimint.com/preview/${data.inscription_id}`}
-                                style={{ width: '100%', height: '100%', border: 'none' }}
-                            >
-                            </iframe>
-                        </div>
-                    </Container>
+                <Col xs={12} md={6} className='mb-3' >
+                    <div style={{ width: '100%', height: '50vh', overflow: 'hidden' }}>
+                        <iframe
+                            title="ordinal-iframe"
+                            className="ordinal-iframe"
+                            src={`https://explorer.ordimint.com/preview/${data.inscription_id}`}
+                            style={{ width: '100%', height: '100%', border: 'none' }}
+                        >
+                        </iframe>
+                    </div>
                 </Col>
 
 
                 <Col xs={12} md={6} >
-                    <Container className='ordinal-details-data-container'>
+                    <div className='ordinal-details-data-container'>
 
-                        <h5>Inscription</h5>
-                        <h1>{data.inscription_number}</h1>
-
-                        <Table variant="dark" bordered={false} className='ordinal-data-tabel'>
+                        <Table variant="dark" bordered={false} className='ordinal-data-table'>
                             <tbody>
                                 <tr>
                                     <td>Inscription ID</td>
                                     <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {formatString(data.inscription_id)} {" "}
-                                        <Button size='sm' variant="secondary" onClick={() => copyToClipboard(data.inscription_id)}>
+
+                                        <Button size='sm' ref={target} variant="secondary" onClick={() => { copyToClipboard(data.inscription_id); renderTooltip(!showTooltip); }}>
                                             <IoIosCopy color="black" />
                                         </Button>
+
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Owner Address</td>
                                     <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {formatString(data.address)}{" "}
-                                        <Button size='sm' variant="secondary" onClick={() => copyToClipboard(data.address)}>
+                                        <Button size='sm' ref={targetID} variant="secondary" onClick={() => {
+                                            copyToClipboard(data.address);
+                                            renderTooltipID(!showTooltipID);
+                                        }}>
                                             <IoIosCopy color="black" />
                                         </Button>
                                     </td>
@@ -148,10 +174,35 @@ export default function OrdinalPage({ data }) {
                                 {/* Add more rows as needed */}
                             </tbody>
                         </Table>
-                    </Container>
+                    </div>
                 </Col>
 
             </Row>
-        </Container >
+            <Overlay
+                target={targetID.current}
+                transition={true}
+                show={showTooltipID}
+                placement="right"
+            >
+                {(propsTooltip) => (
+                    <Tooltip id="copied-tooltip" {...propsTooltip}>
+                        Copied!
+                    </Tooltip>
+                )}
+            </Overlay>
+            <Overlay
+                target={target.current}
+                transition={true}
+                show={showTooltip}
+                placement="right"
+            >
+                {(propsTooltip) => (
+                    <Tooltip id="copied-tooltip" {...propsTooltip}>
+                        Copied!
+                    </Tooltip>
+                )}
+            </Overlay>
+
+        </Container>
     );
 }

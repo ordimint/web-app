@@ -703,7 +703,7 @@ function Home() {
                 />
 
             </Container >
-
+            <p>You already inscribed something?<br></br> Check your order <a href="/check-order"> here</a>.</p>
             <AlertModal
                 show={alertModalparams.show}
                 text={alertModalparams.text}

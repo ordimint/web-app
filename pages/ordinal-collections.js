@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import CollectionThumbnail from '../components/CollectionThumbnail';
-import Link from 'next/link';
 import Pagination from 'react-bootstrap/Pagination';
-import { collections } from '/public/data/collections.js';
-import Footer from '../components/Footer';
+import { collections as collectionsData } from '../public/data/collections.js';
 import Head from 'next/head';
 
-const CollectionsCatalog = () => {
+const CollectionsCatalog = ({ collections }) => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [collectionsPerPage] = useState(20);
@@ -127,6 +125,17 @@ const CollectionsCatalog = () => {
         </div>
     );
 };
+
+export async function getStaticProps() {
+    // Ensure the data to be passed is serializable
+    const collections = JSON.parse(JSON.stringify(collectionsData));
+
+    return {
+        props: {
+            collections,
+        },
+    };
+}
 
 
 export default CollectionsCatalog;

@@ -1,10 +1,11 @@
 import { React, useState } from 'react'
 import { InputGroup, Form, Container, Button, Figure, Col, Row } from 'react-bootstrap'
+import { useRouter } from 'next/router';
 
 import axios from 'axios'
 import Head from 'next/head';
 const CheckOrder = () => {
-
+    const router = useRouter()
     const [orderID, setOrderID] = useState("");
     const [orderStatus, setOrderStatus] = useState("");
     const [testnet, setTestnet] = useState(false)
@@ -14,6 +15,7 @@ const CheckOrder = () => {
 
 
     const checkOrder = async () => {
+
 
         if (orderID === "") {
             return;
@@ -50,7 +52,11 @@ const CheckOrder = () => {
                 <meta name="description" content="Check your inscription order" />
                 <meta name="keywords" content="Bitcoin, Inscription service" />
             </Head>
+            <Container>
+                <Button className="back-button mb-4" variant="secondary" onClick={() => router.back()}>&lt; Back</Button>
+            </Container>
             <div className='main-middle check-order-container'>
+
                 {/* <h1>Check your order</h1> */}
                 <h4 className="mt-3 order-status" >Status: {orderStatus}</h4>
                 {txhash && (

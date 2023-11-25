@@ -21,7 +21,7 @@ const Header = (props) => {
                 <Navbar
                     collapseOnSelect
                     bg="dark"
-                    expand="lg"
+                    expand="xl"
                     key="nav"
                     variant="dark"
                     className="mb-4 pt-4"
@@ -83,8 +83,8 @@ const Header = (props) => {
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <a href="/check-order" className={isActive('/check-order')}>
-                                        Check Order
+                                    <a href="/ordinals-explorer" className={isActive('/ordinals-explorer')}>
+                                        Discover
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item>

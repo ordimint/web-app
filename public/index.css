@@ -737,6 +737,8 @@ span.input-group-text.required .required:after {
 }
 
 .search-input {
+  position: relative;
+  z-index: 5;
   max-width: 300px;
 }
 .search-input input {
@@ -1529,18 +1531,18 @@ div.myAccordion .accordion-body p {
   margin-bottom: 10px; /* Add margin to create spacing between objects */
 }
 
-.ordinal-data-tabel {
-  color: white;
-  border-radius: 5px;
+.ordinal-data-table {
   padding: 1rem;
+  color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 1.5rem;
   background-color: #1e1f20;
-  border: 2px solid #676767;
+  border: 2px solid white;
 }
 
 .ordinal-details-data-container {
-  padding: 2% 0 2% 0;
-  border: 2px solid #676767;
-  border-radius: 5px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1552,4 +1554,29 @@ div.myAccordion .accordion-body p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.ordinal-detail-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ordinal-card {
+  margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 0.5rem;
+  background-color: #1e1f20;
+  border: 2px solid #676767;
+}
+
+.ordinal-card-iframe {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #676767;
+  border-radius: 12px;
 }
