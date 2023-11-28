@@ -89,18 +89,18 @@ export default function OrdinalPage({ data }) {
     return (
         <>
             <Head>
-                <title>Ordimint - Insccription # {data.inscription_number} </title>
+                <title>Ordimint - Inscription {data.inscription_number} </title>
                 <meta name="description" content="Ordimint Ordinal Explorer" />
                 <meta name="keywords" content="Bitcoin, Ordinals, Collections,Inscriptions, Searchable, Digital Assets, Inscriptions, NFT" />
                 <meta property="og:title" content={`Ordimint - Inscription # ${data.inscription_number}`} />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content={`https://explorer.ordimint.com/preview/${data.inscription_id}`} />
+                <meta property="og:image" content={`https://explorer.ordimint.com/content/${data.inscription_id}`} />
                 <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
 
-                <meta name="twitter:card" content={`https://explorer.ordimint.com/preview/${data.inscription_id}`} />
+                <meta name="twitter:card" content={`https://explorer.ordimint.com/content/${data.inscription_id}`} />
                 <meta name="twitter:title" content="Ordimint - The Forever Machine" />
                 <meta name="twitter:description" content="Ordimint Ordinals Explorer" />
-                <meta name="twitter:image" content={`https://explorer.ordimint.com/preview/${data.inscription_id}`} />
+                <meta name="twitter:image" content={`https://explorer.ordimint.com/content/${data.inscription_id}`} />
             </Head>
             <Container id='ordinals-detail-page'>
 
