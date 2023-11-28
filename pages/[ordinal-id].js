@@ -97,7 +97,7 @@ export default function OrdinalPage({ data }) {
                 <meta property="og:image" content={`https://explorer.ordimint.com/preview/${data.inscription_id}`} />
                 <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
 
-                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:card" content={`https://explorer.ordimint.com/preview/${data.inscription_id}`} />
                 <meta name="twitter:title" content="Ordimint - The Forever Machine" />
                 <meta name="twitter:description" content="Ordimint Ordinals Explorer" />
                 <meta name="twitter:image" content={`https://explorer.ordimint.com/preview/${data.inscription_id}`} />
