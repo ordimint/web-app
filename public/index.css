@@ -1555,6 +1555,7 @@ div.myAccordion .accordion-body p {
   align-items: center;
   justify-content: center;
 }
+
 .ordinal-detail-headline {
   display: flex;
   flex-direction: column;
@@ -1563,25 +1564,96 @@ div.myAccordion .accordion-body p {
 }
 
 .ordinal-card {
-  margin: 0.5rem;
+  z-index: 5;
+  margin: 0.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  padding: 0.5rem;
+  padding: 0.1rem;
   background-color: #1e1f20;
-  border: 2px solid #676767;
+  /* border: 2px solid #676767; */
+}
+
+.ordinal-card.card {
+  background-color: #676767;
+  border: none;
 }
 
 .ordinal-card-iframe {
   width: 100%;
   height: 100%;
-  border: 2px solid #676767;
   border-radius: 12px;
+  background-color: #000000;
 }
 
 .ordinal-grid-col {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+.ordinal-grid-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.ordinal-grid-tag {
+  z-index: 5;
+  font-size: 1.2rem !important;
+  cursor: pointer;
+}
+
+.ordinal-card .card-body {
+  padding: 1%;
+}
+
+.ordinal-card-overlay-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  border-radius: 12px;
+}
+.ordinal-card-inscription-number {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f69102;
+}
+.ordinal-card-inscription-first-line {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  justify-content: space-between;
+  white-space: wrap;
+}
+
+.ordinal-card.card a {
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.ordinal-grid-tag-cloud {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.ordinal-card-text-content {
+  padding: 0.5rem;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.ordinal-card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

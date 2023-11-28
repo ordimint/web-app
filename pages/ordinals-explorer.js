@@ -47,10 +47,10 @@ const explorer = ({ inscriptionsList }) => {
     return (
         <div>
             <div className="main-middle">
-                <h1>Explorer</h1>
-                <h4 className='mb-4'>The 100 latest inscriptions</h4>
+                <h1 className='m-4'>Latest Inscriptions</h1>
+
                 <Container fluid>
-                    <TagCloud selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+                    {/* <TagCloud selectedTags={selectedTags} setSelectedTags={setSelectedTags} /> */}
 
                     <OrdinalGrid ordinals={ordinals} />
                 </Container>
@@ -58,7 +58,7 @@ const explorer = ({ inscriptionsList }) => {
 
 
             </div>
-        </div>)
+        </div >)
 
 }
 
