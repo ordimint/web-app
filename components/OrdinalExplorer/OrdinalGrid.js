@@ -1,6 +1,12 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap';
-import OrdinalCard from '../OrdinalCard';
+// import OrdinalCard from '../OrdinalCard';
+const OrdinalCard = dynamic(() => import('../OrdinalCard'), {
+    loading: () => <div className='m-4 p4'>🌀 Loading...</div>,
+})
+
+import dynamic from 'next/dynamic'
+
 
 const OrdinalGrid = ({ ordinals }) => {
     return (

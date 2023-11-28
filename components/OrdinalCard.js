@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Card } from 'react-bootstrap';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
@@ -192,7 +192,6 @@ const OrdinalCard = (props) => {
         if (jsonOperator) {
             setRenderedContent(renderJsonData(textContent));
         }
-
     }, [jsonOperator]);
 
     function getContentTypeDisplay(contentType) {
@@ -225,22 +224,28 @@ const OrdinalCard = (props) => {
                 <Card.Body>
                     <div className='ordinal-card-content' onClick={() => router.push(`/${props.ordinalId}`)}>
                         {jsonOperator ? (
-                            <div className='ordinal-card-text-content'>
-                                {renderedContent}
-                            </div>
+                            <Suspense fallback={<LoadingText />}>
+                                <div className='ordinal-card-text-content'>
+                                    {renderedContent}
+                                </div>
+                            </Suspense>
                         ) :
                             (
-                                <iframe className='ordinal-card-iframe' src={`${explorerURL}/preview/${props.ordinalId}`} />
+                                <Suspense fallback={<LoadingText />}>
+                                    <iframe className='ordinal-card-iframe' src={`${explorerURL}/preview/${props.ordinalId}`} />
+                                </Suspense>
                             )}
                         <div className='ordinal-card-overlay-div' />
                     </div>
                     <div className='ordinal-card-inscription-first-line'>
-                        <span className='ordinal-card-inscription-number'>
-                            {data?.inscription_number}
-                        </span>
-                        <span className='ordinal-card-content-type'>
-                            {getContentTypeDisplay(data?.content_type)}
-                        </span>
+                        <Suspense fallback={<LoadingText />}>
+                            <span className='ordinal-card-inscription-number'>
+                                {data?.inscription_number}
+                            </span>
+                            <span className='ordinal-card-content-type'>
+                                {getContentTypeDisplay(data?.content_type)}
+                            </span>
+                        </Suspense>
                     </div>
 
                     <div className='ordinal-card-timestamp'>
@@ -249,6 +254,14 @@ const OrdinalCard = (props) => {
                 </Card.Body>
             </Link>
         </Card>
+    );
+};
+
+function LoadingText() {
+    return (
+        <div>
+            <p>🌀 Loading...</p>
+        </div>
     );
 };
 
