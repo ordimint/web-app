@@ -1579,6 +1579,7 @@ div.myAccordion .accordion-body p {
 .ordinal-card.card {
   background-color: #676767;
   border: none;
+  height: 100%;
 }
 
 .ordinal-card-iframe {
@@ -1591,6 +1592,7 @@ div.myAccordion .accordion-body p {
 .ordinal-grid-col {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  margin-bottom: 0.5rem;
 }
 .ordinal-grid-row {
   display: flex;
@@ -1606,6 +1608,9 @@ div.myAccordion .accordion-body p {
 
 .ordinal-card .card-body {
   padding: 1%;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 
 .ordinal-card-overlay-div {
@@ -1628,6 +1633,9 @@ div.myAccordion .accordion-body p {
   align-content: space-between;
   justify-content: space-between;
   white-space: wrap;
+}
+
+.ordinal-card-timestamp {
 }
 
 .ordinal-card.card a {

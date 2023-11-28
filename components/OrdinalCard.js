@@ -5,9 +5,6 @@ import Link from 'next/link';
 
 
 
-
-
-
 const OrdinalCard = (props) => {
     const router = useRouter()
     const [data, setData] = useState(null);
