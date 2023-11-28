@@ -53,13 +53,13 @@ const explorer = ({ inscriptionsList }) => {
                 <meta name="keywords" content="Bitcoin, Ordinals, Collections,Inscriptions, Searchable, Digital Assets, Inscriptions, NFT" />
                 <meta property="og:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content="https://ordimint.com/Ordimint-Twitter-card.svg" />
+                <meta property="og:image" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
                 <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
 
-                <meta name="twitter:card" content="https://ordimint.com/Ordimint-Twitter-card.svg" />
+                <meta name="twitter:card" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
                 <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
-                <meta name="twitter:image" content="https://ordimint.com/Ordimint-Twitter-card.svg" />
+                <meta name="twitter:image" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
             </Head>
             <div className="main-middle">
                 <h1 className='m-4'>Latest Inscriptions</h1>
