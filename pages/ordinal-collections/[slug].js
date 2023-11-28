@@ -38,7 +38,7 @@ const CollectionDetailPage = ({ collectionMeta, collection, slug, }) => {
           content="Bitcoin, Ordinals,Collections, Minting, Inscription, Wallet, Integrated, Ledger, Alby, Digital Artefacts"
         />
         {/* Twitter Card meta tags */}
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content={`https://explorer.ordimint.com/preview/${collectionMeta.inscription_icon}`} />
         <meta name="twitter:site" content="@ordimint" />
 
         <meta name="twitter:creator" content="@ordimint" />

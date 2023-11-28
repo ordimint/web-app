@@ -51,7 +51,7 @@ const CollectionsCatalog = ({ collections }) => {
                 <meta property="og:image" content="https://ordimint.com/OrdimintSVGLogo-black.svg" />
                 <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
 
-                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:card" content="https://ordimint.com/OrdimintSVGLogo-black.svg" />
                 <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:image" content="https://ordimint.com/OrdimintSVGLogo-black.svg" />
