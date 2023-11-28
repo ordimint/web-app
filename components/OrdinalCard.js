@@ -11,23 +11,19 @@ import Link from 'next/link';
 const OrdinalCard = (props) => {
     const router = useRouter()
     const [data, setData] = useState(null);
+    const [jsonOperator, setJsonOperator] = useState(false);
     const [textContent, setTextContent] = useState('');
     const [renderedContent, setRenderedContent] = useState(null);
 
     let explorerURL = process.env.REACT_APP_MAINNET_URL;
 
     function renderJsonData(jsonData) {
-
         switch (jsonData.p) {
             case "ons":
                 return (
                     <>
                         <h4>News</h4>
                         <div><strong>Title:</strong> {jsonData.title}</div>
-                        {/* <p><strong>URL:</strong> <a href={jsonData.url}>{jsonData.url}</a></p>
-                        <p><strong>Author:</strong> {jsonData.author}</p>
-                        <p><strong>Body:</strong> {jsonData.body.length > 20 ? jsonData.body.substring(0, 20) + '...' : jsonData.body}</p> */}
-
                     </>
                 );
 
@@ -135,9 +131,8 @@ const OrdinalCard = (props) => {
 
                         );
                     }
-
-
             default:
+                setJsonOperator(false);
                 return <p>Unknown operation.</p>;
         }
     }
@@ -161,16 +156,7 @@ const OrdinalCard = (props) => {
                 }
                 const responseJSON = await response.json();
                 setData(responseJSON);
-                if (getContentTypeDisplay(responseJSON.content_type).includes('text')) {
-                    const textResponse = await fetch(`${explorerURL}/content/${props.ordinalId}`);
-                    let textContent;
-                    try {
-                        textContent = await textResponse.json();
-                    } catch (error) {
-                        textContent = await textResponse.text();
-                    }
-                    setTextContent(textContent);
-                }
+
 
             } catch (error) {
                 console.error(error);
@@ -179,14 +165,35 @@ const OrdinalCard = (props) => {
         fetchData();
     }, [props.ordinalId]);
 
+    useEffect(() => {
+        if (data) {
+            const processData = async (responseJSON) => {
+                if (getContentTypeDisplay(responseJSON.content_type).includes('text')) {
+                    const textResponse = await fetch(`${explorerURL}/content/${props.ordinalId}`);
+                    let textContent;
+                    try {
+                        textContent = await textResponse.json();
+                        setJsonOperator(true);
+                        setTextContent(textContent);
+                    } catch (error) {
+                        console.error(error);
+                        setTextContent(textResponse)
+                    }
+
+                }
+            }
+            processData(data);
+        }
+
+    }, [data]);
+
 
     useEffect(() => {
-        if (typeof textContent === 'object') {
+        if (jsonOperator) {
             setRenderedContent(renderJsonData(textContent));
-        } else {
-            setRenderedContent(textContent);
         }
-    }, [textContent]);
+
+    }, [jsonOperator]);
 
     function getContentTypeDisplay(contentType) {
         try {
@@ -199,9 +206,7 @@ const OrdinalCard = (props) => {
                 return 'gltf';
             } else if (type === 'image/svg+xml') {
                 return 'svg';
-
             }
-
             else {
                 return type?.split('/')[1];
             }
@@ -219,7 +224,7 @@ const OrdinalCard = (props) => {
             <Link href={`/${props.ordinalId}`}>
                 <Card.Body>
                     <div className='ordinal-card-content' onClick={() => router.push(`/${props.ordinalId}`)}>
-                        {textContent ? (
+                        {jsonOperator ? (
                             <div className='ordinal-card-text-content'>
                                 {renderedContent}
                             </div>
