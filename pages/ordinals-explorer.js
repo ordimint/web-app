@@ -5,10 +5,10 @@ import TagCloud from '../components/OrdinalExplorer/TagCloud';
 import Head from 'next/head';
 import { useState } from 'react';
 
+const explorerURL = process.env.REACT_APP_MAINNET_URL;
 
-export async function getServerSideProps(context) {
-    const explorerURL = process.env.REACT_APP_MAINNET_URL;
 
+export async function getOrdinalsList() {
     try {
         const response = await fetch(`${explorerURL}/inscriptions`, {
             headers: {
@@ -23,13 +23,9 @@ export async function getServerSideProps(context) {
 
         if (response.headers.get('content-type').includes('application/json')) {
             const data = await response.json();
-            return {
-                props: { inscriptionsList: data.inscriptions }, // Will be passed to the page component as props
-            };
-        } else {
-            return {
-                props: {},
-            };
+            // console.log('Data in getOrdinalsList:', data.inscriptions); // Check the data
+            return data.inscriptions
+
         }
     } catch (error) {
         console.error('Fetch error:', error);
@@ -39,12 +35,55 @@ export async function getServerSideProps(context) {
     }
 }
 
+export async function fetchOrdinalData(ordinalId) {
+    // console.log('Fetching data for ordinal ID:', ordinalId); // Check the ordinal ID
+    try {
+        const response = await fetch(`${explorerURL}/inscription/${ordinalId}`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        // console.log('Response:', response);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        if (response.headers.get('content-type').includes('application/json')) {
+            // Only return necessary fields
+            const responseJSON = await response.json();
+            return {
+                timestamp: responseJSON.timestamp,
+                inscription_id: responseJSON.inscription_id,
+                inscription_number: responseJSON.inscription_number,
+                content_type: responseJSON.content_type
+            };
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function fetchAllOrdinalsData(ordinals) {
+    // console.log('Ordinals in fetchAllOrdinalsData:', ordinals); // Check the ordinals array
+    const data = await Promise.all(ordinals.map(fetchOrdinalData));
+    // console.log('Data in fetchAllOrdinalsData:', data); // Check the fetched data
+    return data;
+}
+
+export async function getServerSideProps(context) {
+    const inscriptionsList = await getOrdinalsList();
+    // console.log('Inscriptions list in getServerSideProps:', inscriptionsList); // Check the inscriptions list
+    const ordinalsData = await fetchAllOrdinalsData(inscriptionsList);
+    // console.log('Ordinals data in getServerSideProps:', ordinalsData); // Check the ordinals data
+    return { props: { ordinalsData } };
+}
+
 
 // Explorer component
-const explorer = ({ inscriptionsList }) => {
+const explorer = ({ ordinalsData }) => {
 
-    const [ordinals, setOrdinals] = useState(inscriptionsList);
-    const [selectedTags, setSelectedTags] = useState([]);
+    // const [ordinals, setOrdinals] = useState(inscriptionsList);
+    // const [selectedTags, setSelectedTags] = useState([]);
     return (
         <div>
             <Head>
@@ -67,7 +106,7 @@ const explorer = ({ inscriptionsList }) => {
                 <Container fluid>
                     {/* <TagCloud selectedTags={selectedTags} setSelectedTags={setSelectedTags} /> */}
 
-                    <OrdinalGrid ordinals={ordinals} />
+                    <OrdinalGrid ordinalsData={ordinalsData} />
                 </Container>
 
 

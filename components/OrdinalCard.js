@@ -1,16 +1,18 @@
-import React, { useState, useEffect, Suspense } from 'react';
-import { Card } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Card, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 
 
 
-const OrdinalCard = (props) => {
+
+const OrdinalCard = ({ timestamp, inscription_id, inscription_number, content_type }) => {
     const router = useRouter()
     const [data, setData] = useState(null);
     const [jsonOperator, setJsonOperator] = useState(false);
     const [textContent, setTextContent] = useState('');
     const [renderedContent, setRenderedContent] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     let explorerURL = process.env.REACT_APP_MAINNET_URL;
 
@@ -139,7 +141,7 @@ const OrdinalCard = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${explorerURL}/inscription/${props.ordinalId}`, {
+                const response = await fetch(`${explorerURL}/inscription/${inscription_id}`, {
                     headers: {
                         'Accept': 'application/json'
                     }
@@ -153,27 +155,27 @@ const OrdinalCard = (props) => {
                 }
                 const responseJSON = await response.json();
                 setData(responseJSON);
-
+                setLoading(false);
 
             } catch (error) {
                 console.error(error);
             }
         };
         fetchData();
-    }, [props.ordinalId]);
+    }, [inscription_id]);
 
     useEffect(() => {
         if (data) {
             const processData = async (responseJSON) => {
                 if (getContentTypeDisplay(responseJSON.content_type).includes('text')) {
-                    const textResponse = await fetch(`${explorerURL}/content/${props.ordinalId}`);
+                    const textResponse = await fetch(`${explorerURL}/content/${inscription_id}`);
                     let textContent;
                     try {
                         textContent = await textResponse.json();
                         setJsonOperator(true);
                         setTextContent(textContent);
                     } catch (error) {
-                        console.error(error);
+                        // console.error(error);
                         setTextContent(textResponse)
                     }
 
@@ -212,41 +214,48 @@ const OrdinalCard = (props) => {
         }
     }
 
+    if (loading) {
 
+        return (
+            <div className='ordinal-card-loading-spinner'>
+                <Spinner className='ordinal-card-loading-spinner' animation="border" />
+
+            </div>); // Render placeholder content
+    }
 
 
     return (
         <Card className='ordinal-card'>
-            <Link href={`/${props.ordinalId}`}>
+            <Link href={`/${inscription_id}`}>
                 <Card.Body>
-                    <div className='ordinal-card-content' onClick={() => router.push(`/${props.ordinalId}`)}>
+                    <div className='ordinal-card-content' onClick={() => router.push(`/${inscription_id}`)}>
                         {jsonOperator ? (
-                            <Suspense fallback={<LoadingText />}>
-                                <div className='ordinal-card-text-content'>
-                                    {renderedContent}
-                                </div>
-                            </Suspense>
+
+                            <div className='ordinal-card-text-content'>
+                                {renderedContent}
+                            </div>
+
                         ) :
                             (
-                                <Suspense fallback={<LoadingText />}>
-                                    <iframe className='ordinal-card-iframe' src={`${explorerURL}/preview/${props.ordinalId}`} />
-                                </Suspense>
+
+                                <iframe className='ordinal-card-iframe' src={`${explorerURL}/preview/${inscription_id}`} />
+
                             )}
                         <div className='ordinal-card-overlay-div' />
                     </div>
                     <div className='ordinal-card-inscription-first-line'>
-                        <Suspense fallback={<LoadingText />}>
-                            <span className='ordinal-card-inscription-number'>
-                                {data?.inscription_number}
-                            </span>
-                            <span className='ordinal-card-content-type'>
-                                {getContentTypeDisplay(data?.content_type)}
-                            </span>
-                        </Suspense>
+
+                        <span className='ordinal-card-inscription-number'>
+                            {inscription_number}
+                        </span>
+                        <span className='ordinal-card-content-type'>
+                            {getContentTypeDisplay(content_type)}
+                        </span>
+
                     </div>
 
                     <div className='ordinal-card-timestamp'>
-                        {Math.floor((Date.now() / 1000 - data?.timestamp) / 86400)} days old
+                        {Math.floor((Date.now() / 1000 - timestamp) / 86400)} days old
                     </div>
                 </Card.Body>
             </Link>
@@ -254,12 +263,5 @@ const OrdinalCard = (props) => {
     );
 };
 
-function LoadingText() {
-    return (
-        <div>
-            <p>🌀 Loading...</p>
-        </div>
-    );
-};
 
 export default OrdinalCard;
