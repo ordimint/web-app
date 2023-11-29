@@ -49,9 +49,9 @@ export async function fetchOrdinalData(ordinalId) {
         }
 
         if (response.headers.get('content-type').includes('application/json')) {
-            // Only return necessary fields
             const responseJSON = await response.json();
             return {
+                ordinalData: responseJSON,
                 timestamp: responseJSON.timestamp,
                 inscription_id: responseJSON.inscription_id,
                 inscription_number: responseJSON.inscription_number,

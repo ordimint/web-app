@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 
 
-const OrdinalCard = ({ timestamp, inscription_id, inscription_number, content_type }) => {
+const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, inscription_number }) => {
     const router = useRouter()
     const [data, setData] = useState(null);
     const [jsonOperator, setJsonOperator] = useState(false);
@@ -139,30 +139,12 @@ const OrdinalCard = ({ timestamp, inscription_id, inscription_number, content_ty
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${explorerURL}/inscription/${inscription_id}`, {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error(`Expected JSON but received ${contentType}`);
-                }
-                const responseJSON = await response.json();
-                setData(responseJSON);
-                setLoading(false);
 
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchData();
-    }, [inscription_id]);
+        if (ordinalData) {
+            setData(ordinalData);
+            setLoading(false);
+        }
+    }, [ordinalData]);
 
     useEffect(() => {
         if (data) {
