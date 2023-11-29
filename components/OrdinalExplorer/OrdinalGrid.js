@@ -17,7 +17,7 @@ const OrdinalGrid = ({ ordinalsData }) => {
                 Array.isArray(ordinalsData) && ordinalsData.map((ordinalData, index) => {
                     return (
 
-                        <Col xs={3} sm={3} md={2} lg={2} xl={2} xxl={1} key={index} className='ordinal-grid-col'>
+                        <Col xs={6} sm={3} md={2} lg={2} xl={2} xxl={2} key={index} className='ordinal-grid-col'>
 
                             <OrdinalCard
                                 timestamp={ordinalData.timestamp}
