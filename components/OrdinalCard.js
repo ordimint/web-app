@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
@@ -210,7 +210,9 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
         <Card className='ordinal-card'>
             <Link href={`/${inscription_id}`}>
                 <Card.Body>
+
                     <div className='ordinal-card-content' onClick={() => router.push(`/${inscription_id}`)}>
+
                         {jsonOperator ? (
 
                             <div className='ordinal-card-text-content'>
@@ -220,11 +222,13 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
                         ) :
                             (
 
-                                <iframe className='ordinal-card-iframe' src={`${explorerURL}/preview/${inscription_id}`} />
+                                <iframe className='ordinal-card-iframe' loading="lazy" src={`${explorerURL}/preview/${inscription_id}`} />
 
                             )}
                         <div className='ordinal-card-overlay-div' />
+
                     </div>
+
                     <div className='ordinal-card-inscription-first-line'>
 
                         <span className='ordinal-card-inscription-number'>
