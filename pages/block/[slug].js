@@ -85,24 +85,24 @@ async function fetchAllOrdinalsData(ordinals) {
 }
 
 
-export async function getStaticPaths() {
-    const currentBlockHeight = await getBlockHeight();
+// export async function getStaticPaths() {
+//     const currentBlockHeight = await getBlockHeight();
 
-    // Calculate the number of pages to generate
-    const numPages = currentBlockHeight - 767430;
+//     // Calculate the number of pages to generate
+//     const numPages = currentBlockHeight - 767430;
 
-    // Generate paths for each page, starting from 767430
-    const paths = Array.from({ length: numPages }, (_, i) => ({
-        params: { slug: (i + 767430).toString() },
-    }));
+//     // Generate paths for each page, starting from 767430
+//     const paths = Array.from({ length: numPages }, (_, i) => ({
+//         params: { slug: (i + 767430).toString() },
+//     }));
 
-    // fallback: 'blocking' will server-render pages on-demand if not generated at build time
-    return { paths, fallback: 'blocking' };
-}
+//     // fallback: 'blocking' will server-render pages on-demand if not generated at build time
+//     return { paths, fallback: 'blocking' };
+// }
 
 
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
     const { slug } = context.params;
     const newestBlockHeight = await getBlockHeight();
 
