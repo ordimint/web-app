@@ -34,6 +34,42 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
                     </>
                 );
 
+            case "orc-20":
+                if (jsonData.op === "mint") {
+                    return (
+
+                        <>
+                            <p>ORC-20 {jsonData.op}</p>
+                            <div><strong>Ticker:</strong> {jsonData.tick}</div>
+                            <div><strong>Amount:</strong> {jsonData.amt}</div>
+                        </>
+
+                    );
+                } else if (jsonData.op === "transfer") {
+                    return (
+
+                        <>
+                            <p>ORC-20 {jsonData.op}</p>
+                            <div><strong>Ticker:</strong> {jsonData.tick}</div>
+                            <div><strong>Amount:</strong> {jsonData.amt}</div>
+                        </>
+
+                    );
+                }
+                else if (jsonData.op === "deploy") {
+                    return (
+
+                        <>
+                            <p>ORC-20 {jsonData.op}</p>
+                            <div><strong>Ticker:</strong> {jsonData.tick}</div>
+                            {jsonData.max && <div><strong>Max:</strong> {jsonData.max}</div>}
+                            {jsonData.lim && <div><strong>Limit:</strong> {jsonData.lim}</div>}
+                        </>
+
+                    );
+                }
+
+
             case "brc-20":
                 if (jsonData.op === "mint") {
                     return (
@@ -208,10 +244,10 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
 
     return (
         <Card className='ordinal-card'>
-            <Link href={`/${inscription_id}`}>
+            <Link href={`/inscription/${inscription_id}`}>
                 <Card.Body>
 
-                    <div className='ordinal-card-content' onClick={() => router.push(`/${inscription_id}`)}>
+                    <div className='ordinal-card-content' onClick={() => router.push(`/inscription/${inscription_id}`)}>
 
                         {jsonOperator ? (
 

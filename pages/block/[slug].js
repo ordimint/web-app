@@ -1,21 +1,18 @@
 import React from 'react'
-import { Container } from 'react-bootstrap';
-import OrdinalGrid from '../components/OrdinalExplorer/OrdinalGrid';
-import TagCloud from '../components/OrdinalExplorer/TagCloud';
-import BlockCloud from '../components/OrdinalExplorer/BlockCloud';
+import { Container, Row, Col } from 'react-bootstrap';
+import OrdinalGrid from '../../components/OrdinalExplorer/OrdinalGrid';
+import TagCloud from '../../components/OrdinalExplorer/TagCloud';
+import BlockCloud from '../../components/OrdinalExplorer/BlockCloud';
 import Head from 'next/head';
-import { useState } from 'react';
+import { lazy, Suspense } from 'react';
 
 const explorerURL = process.env.REACT_APP_MAINNET_URL;
 
-export async function getBlocksList() {
+export async function getBlockHeight() {
     try {
         const blockHeight = await fetch('https://mempool.space/api/blocks/tip/height');
         const blockHeightJSON = await blockHeight.json();
-        const blockList = await fetch(`https://mempool.space/api/v1/blocks/${blockHeightJSON}`);
-        const blockListJSON = await blockList.json();
-        const heightArray = await blockListJSON.map(block => block.height);
-        return heightArray;
+        return blockHeightJSON;
     } catch (error) {
         console.error(error);
     }
@@ -23,11 +20,11 @@ export async function getBlocksList() {
 
 
 
-export async function getOrdinalsList() {
+export async function getOrdinalsList(block) {
 
 
     try {
-        const response = await fetch(`${explorerURL}/inscriptions`, {
+        const response = await fetch(`${explorerURL}/inscriptions/block/${block}`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -87,21 +84,38 @@ async function fetchAllOrdinalsData(ordinals) {
     return data;
 }
 
-export async function getServerSideProps(context) {
-    const blocksList = await getBlocksList();
-    const inscriptionsList = await getOrdinalsList(blocksList[0]);
-    // console.log('Inscriptions list in getServerSideProps:', inscriptionsList); // Check the inscriptions list
+
+export async function getStaticPaths() {
+    const currentBlockHeight = await getBlockHeight();
+
+    // Calculate the number of pages to generate
+    const numPages = currentBlockHeight - 767430;
+
+    // Generate paths for each page, starting from 767430
+    const paths = Array.from({ length: numPages }, (_, i) => ({
+        params: { slug: (i + 767430).toString() },
+    }));
+
+    // fallback: 'blocking' will server-render pages on-demand if not generated at build time
+    return { paths, fallback: 'blocking' };
+}
+
+
+
+export async function getStaticProps(context) {
+    const { slug } = context.params;
+    const newestBlockHeight = await getBlockHeight();
+
+    // Fetch the data from the server
+    const inscriptionsList = await getOrdinalsList(slug);
     const ordinalsData = await fetchAllOrdinalsData(inscriptionsList);
-    // console.log('Ordinals data in getServerSideProps:', ordinalsData); // Check the ordinals data
-    return { props: { ordinalsData, blocksList } };
+
+    return { props: { ordinalsData, blockHeight: newestBlockHeight, slug } };
 }
 
 
 // Explorer component
-const explorer = ({ ordinalsData, blocksList }) => {
-
-    // const [ordinals, setOrdinals] = useState(inscriptionsList);
-    const [selectedBlock, setSelectedBlock] = useState(blocksList[0]);
+const BlockDetailPage = ({ ordinalsData, blockHeight, slug }) => {
 
     return (
         <div>
@@ -120,14 +134,17 @@ const explorer = ({ ordinalsData, blocksList }) => {
                 <meta name="twitter:image" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
             </Head>
             <div className="main-middle">
-                <h1 className='m-4'>Latest Inscriptions</h1>
 
+                <h3>Block</h3>
                 <Container fluid>
-                    <BlockCloud blocksList={blocksList} selectedBlock={blocksList[0]} block={blocksList[0]} />
+
+                    <BlockCloud selectedBlock={slug} blockHeight={blockHeight} />
+
 
                     {/* <TagCloud selectedTags={selectedTags} setSelectedTags={setSelectedTags} /> */}
 
-                    <OrdinalGrid ordinalsData={ordinalsData} />
+                    <OrdinalGrid key={slug} ordinalsData={ordinalsData} />
+
                 </Container>
 
 
@@ -138,4 +155,4 @@ const explorer = ({ ordinalsData, blocksList }) => {
 }
 
 
-export default explorer
+export default BlockDetailPage

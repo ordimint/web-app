@@ -1651,6 +1651,22 @@ div.myAccordion .accordion-body p {
   white-space: nowrap;
 }
 
+.block-cloud-tag {
+  position: relative;
+  z-index: 5;
+  font-size: 3.2rem !important;
+  cursor: pointer;
+}
+
+.block-cloud {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.active-badge {
+  border: 2px solid yellow;
+}
+
 .ordinal-card-text-content {
   padding: 0.5rem;
   background-color: black;

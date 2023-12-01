@@ -9,10 +9,11 @@ import { useState, useRef } from 'react';
 
 export async function getServerSideProps(context) {
     const explorerURL = process.env.REACT_APP_MAINNET_URL;
-    const { 'ordinal-id': ordinalsid } = context.params;
+
+    const { slug } = context.query;
 
     try {
-        const response = await fetch(`${explorerURL}/inscription/${ordinalsid}`, {
+        const response = await fetch(`${explorerURL}/inscription/${slug}`, {
             headers: {
                 'Accept': 'application/json'
             }
