@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { TailSpin } from 'react-loading-icons';
 import { TestnetContext } from '../contexts/TestnetContext';
+import { Button } from 'react-bootstrap';
 
 const InscriptionsDetails = (props) => {
     const { testnet } = useContext(TestnetContext);
@@ -29,7 +30,8 @@ const InscriptionsDetails = (props) => {
                 return {
                     inscription_number: responseJSON.inscription_number,
                     value: responseJSON.output_value,
-                    timestamp: responseJSON.timestamp
+                    timestamp: responseJSON.timestamp,
+                    inscription_id: responseJSON.inscription_id
                 };
             } else {
                 console.error('The response is not in JSON format');
@@ -82,12 +84,15 @@ const InscriptionsDetails = (props) => {
             <div>
                 {inscriptionData ? (
                     <>
-                        <h5 className='m-3'>#{inscriptionData.inscription_number}</h5>
+                        <h5 className='m-3'>#{inscriptionData.inscription_number.toLocaleString('en-US')}</h5>
                         <h5 className='m-3'>{inscriptionData.value} Sats</h5>
                         <h5 className='m-3'>
                             {new Date(inscriptionData.timestamp * 1000).toLocaleDateString()}<br />
                             {new Date(inscriptionData.timestamp * 1000).toLocaleTimeString()}
                         </h5>
+                        <a href={`/explorer/inscription/${inscriptionData.inscription_id}`} target="_blank" rel="noopener noreferrer">
+                            <Button className='mb-2' variant='secondary'>Details</Button>
+                        </a>
                     </>
                 ) : (
                     <p>

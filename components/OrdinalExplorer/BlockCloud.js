@@ -1,46 +1,53 @@
-import React from 'react';
-import { Badge, Stack } from 'react-bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Stack } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-
+import { Badge } from 'react-bootstrap';
 
 
 const BlockCloud = ({ selectedBlock, blockHeight }) => {
     const router = useRouter()
-
-    const blocks = Array.from({ length: blockHeight - 800000 + 1 }, (_, i) => blockHeight - i);
-
-    const activeBlockRef = useRef(null);
-    const [activeBlock, setActiveBlock] = useState(selectedBlock);
+    const blockCloudRef = useRef(null); // Add this line
+    // Ensure that selectedBlock is within the range of blocks
+    const blocks = Array.from({ length: blockHeight - 747899 + 10 + 1 }, (_, i) => blockHeight + 10 - i);
 
     useEffect(() => {
-        if (activeBlockRef.current && selectedBlock !== null && selectedBlock !== undefined) {
-            activeBlockRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const blockCloud = blockCloudRef.current;
+        const activeBadge = blockCloud.querySelector('.active-badge');
+
+        if (activeBadge) {
+            const blockCloudMiddle = blockCloud.clientWidth / 2;
+            const activeBadgeMiddle = activeBadge.offsetLeft + activeBadge.clientWidth / 2;
+            const scrollLeft = activeBadgeMiddle - blockCloudMiddle;
+
+            blockCloud.scrollLeft = scrollLeft;
         }
-    }, [activeBlock, selectedBlock]);
+    }, [selectedBlock]);
 
     return (
-        <div className='block-cloud mb-4'>
+        <div className="block-cloud mb-4" ref={blockCloudRef}>
             <Stack direction="horizontal" gap={2}>
-                {blocks.map((block, index) => (
-                    <a
+                {blocks.map((block, index) => {
 
-                        onClick={() => {
-                            router.push(`/block/${block}`);
-                            setActiveBlock(block);
-                        }}
-                        key={index}
-
-                    >
-                        <Badge
-                            ref={block === activeBlock ? activeBlockRef : null}
-                            className={`block-cloud-tag ${block === activeBlock ? 'active-badge' : ''}`}
-
+                    return (
+                        <a
+                            onClick={(e) => {
+                                if (block > blockHeight) {
+                                    e.preventDefault();
+                                    return;
+                                }
+                                router.push(`/explorer/block/${block}`);
+                            }}
+                            key={index}
                         >
-                            {block}
-                        </Badge>
-                    </a>
-                ))}
+                            <div
+                                className={`block-cloud-tag ${block == selectedBlock ? 'active-badge' : ''} ${block > blockHeight ? 'unmined-block' : ''}`}
+                            >
+                                <h5>Block</h5>
+                                {block}
+                            </div>
+                        </a>
+                    );
+                })}
             </Stack>
         </div>
     )

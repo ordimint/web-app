@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link';
 
 
-
+let explorerURL = process.env.REACT_APP_MAINNET_URL;
 
 const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, inscription_number }) => {
     const router = useRouter()
@@ -14,7 +14,7 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
     const [renderedContent, setRenderedContent] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    let explorerURL = process.env.REACT_APP_MAINNET_URL;
+
 
     function renderJsonData(jsonData) {
         switch (jsonData.p) {
@@ -244,10 +244,10 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
 
     return (
         <Card className='ordinal-card'>
-            <Link href={`/inscription/${inscription_id}`}>
+            <Link href={`/explorer/inscription/${inscription_id}`}>
                 <Card.Body>
 
-                    <div className='ordinal-card-content' onClick={() => router.push(`/inscription/${inscription_id}`)}>
+                    <div className='ordinal-card-content' onClick={() => router.push(`/explorer/inscription/${inscription_id}`)}>
 
                         {jsonOperator ? (
 
@@ -268,7 +268,7 @@ const OrdinalCard = ({ ordinalData, inscription_id, content_type, timestamp, ins
                     <div className='ordinal-card-inscription-first-line'>
 
                         <span className='ordinal-card-inscription-number'>
-                            {inscription_number}
+                            {inscription_number.toLocaleString('en-US')}
                         </span>
                         <span className='ordinal-card-content-type'>
                             {getContentTypeDisplay(content_type)}

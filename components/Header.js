@@ -83,8 +83,8 @@ const Header = (props) => {
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <a href="/ordinals-explorer" className={isActive('/ordinals-explorer')}>
-                                        Discover
+                                    <a href="/explorer" className={isActive('/explorer')}>
+                                        Explorer
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item>

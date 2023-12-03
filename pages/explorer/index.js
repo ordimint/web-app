@@ -1,21 +1,18 @@
 import React from 'react'
-import { Container } from 'react-bootstrap';
-import OrdinalGrid from '../components/OrdinalExplorer/OrdinalGrid';
-import TagCloud from '../components/OrdinalExplorer/TagCloud';
-import BlockCloud from '../components/OrdinalExplorer/BlockCloud';
+import { Container, Row, Col } from 'react-bootstrap';
+import OrdinalGrid from '../../components/OrdinalExplorer/OrdinalGrid';
+import TagCloud from '../../components/OrdinalExplorer/TagCloud';
+import BlockCloud from '../../components/OrdinalExplorer/BlockCloud';
 import Head from 'next/head';
-import { useState } from 'react';
+
 
 const explorerURL = process.env.REACT_APP_MAINNET_URL;
 
-export async function getBlocksList() {
+export async function getBlockHeight() {
     try {
         const blockHeight = await fetch('https://mempool.space/api/blocks/tip/height');
         const blockHeightJSON = await blockHeight.json();
-        const blockList = await fetch(`https://mempool.space/api/v1/blocks/${blockHeightJSON}`);
-        const blockListJSON = await blockList.json();
-        const heightArray = await blockListJSON.map(block => block.height);
-        return heightArray;
+        return blockHeightJSON;
     } catch (error) {
         console.error(error);
     }
@@ -23,11 +20,11 @@ export async function getBlocksList() {
 
 
 
-export async function getOrdinalsList() {
+export async function getOrdinalsList(block) {
 
 
     try {
-        const response = await fetch(`${explorerURL}/inscriptions`, {
+        const response = await fetch(`${explorerURL}/inscriptions/block/${block}`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -87,21 +84,21 @@ async function fetchAllOrdinalsData(ordinals) {
     return data;
 }
 
+
+
 export async function getServerSideProps(context) {
-    const blocksList = await getBlocksList();
-    const inscriptionsList = await getOrdinalsList(blocksList[0]);
-    // console.log('Inscriptions list in getServerSideProps:', inscriptionsList); // Check the inscriptions list
+    const newestBlockHeight = await getBlockHeight();
+
+    // Fetch the data from the server
+    const inscriptionsList = await getOrdinalsList(newestBlockHeight);
     const ordinalsData = await fetchAllOrdinalsData(inscriptionsList);
-    // console.log('Ordinals data in getServerSideProps:', ordinalsData); // Check the ordinals data
-    return { props: { ordinalsData, blocksList } };
+
+    return { props: { ordinalsData, blockHeight: newestBlockHeight } };
 }
 
 
 // Explorer component
-const explorer = ({ ordinalsData, blocksList }) => {
-
-    // const [ordinals, setOrdinals] = useState(inscriptionsList);
-    const [selectedBlock, setSelectedBlock] = useState(blocksList[0]);
+const explorer = ({ ordinalsData, blockHeight }) => {
 
     return (
         <div>
@@ -111,23 +108,30 @@ const explorer = ({ ordinalsData, blocksList }) => {
                 <meta name="keywords" content="Bitcoin, Ordinals, Collections,Inscriptions, Searchable, Digital Assets, Inscriptions, NFT" />
                 <meta property="og:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
+                <meta property="og:image" content="https://ordimint.com/Ordimint-Twitter-card.png" />
                 <meta property="og:description" content="A website to mint, receive, store or send your Ordinals. View all new Ordinal Collections, Inscribe or use our wallet." />
 
-                <meta name="twitter:card" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
+                <meta name="twitter:card" content="https://ordimint.com/Ordimint-Twitter-card.png" />
                 <meta name="twitter:title" content="Ordimint - A website to mint, receive, store or send your Ordinals" />
                 <meta name="twitter:description" content="A website to mint, receive, store or send your Ordinals" />
-                <meta name="twitter:image" content="https://ordimint.com/Ordimint-Twitter-card.jpeg" />
+                <meta name="twitter:image" content="https://ordimint.com/Ordimint-Twitter-card.png" />
             </Head>
             <div className="main-middle">
-                <h1 className='m-4'>Latest Inscriptions</h1>
+                <Row>
+                    <Col>
+                        <h1 className="text-center">Ordinals Explorer</h1>
+                    </Col>
 
+                </Row>
                 <Container fluid>
-                    <BlockCloud blocksList={blocksList} selectedBlock={blocksList[0]} block={blocksList[0]} />
+                    <hr />
+                    <BlockCloud selectedBlock={blockHeight} blockHeight={blockHeight} />
+                    <hr />
 
                     {/* <TagCloud selectedTags={selectedTags} setSelectedTags={setSelectedTags} /> */}
 
-                    <OrdinalGrid ordinalsData={ordinalsData} />
+                    <OrdinalGrid key={blockHeight} ordinalsData={ordinalsData} />
+
                 </Container>
 
 

@@ -46,15 +46,12 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setCurrentUtxo, setSh
         <>
           <br />
           <Container fluid>
-            <Row id="auction-ordinal-row">
+            <Row className="auction-ordinal-row">
               {paginate(ownedUtxos, itemsPerPage, currentPage).map((it) => {
                 return (
                   <Col sm={2} md={4} lg={4} key={it.txid} >
                     <Card className="hover-pointer gallery-item wallet-card"
-                      onClick={() => {
-                        setCurrentUtxo(it)
-                        setShowUtxoModal(true)
-                      }}
+
 
                     >
                       {!inscriptionUtxosByUtxo[`${it.txid}:${it.vout}`] ? (
@@ -73,7 +70,11 @@ export default function UtxoInfo({ utxosReady, ownedUtxos, setCurrentUtxo, setSh
                         testnet={testnet}
                       />
                       <div className='wallet-card-button'>
-                        <Button >Details</Button>
+
+                        <Button onClick={() => {
+                          setCurrentUtxo(it)
+                          setShowUtxoModal(true)
+                        }} >Send</Button>
                       </div>
                     </Card>
                     {/* </div> */}

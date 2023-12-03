@@ -121,7 +121,7 @@ export default function OrdinalPage({ data }) {
                         <div style={{ width: '100%', height: '50vh', overflow: 'hidden' }}>
                             <iframe
                                 title="ordinal-iframe"
-                                className="ordinal-iframe"
+                                className="ordinal-detail-page-ordinal-iframe"
                                 src={`https://explorer.ordimint.com/preview/${data.inscription_id}`}
                                 style={{ width: '100%', height: '100%', border: 'none' }}
                             >
@@ -177,7 +177,11 @@ export default function OrdinalPage({ data }) {
                                     </tr>
                                     <tr>
                                         <td>Genesis Height</td>
-                                        <td>Block {data.genesis_height}</td>
+                                        <td>Block{" "}
+                                            <a href={`/explorer/block/${data.genesis_height}`} target="_blank" rel="noopener noreferrer">
+                                                {data.genesis_height}
+                                            </a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Satoshi</td>
