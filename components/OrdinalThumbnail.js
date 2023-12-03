@@ -6,7 +6,7 @@ const OrdinalThumbnail = (props) => {
     const router = useRouter()
 
     const handleClick = () => {
-        router.push(`/${props.collection.id}`);
+        router.push(`/explorer/inscription/${props.collection.id}`);
     }
 
     return (

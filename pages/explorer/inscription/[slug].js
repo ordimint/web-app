@@ -110,7 +110,7 @@ export default function OrdinalPage({ data }) {
                 <Row>
                     <Col className='m-4 ordinal-detail-headline'>
                         <h3>Inscription</h3>
-                        <h1>{data.inscription_number}</h1>
+                        <h1>{data.inscription_number.toLocaleString('en-US')}</h1>
 
                     </Col>
                     <hr></hr>
