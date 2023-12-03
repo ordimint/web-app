@@ -84,7 +84,8 @@ const Header = (props) => {
                                 </Nav.Item>
                                 <Nav.Item>
                                     <a href="/explorer" className={isActive('/explorer')}>
-                                        Explorer
+                                        Explorer{" "}
+                                        <Badge bg="danger">New!</Badge>
                                     </a>
                                 </Nav.Item>
                                 <Nav.Item>
@@ -99,8 +100,7 @@ const Header = (props) => {
                                 </Nav.Item>
                                 <Nav.Item>
                                     <a href="/partners" className={isActive('/partners')}>
-                                        Partners{" "}
-                                        <Badge bg="danger">New!</Badge>
+                                        Partners
                                     </a>
 
                                 </Nav.Item>
